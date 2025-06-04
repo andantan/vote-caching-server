@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package block_event_message;
+
+service CreatedBlockEventService {
+    rpc ReportCreatedBlockEvent(CreatedBlockEvent) returns (ReportBlockEventResponse);
+}
+
+message CreatedBlockEvent {
+    string topic = 1;
+    uint64 height = 2;
+}
+
+message ReportBlockEventResponse {
+    bool success = 1;
+    string message = 2;
+}

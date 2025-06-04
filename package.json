@@ -1,10 +1,11 @@
 {
   "name": "mongodb-cache-server",
+  "type": "module",
   "version": "0.0.0",
   "description": "\"A MongoDB caching layer for real-time voting data.\"",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [
     "voting",
@@ -17,5 +18,12 @@
     "blockchain"
   ],
   "author": "kyubin2892@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.7.15"
+  },
+  "devDependencies": {
+    "eslint": "^9.28.0"
+  }
 }
