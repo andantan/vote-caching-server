@@ -1,0 +1,21 @@
+{
+  "name": "mongodb-cache-server",
+  "version": "0.0.0",
+  "description": "\"A MongoDB caching layer for real-time voting data.\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "voting",
+    "cache",
+    "caching",
+    "mongodb",
+    "grpc",
+    "data",
+    "service",
+    "blockchain"
+  ],
+  "author": "kyubin2892@gmail.com",
+  "license": "ISC"
+}
