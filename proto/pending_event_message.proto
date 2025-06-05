@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pending_event_message;
+
+service ExpiredPendingEventService {
+    rpc ReportExpiredPendingEvent(ExpiredPendingEvent) 
+    returns (ReportPendingEventResponse);
+}
+
+message ExpiredPendingEvent {
+    string topic = 1;
+    int64 count = 2;
+    map<string, uint64> options = 3;
+}
+
+message ReportPendingEventResponse {
+    bool success = 1;
+    string message = 2;
+}

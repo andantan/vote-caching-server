@@ -3,16 +3,22 @@ import protoLoader from "@grpc/proto-loader";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
-import { reportCreatedBlockEvent } from "./grpcBlockEventHandler.js"
+import reportCreatedBlockEvent from "./handler/grpcBlockEventHandler.js"
+import reportExpiredPendingEvent from "./handler/grpcPendingEventHandler.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const BLOCK_EVENT_PROTO_FILE_NAME = "block_event_message.proto";
-const BLOCK_EVENT_PROTO_FILE_PATH = join(__dirname, '..', 'proto', BLOCK_EVENT_PROTO_FILE_NAME);
+const PENDING_EVENT_PROTO_FLE_NAME = "pending_event_message.proto";
+
+const PROTO_FILES = [
+    join(__dirname, '..', 'proto', BLOCK_EVENT_PROTO_FILE_NAME),
+    join(__dirname, '..', 'proto', PENDING_EVENT_PROTO_FLE_NAME)
+];
 
 export async function runGrpcServer(port) {
-    const packageDefinition = protoLoader.loadSync(BLOCK_EVENT_PROTO_FILE_PATH, {
+    const packageDefinition = protoLoader.loadSync(PROTO_FILES, {
         keepCase: true,
         longs: String,
         enums: String,
@@ -21,7 +27,9 @@ export async function runGrpcServer(port) {
     });
 
     const grpcObject = grpc.loadPackageDefinition(packageDefinition);
+
     const blockEventMessagePackage = grpcObject.block_event_message;
+    const pendingEventMessagePackage = grpcObject.pending_event_message;
     
     const server = new grpc.Server();
 
@@ -29,8 +37,17 @@ export async function runGrpcServer(port) {
         ReportCreatedBlockEvent: reportCreatedBlockEvent,
     });
 
-    console.log("Service Definition being added:", blockEventMessagePackage.CreatedBlockEventService.service);
+    server.addService(pendingEventMessagePackage.ExpiredPendingEventService.service, {
+        ReportExpiredPendingEvent: reportExpiredPendingEvent
+    });
 
+    console.log()
+    console.log("Service (CreatedBlockEventService) Definition being added");
+    console.log(`   ${blockEventMessagePackage.CreatedBlockEventService.service.ReportCreatedBlockEvent.path}`);
+    console.log("Service (ExpiredPendingEventService) Definition being added");
+    console.log(`   ${pendingEventMessagePackage.ExpiredPendingEventService.service.ReportExpiredPendingEvent.path}`);
+    console.log()
+    
     await new Promise((resolve, reject) => {
         server.bindAsync(
             `0.0.0.0:${port}`,

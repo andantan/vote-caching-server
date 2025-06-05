@@ -3,7 +3,8 @@ syntax = "proto3";
 package block_event_message;
 
 service CreatedBlockEventService {
-    rpc ReportCreatedBlockEvent(CreatedBlockEvent) returns (ReportBlockEventResponse);
+    rpc ReportCreatedBlockEvent(CreatedBlockEvent) 
+    returns (ReportBlockEventResponse);
 }
 
 message CreatedBlockEvent {

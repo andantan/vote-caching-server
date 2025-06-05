@@ -1,4 +1,4 @@
-import { runGrpcServer } from "./server/grpcBlockEventServer.js";
+import { runGrpcServer } from "./server/grpcEventServer.js";
 
 const GRPC_PORT = 50051;
 
