@@ -1,29 +1,33 @@
 {
   "name": "mongodb-cache-server",
-  "type": "module",
+  "type": "commonjs",
   "version": "0.0.0",
   "description": "\"A MongoDB caching layer for real-time voting data.\"",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node dist/index.js",
+    "clean": "rimraf dist src/generated",
+    "build": "npx tsc && cpx \"src/generated/**/*.js\" dist/generated",
+    "type-check": "npx tsc --noEmit",
+    "make-generated": "mkdirp src/generated",
+    "protoc-block-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated ./proto/block_event_message.proto",
+    "protoc-pending-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated ./proto/pending_event_message.proto",
+    "init": "npm run make-generated && npm run protoc-block-event && npm run protoc-pending-event && npm run build"
   },
-  "keywords": [
-    "voting",
-    "cache",
-    "caching",
-    "mongodb",
-    "grpc",
-    "data",
-    "service",
-    "blockchain"
-  ],
   "author": "kyubin2892@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
-    "@grpc/proto-loader": "^0.7.15"
+    "@protobuf-ts/runtime-rpc": "^2.11.0"
   },
   "devDependencies": {
-    "eslint": "^9.28.0"
+    "typescript": "^5.8.3",
+    "@protobuf-ts/plugin": "^2.11.0",
+    "@types/node": "^22.15.29",
+    "cpx": "^1.5.0",
+    "eslint": "^9.28.0",
+    "grpc-tools": "^1.13.0",
+    "mkdirp": "^3.0.1",
+    "rimraf": "^6.0.1"
   }
 }

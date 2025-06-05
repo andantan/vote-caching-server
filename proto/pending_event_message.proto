@@ -10,7 +10,7 @@ service ExpiredPendingEventService {
 message ExpiredPendingEvent {
     string topic = 1;
     int64 count = 2;
-    map<string, uint64> options = 3;
+    map<string, uint32> options = 3;
 }
 
 message ReportPendingEventResponse {

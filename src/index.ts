@@ -1,12 +1,12 @@
-import { runGrpcServer } from "./server/grpcEventServer.js";
+import runGrpcServer from "./server/grpcEventServer.js";
 
-const GRPC_PORT = 50051;
+const PORT = 50051;
 
 async function main() {
   try {
     console.log('Starting gRPC server...');
 
-    await runGrpcServer(GRPC_PORT);
+    await runGrpcServer(PORT);
 
     console.log('gRPC server is fully operational.');
   } catch (error) {
