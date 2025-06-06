@@ -11,7 +11,7 @@ function validateNewProposalEvent(call, callback) {
     }
     const response = {
         success: true,
-        message: `Proposal event { topic: ${topic}, duration: ${duration} }`
+        message: `NewProposal event { topic: ${topic}, duration: ${duration} }`
     };
     console.log(`[gRPC-MongoDB-Cache-Server] NewProposalEventService.validateNewProposalEvent response:`);
     console.log(`  Message: ${response.message}`);
