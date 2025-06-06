@@ -1,6 +1,6 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
-import { ExpiredPendingEvent, ReportPendingEventResponse } from "../../generated/pending_event_message.js";
+import { ExpiredPendingEvent, ReportPendingEventResponse } from "../../generated/blockchain_event/pending_event_message.js";
 
 export default function reportExpiredPendingEvent(
     call: ServerUnaryCall<ExpiredPendingEvent, ReportPendingEventResponse>,

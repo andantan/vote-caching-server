@@ -38,13 +38,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = runGrpcServer;
 const grpc = __importStar(require("@grpc/grpc-js"));
-const block_event_message_grpc_server_js_1 = require("../generated/block_event_message.grpc-server.js");
-const pending_event_message_grpc_server_js_1 = require("../generated/pending_event_message.grpc-server.js");
+const block_event_message_grpc_server_js_1 = require("../generated/blockchain_event/block_event_message.grpc-server.js");
+const pending_event_message_grpc_server_js_1 = require("../generated/blockchain_event/pending_event_message.grpc-server.js");
+const proposal_event_message_grpc_server_js_1 = require("../generated/web_event/proposal_event_message.grpc-server.js");
 const grpcBlockEventHandler_js_1 = __importDefault(require("./handler/grpcBlockEventHandler.js"));
 const grpcPendingEventHandler_js_1 = __importDefault(require("./handler/grpcPendingEventHandler.js"));
+const grpcProposalEventHandler_js_1 = __importDefault(require("./handler/grpcProposalEventHandler.js"));
 const GRPC_PORT = 50051;
 async function runGrpcServer(port = GRPC_PORT) {
     const server = new grpc.Server();
+    server.addService(proposal_event_message_grpc_server_js_1.newProposalEventServiceDefinition, {
+        ValidateNewProposalEvent: grpcProposalEventHandler_js_1.default
+    });
+    console.log("[gRPC Server] NewProposalEventService::validateNewProposalEvent registered");
     server.addService(block_event_message_grpc_server_js_1.createdBlockEventServiceDefinition, {
         ReportCreatedBlockEvent: grpcBlockEventHandler_js_1.default,
     });

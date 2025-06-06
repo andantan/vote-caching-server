@@ -1,6 +1,6 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
-import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/block_event_message.js";
+import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
 
 export default function reportCreatedBlockEvent(
     call: ServerUnaryCall<CreatedBlockEvent, ReportBlockEventResponse>,

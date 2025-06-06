@@ -7,12 +7,17 @@
   "scripts": {
     "start": "node dist/index.js",
     "clean": "rimraf dist src/generated",
-    "build": "npx tsc && cpx \"src/generated/**/*.js\" dist/generated",
+    "build": "npx tsc",
+    "init": "npm run make-generated && npm run _protoc-block-event && npm run _protoc-pending-event && npm run _protoc-proposal-event",
     "type-check": "npx tsc --noEmit",
-    "make-generated": "mkdirp src/generated",
-    "protoc-block-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated ./proto/block_event_message.proto",
-    "protoc-pending-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated ./proto/pending_event_message.proto",
-    "init": "npm run make-generated && npm run protoc-block-event && npm run protoc-pending-event && npm run build"
+    "make-generated": "npm run _mkdir-generated && npm run _mkdir-generated-blockchain-event && npm run _mkdir-generated-web-event",
+    "_mkdir-generated": "mkdirp src/generated",
+    "_mkdir-generated-web-event": "mkdirp src/generated/web_event",
+    "_mkdir-generated-blockchain-event": "mkdirp src/generated/blockchain_event",
+    "_protoc-block-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/blockchain_event/block_event_message.proto",
+    "_protoc-pending-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/blockchain_event/pending_event_message.proto",
+    "_protoc-proposal-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/proposal_event_message.proto",
+    "_cpx": "cpx \"src/generated/**/*.js\" dist/generated"
   },
   "author": "kyubin2892@gmail.com",
   "license": "ISC",
@@ -21,12 +26,12 @@
     "@protobuf-ts/runtime-rpc": "^2.11.0"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
-    "@protobuf-ts/plugin": "^2.11.0",
-    "@types/node": "^22.15.29",
-    "cpx": "^1.5.0",
     "eslint": "^9.28.0",
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.29",
+    "@protobuf-ts/plugin": "^2.11.0",
     "grpc-tools": "^1.13.0",
+    "cpx": "^1.5.0",
     "mkdirp": "^3.0.1",
     "rimraf": "^6.0.1"
   }
