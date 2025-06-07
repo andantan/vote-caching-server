@@ -3,10 +3,12 @@ import * as grpc from "@grpc/grpc-js";
 import { createdBlockEventServiceDefinition } from "../generated/blockchain_event/block_event_message.grpc-server.js";
 import { expiredPendingEventServiceDefinition } from "../generated/blockchain_event/pending_event_message.grpc-server.js";
 import { newProposalEventServiceDefinition } from "../generated/web_event/proposal_event_message.grpc-server.js";
+import { newBallotEventServiceDefinition } from "../generated/web_event/ballot_event_message.grpc-server.js";
 
-import reportCreatedBlockEvent from "./handler/grpcBlockEventHandler.js";
-import reportExpiredPendingEvent from "./handler/grpcPendingEventHandler.js";
-import validateNewProposalEvent from "./handler/grpcProposalEventHandler.js";
+import reportCreatedBlockEvent from "./blockchain-event-handler/grpcBlockEventHandler.js";
+import reportExpiredPendingEvent from "./blockchain-event-handler/grpcPendingEventHandler.js";
+import validateNewProposalEvent from "./webclient-event-handler/grpcProposalEventHandler.js";
+import validateNewBallotEvent from "./webclient-event-handler/grpcBallotEventHandler.js";
 
 import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
 import logger from "../config/logger.js";
@@ -21,19 +23,27 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
         ValidateNewProposalEvent: validateNewProposalEvent
     });
 
-    logger.info("[ProposalEvent] NewProposalEventService::validateNewProposalEvent registered");
+    logger.info("[webclient-event-handler::ProposalEvent] NewProposalEventService::validateNewProposalEvent registered");
 
+    server.addService(newBallotEventServiceDefinition, {
+        ValidateNewBallotEvent: validateNewBallotEvent
+    });
+
+    logger.info("[webclient-event-handler::BallotEvent] newBallotEventService::validateNewBallotEvent registered");
+    
     server.addService(createdBlockEventServiceDefinition, {
         ReportCreatedBlockEvent: reportCreatedBlockEvent,
     });
 
-    logger.info("[BlockEvent] CreatedBlockEventService::reportCreatedBlockEvent registered");
+    logger.info("[blockchain-event-handler::BlockEvent] CreatedBlockEventService::reportCreatedBlockEvent registered");
     
     server.addService(expiredPendingEventServiceDefinition, {
         ReportExpiredPendingEvent: reportExpiredPendingEvent
     });
 
-    logger.info("[PendingEvent] ExpiredPendingEventService::reportExpiredPendingEvent registered");
+    logger.info("[blockchain-event-handler::PendingEvent] ExpiredPendingEventService::reportExpiredPendingEvent registered");
+    
+
 
     await new Promise<void>((resolve, reject) => {
         server.bindAsync(
