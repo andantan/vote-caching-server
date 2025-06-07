@@ -1,6 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import { NewProposalEvent, ValidateProposalEventResponse } from "../../generated/web_event/proposal_event_message.js";
+import logger from "../../config/logger.js";
 
 export default function validateNewProposalEvent(
     call: ServerUnaryCall<NewProposalEvent, ValidateProposalEventResponse>,
@@ -8,9 +9,7 @@ export default function validateNewProposalEvent(
 ): void {
     const { topic, duration } = call.request;
 
-    console.log(`[gRPC-MongoDB-Cache-Server] NewProposalEventService.validateNewProposalEvent received`);
-    console.log(`  Topic: ${topic}`);
-    console.log(`  Duration: ${duration}`);
+    logger.info(`[ProposalEvent] NewProposalEvent - Topic: ${topic}, Duration: ${duration}`);
 
     {
         // TODO: MongoDB service code section
@@ -21,9 +20,7 @@ export default function validateNewProposalEvent(
         message: `NewProposal event { topic: ${topic}, duration: ${duration} }`
     };
 
-    console.log(`[gRPC-MongoDB-Cache-Server] NewProposalEventService.validateNewProposalEvent response:`);
-    console.log(`  Message: ${response.message}`);
-    console.log(`  Success: ${response.success}`);
+    logger.info(`[ProposalEvent] ValidateProposalEventResponse - Message: ${response.message}, Success: ${response.success}`);
 
     callback(null, response);
 }

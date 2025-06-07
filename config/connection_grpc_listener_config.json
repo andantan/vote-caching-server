@@ -1,0 +1,4 @@
+{
+    "DefaultGrpcEventListenerPort": 50051,
+    "GrpcEventListenerPort": 50051
+}

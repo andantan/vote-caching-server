@@ -1,16 +1,19 @@
 import runGrpcServer from "./server/grpcEventServer.js";
 
-const PORT = 50051;
+import * as grpcConfig from "../config/connection_grpc_listener_config.json";
+import logger from "./config/logger.js";
+
+const GRPC_EVENT_LISTENER_PORT: number = grpcConfig.GrpcEventListenerPort;
 
 async function main() {
   try {
-    console.log('Starting gRPC server...');
+    logger.info('Starting gRPC server...');
 
-    await runGrpcServer(PORT);
+    await runGrpcServer(GRPC_EVENT_LISTENER_PORT);
 
-    console.log('gRPC server is fully operational.');
+    logger.info('gRPC server is fully operational.');
   } catch (error) {
-    console.error('Failed to start gRPC server:', error);
+    logger.error('Failed to start gRPC server:', error);
 
     process.exit(1);
   }

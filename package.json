@@ -3,7 +3,9 @@
   "type": "commonjs",
   "version": "0.0.0",
   "description": "\"A MongoDB caching layer for real-time voting data.\"",
-  "main": "dist/src/index.js",
+  "@root/*.ts": "/src",
+  "@root/*.js": "/dist",
+  "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
     "clean": "rimraf dist src/generated",
@@ -23,11 +25,13 @@
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
-    "@protobuf-ts/runtime-rpc": "^2.11.0"
+    "@protobuf-ts/runtime-rpc": "^2.11.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "^2.11.0",
     "@types/node": "^22.15.29",
+    "@types/winston": "^2.4.4",
     "eslint": "^9.28.0",
     "grpc-tools": "^1.13.0",
     "mkdirp": "^3.0.1",

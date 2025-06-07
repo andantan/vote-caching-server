@@ -8,28 +8,32 @@ import reportCreatedBlockEvent from "./handler/grpcBlockEventHandler.js";
 import reportExpiredPendingEvent from "./handler/grpcPendingEventHandler.js";
 import validateNewProposalEvent from "./handler/grpcProposalEventHandler.js";
 
-const GRPC_PORT = 50051;
+import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
+import logger from "../config/logger.js";
 
-export default async function runGrpcServer(port: number = GRPC_PORT): Promise<grpc.Server> {
+
+const DEFAULT_GRPC_EVENT_LISTENER_PORT: number = grpcConfig.DefaultGrpcEventListenerPort;
+
+export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LISTENER_PORT): Promise<grpc.Server> {
     const server = new grpc.Server();
 
     server.addService(newProposalEventServiceDefinition, {
         ValidateNewProposalEvent: validateNewProposalEvent
     });
 
-    console.log("[gRPC Server] NewProposalEventService::validateNewProposalEvent registered");
+    logger.info("[ProposalEvent] NewProposalEventService::validateNewProposalEvent registered");
 
     server.addService(createdBlockEventServiceDefinition, {
         ReportCreatedBlockEvent: reportCreatedBlockEvent,
     });
 
-    console.log("[gRPC Server] CreatedBlockEventService::reportCreatedBlockEvent registered");
+    logger.info("[BlockEvent] CreatedBlockEventService::reportCreatedBlockEvent registered");
     
     server.addService(expiredPendingEventServiceDefinition, {
         ReportExpiredPendingEvent: reportExpiredPendingEvent
     });
 
-    console.log("[gRPC Server] ExpiredPendingEventService::reportExpiredPendingEvent registered");
+    logger.info("[PendingEvent] ExpiredPendingEventService::reportExpiredPendingEvent registered");
 
     await new Promise<void>((resolve, reject) => {
         server.bindAsync(
@@ -37,17 +41,17 @@ export default async function runGrpcServer(port: number = GRPC_PORT): Promise<g
             grpc.ServerCredentials.createInsecure(),
             (err: Error | null, boundPort: number) => {
                 if (err) {
-                    console.error(`Error binding gRPC server to port ${port}:`, err);
+                    logger.error(`Error binding gRPC server to port ${port}:`, err);
                     return reject(err);
                 }
 
-                console.log(`gRPC server successfully bound to http://0.0.0.0:${boundPort}`);
+                logger.info(`gRPC server successfully bound to http://0.0.0.0:${boundPort}`);
                 resolve();
             }
         );
     });
 
-    console.log(`gRPC server is now listening on port ${port}`);
+    logger.info(`gRPC server is now listening on port ${port}`);
 
     return server;
 }

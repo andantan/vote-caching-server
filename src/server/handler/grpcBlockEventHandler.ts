@@ -1,6 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
 import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
+import logger from '../../config/logger.js';
 
 export default function reportCreatedBlockEvent(
     call: ServerUnaryCall<CreatedBlockEvent, ReportBlockEventResponse>,
@@ -8,9 +9,7 @@ export default function reportCreatedBlockEvent(
 ): void {
     const { topic, height } = call.request;
 
-    console.log(`[gRPC-MongoDB-Cache-Server] CreatedBlockEventService.reportCreatedBlockEvent received`);
-    console.log(`  Topic: ${topic}`);
-    console.log(`  Height: ${height}`);
+    logger.info(`[BlockEvent] CreatedBlockEvent - Topic: ${topic}, Height: ${height}`);
 
     {
         // TODO: MongoDB service code section
@@ -21,9 +20,7 @@ export default function reportCreatedBlockEvent(
         message: `Block event { topic: ${topic}, height: ${height} }`
     };
 
-    console.log(`[gRPC-MongoDB-Cache-Server] CreatedBlockEventService.reportCreatedBlockEvent response:`);
-    console.log(`  Message: ${response.message}`);
-    console.log(`  Success: ${response.success}`);
+    logger.info(`[BlockEvent] ReportBlockEventResponse - Message: ${response.message}, Success: ${response.success}`);
 
     callback(null, response);
 }
