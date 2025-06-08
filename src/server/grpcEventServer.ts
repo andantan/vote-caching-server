@@ -11,7 +11,7 @@ import validateNewProposalEvent from "./webclient-event-handler/grpcProposalEven
 import validateNewBallotEvent from "./webclient-event-handler/grpcBallotEventHandler.js";
 
 import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
-import logger from "../config/logger.js";
+import logger from "../config/logger.js"
 
 
 const DEFAULT_GRPC_EVENT_LISTENER_PORT: number = grpcConfig.DefaultGrpcEventListenerPort;
