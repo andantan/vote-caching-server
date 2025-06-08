@@ -19,7 +19,7 @@ build:
 all: init build
 deploy: install init build
 
-run:
+run-cache-server:
 	@$(CLEAR_COMMAND)
 	@echo "Starting the application..."
 	@npm run start

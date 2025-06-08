@@ -1,7 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import { NewBallotEvent, ValidateBallotEventResponse } from './../../generated/web_event/ballot_event_message';
-import logger from "../../config/logger";
+import logger from "../../config/logger.js";
 
 export default function validateNewBallotEvent(
     call: ServerUnaryCall<NewBallotEvent, ValidateBallotEventResponse>,

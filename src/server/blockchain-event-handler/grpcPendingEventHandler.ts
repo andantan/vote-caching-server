@@ -9,7 +9,7 @@ export default function reportExpiredPendingEvent(
 ): void {
     const { topic, count, options } = call.request;
 
-    logger.info(`[PendingEvent] ExpiredPendingEvent - Topic: ${topic}, Count: ${count}, Options: ${JSON.stringify(options)}`);
+    logger.debug(`[PendingEvent] ExpiredPendingEvent - Topic: ${topic}, Count: ${count}, Options: ${JSON.stringify(options)}`);
 
     {
         // TODO: MongoDB service code section
@@ -20,7 +20,7 @@ export default function reportExpiredPendingEvent(
         message: `Pending event { topic: ${topic}, count: ${count}, optons: ${JSON.stringify(options)} }`
     };
 
-    logger.info(`[PendingEvent] ReportPendingEventResponse - Message: ${response.message}, Success: ${response.success}`);
+    logger.debug(`[PendingEvent] ReportPendingEventResponse - Message: ${response.message}, Success: ${response.success}`);
 
     callback(null, response);
 }
