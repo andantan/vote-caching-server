@@ -17,6 +17,7 @@ build:
 	@npm run build
 
 all: init build
+deploy: install init build
 
 run:
 	@$(CLEAR_COMMAND)
