@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ballot_event_message;
+
+service NewBallotEventService {
+    rpc ValidateNewBallotEvent(NewBallotEvent) 
+    returns (ValidateBallotEventResponse);
+}
+
+message NewBallotEvent {
+    string hash = 1;
+    string option = 2;
+    string topic = 3;
+}
+
+message ValidateBallotEventResponse {
+    bool success = 1;
+    string message = 2;
+}
