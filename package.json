@@ -27,10 +27,12 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@protobuf-ts/runtime-rpc": "^2.11.0",
+    "mongoose": "^8.15.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "^2.11.0",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.15.29",
     "@types/winston": "^2.4.4",
     "eslint": "^9.28.0",

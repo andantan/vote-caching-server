@@ -17,7 +17,7 @@ export default function reportExpiredPendingEvent(
 
     const response: ReportPendingEventResponse = {
         success: true,
-        message: `Pending event { topic: ${topic}, count: ${count}, optons: ${JSON.stringify(options)} }`
+        message: `Pending event { topic: ${topic}, count: ${count}, options: ${JSON.stringify(options)} }`
     };
 
     logger.debug(`[PendingEvent] ReportPendingEventResponse - Message: ${response.message}, Success: ${response.success}`);
