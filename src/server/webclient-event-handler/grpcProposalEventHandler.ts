@@ -1,7 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import * as ProposalEvent from "../../generated/web_event/proposal_event_message.js";
-import { ProposalEventMongoDBActor } from "../../database/actor/votes/proposalEventMongoActor.js";
+import { ProposalEventMongoDBActor } from "../../database/actor/proposalEventMongoActor.js";
 import logger from "../../config/logger.js";
 
 const actor = new ProposalEventMongoDBActor()

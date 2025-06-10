@@ -14,6 +14,6 @@ message CreatedBlockEvent {
 }
 
 message ReportBlockEventResponse {
-    bool success = 1;
-    string message = 2;
+    bool cached = 1;
+    string status = 2;
 }

@@ -33,13 +33,13 @@ export interface CreatedBlockEvent {
  */
 export interface ReportBlockEventResponse {
     /**
-     * @generated from protobuf field: bool success = 1
+     * @generated from protobuf field: bool cached = 1
      */
-    success: boolean;
+    cached: boolean;
     /**
-     * @generated from protobuf field: string message = 2
+     * @generated from protobuf field: string status = 2
      */
-    message: string;
+    status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
@@ -108,14 +108,14 @@ export const CreatedBlockEvent = new CreatedBlockEvent$Type();
 class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse> {
     constructor() {
         super("block_event_message.ReportBlockEventResponse", [
-            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<ReportBlockEventResponse>): ReportBlockEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.success = false;
-        message.message = "";
+        message.cached = false;
+        message.status = "";
         if (value !== undefined)
             reflectionMergePartial<ReportBlockEventResponse>(this, message, value);
         return message;
@@ -125,11 +125,11 @@ class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bool success */ 1:
-                    message.success = reader.bool();
+                case /* bool cached */ 1:
+                    message.cached = reader.bool();
                     break;
-                case /* string message */ 2:
-                    message.message = reader.string();
+                case /* string status */ 2:
+                    message.status = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -143,12 +143,12 @@ class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse
         return message;
     }
     internalBinaryWrite(message: ReportBlockEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bool success = 1; */
-        if (message.success !== false)
-            writer.tag(1, WireType.Varint).bool(message.success);
-        /* string message = 2; */
-        if (message.message !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.message);
+        /* bool cached = 1; */
+        if (message.cached !== false)
+            writer.tag(1, WireType.Varint).bool(message.cached);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

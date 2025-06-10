@@ -1,9 +1,9 @@
-import { VoteModel, IVote } from "../../models/votes/vote.js";
-import logger from "../../../config/logger.js";
+import { VoteModel, IVote } from "../models/votes/vote.js";
+import logger from "../../config/logger.js";
 
 export class ProposalEventMongoDBActor {
     public async saveNewProposal(topic: string, duration: number): Promise<IVote> {
-        logger.info(`[ProposalEventMongoDBActor] Attempting to save new proposal: Topic: "${topic}", Duration: ${duration}`);
+        logger.info(`[ProposalEventMongoDBActor] Attempting to save new proposal - Topic: "${topic}", Duration: ${duration}`);
 
         try {
             const newVote: IVote = new VoteModel({
@@ -13,7 +13,7 @@ export class ProposalEventMongoDBActor {
 
             const savedVote = await newVote.save();
             
-            logger.info(`[ProposalEventMongoDBActor] New proposal saved successfully. topic: "${savedVote.topic}"`);
+            logger.info(`[ProposalEventMongoDBActor] New proposal saved successfully - topic: "${savedVote.topic}"`);
 
             return savedVote;
         } catch (error: unknown) {
@@ -24,7 +24,7 @@ export class ProposalEventMongoDBActor {
     }
 
     public async findIfExistsProposal(topic: string): Promise<IVote | null> {
-        logger.info(`[ProposalEventMongoDBActor] Attempting to find exists new proposal: Topic: "${topic}"`);
+        logger.info(`[ProposalEventMongoDBActor] Attempting to find exists new proposal - Topic: "${topic}"`);
 
         try {
             const vote = await VoteModel.findOne({

@@ -5,7 +5,7 @@ import { expiredPendingEventServiceDefinition } from "../generated/blockchain_ev
 import { newProposalEventServiceDefinition } from "../generated/web_event/proposal_event_message.grpc-server.js";
 import { newBallotEventServiceDefinition } from "../generated/web_event/ballot_event_message.grpc-server.js";
 
-import reportCreatedBlockEvent from "./blockchain-event-handler/grpcBlockEventHandler.js";
+import { reportCreatedBlockEvent } from "./blockchain-event-handler/grpcBlockEventHandler.js";
 import reportExpiredPendingEvent from "./blockchain-event-handler/grpcPendingEventHandler.js";
 import { validateNewProposalEvent, cacheNewProposalEvent } from "./webclient-event-handler/grpcProposalEventHandler.js";
 import validateNewBallotEvent from "./webclient-event-handler/grpcBallotEventHandler.js";
