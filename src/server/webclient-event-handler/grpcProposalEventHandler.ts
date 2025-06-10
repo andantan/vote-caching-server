@@ -1,38 +1,72 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
-import { NewProposalEvent, ValidateProposalEventResponse } from "../../generated/web_event/proposal_event_message.js";
-import { ProposalEventMongoActor } from "../../database/actor/votes/proposalEventMongoActor.js";
+import * as ProposalEvent from "../../generated/web_event/proposal_event_message.js";
+import { ProposalEventMongoDBActor } from "../../database/actor/votes/proposalEventMongoActor.js";
 import logger from "../../config/logger.js";
 
-const proposalMongoActor = new ProposalEventMongoActor()
+const actor = new ProposalEventMongoDBActor()
 
-export default async function validateNewProposalEvent(
-    call: ServerUnaryCall<NewProposalEvent, ValidateProposalEventResponse>,
-    callback: sendUnaryData<ValidateProposalEventResponse>
+export async function validateNewProposalEvent(
+    call: ServerUnaryCall<ProposalEvent.ValidateProposalEventRequest, ProposalEvent.ValidateProposalEventResponse>,
+    callback: sendUnaryData<ProposalEvent.ValidateProposalEventResponse>
+): Promise<void> {
+    const { topic } = call.request;
+
+    logger.info(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}"`);
+
+    let validation = true;
+    let status = '';
+
+    try {
+        const validatedVote = await actor.findIfExistsProposal(topic);
+
+        if (validatedVote === null) {
+            status = "OK";
+            logger.info(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", Status: "${status}", Validation: ${validation}`);
+        } else {
+            validation = false;
+            status = validatedVote.expired ? "PROPOSAL_EXPIRED" : "PROPOSAL_ALREADY_OPEN";
+            logger.warn(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", Status: "${status}", Validation: ${validation}`);
+        }
+    } catch (error: unknown) {
+        validation = false;
+        status = "UNKNOWN_ERROR";
+        logger.error(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", UNKNOWN_ERROR: `, error);
+    }
+
+    const response: ProposalEvent.ValidateProposalEventResponse = {
+        validation: validation,
+        status: status
+    };
+
+    callback(null, response);
+}
+
+export async function cacheNewProposalEvent(
+    call: ServerUnaryCall<ProposalEvent.CacheProposalEventRequest, ProposalEvent.CacheProposalEventResponse>,
+    callback: sendUnaryData<ProposalEvent.CacheProposalEventResponse>
 ): Promise<void> {
     const { topic, duration } = call.request;
 
-    logger.info(`[ProposalEvent] NewProposalEvent - Topic: ${topic}, Duration: ${duration}`);
+    logger.info(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}"`);
 
-    let success = true;
-    let message = '';
+    let cached = true;
+    let status = '';
 
     try {
-        const voteId = await proposalMongoActor.saveNewProposal(topic, duration);
-        message = `New proposal for topic "${topic}" (duration: ${duration} min) accepted and saved. Vote ID: ${voteId}`;
-        logger.info(`[ProposalEvent] Successfully processed and saved new proposal.`);
+        await actor.saveNewProposal(topic, duration);
+        status = "OK";
+        logger.info(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}", Status: "${status}", Cached: ${cached}`);
     } catch (error: unknown) {
-        success = false;
-        message = `Failed to validate or save new proposal for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
-        logger.error(`[ProposalEvent] Error processing new proposal:`, error);
+        cached = false;
+        status = "UNKNOWN_ERROR";
+        logger.error(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}", Unknown error:`, error);
     }
 
-    const response: ValidateProposalEventResponse = {
-        success: true,
-        message: message
+    const response: ProposalEvent.CacheProposalEventResponse = {
+        cached: cached,
+        status: status
     };
-
-    logger.info(`[ProposalEvent] ValidateProposalEventResponse - Message: ${response.message}, Success: ${response.success}`);
 
     callback(null, response);
 }

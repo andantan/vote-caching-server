@@ -3,16 +3,28 @@ syntax = "proto3";
 package proposal_event_message;
 
 service NewProposalEventService {
-    rpc ValidateNewProposalEvent(NewProposalEvent) 
+  rpc ValidateNewProposalEvent(ValidateProposalEventRequest)
     returns (ValidateProposalEventResponse);
+
+  rpc CacheNewProposalEvent(CacheProposalEventRequest)
+    returns (CacheProposalEventResponse);
 }
 
-message NewProposalEvent {
-    string topic = 1;
-    uint32 duration = 2;
+message ValidateProposalEventRequest {
+  string topic = 1;
 }
 
 message ValidateProposalEventResponse {
-    bool success = 1;
-    string message = 2;
+  bool validation = 1;
+  string status = 2;
+}
+
+message CacheProposalEventRequest {
+  string topic = 1;
+  uint32 duration = 2;
+}
+
+message CacheProposalEventResponse {
+  bool cached = 1;
+  string status = 2;
 }

@@ -4,8 +4,10 @@
 import { NewProposalEventService } from "./proposal_event_message";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { CacheProposalEventResponse } from "./proposal_event_message";
+import type { CacheProposalEventRequest } from "./proposal_event_message";
 import type { ValidateProposalEventResponse } from "./proposal_event_message";
-import type { NewProposalEvent } from "./proposal_event_message";
+import type { ValidateProposalEventRequest } from "./proposal_event_message";
 import * as grpc from "@grpc/grpc-js";
 /**
  * @generated from protobuf service proposal_event_message.NewProposalEventService
@@ -14,10 +16,17 @@ export interface INewProposalEventServiceClient {
     /**
      * @generated from protobuf rpc: ValidateNewProposalEvent
      */
-    validateNewProposalEvent(input: NewProposalEvent, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewProposalEvent(input: NewProposalEvent, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewProposalEvent(input: NewProposalEvent, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewProposalEvent(input: NewProposalEvent, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewProposalEvent(input: ValidateProposalEventRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewProposalEvent(input: ValidateProposalEventRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewProposalEvent(input: ValidateProposalEventRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewProposalEvent(input: ValidateProposalEventRequest, callback: (err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: CacheNewProposalEvent
+     */
+    cacheNewProposalEvent(input: CacheProposalEventRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewProposalEvent(input: CacheProposalEventRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewProposalEvent(input: CacheProposalEventRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewProposalEvent(input: CacheProposalEventRequest, callback: (err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service proposal_event_message.NewProposalEventService
@@ -31,8 +40,15 @@ export class NewProposalEventServiceClient extends grpc.Client implements INewPr
     /**
      * @generated from protobuf rpc: ValidateNewProposalEvent
      */
-    validateNewProposalEvent(input: NewProposalEvent, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void)): grpc.ClientUnaryCall {
+    validateNewProposalEvent(input: ValidateProposalEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: ValidateProposalEventResponse) => void)): grpc.ClientUnaryCall {
         const method = NewProposalEventService.methods[0];
-        return this.makeUnaryRequest<NewProposalEvent, ValidateProposalEventResponse>(`/${NewProposalEventService.typeName}/${method.name}`, (value: NewProposalEvent): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ValidateProposalEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+        return this.makeUnaryRequest<ValidateProposalEventRequest, ValidateProposalEventResponse>(`/${NewProposalEventService.typeName}/${method.name}`, (value: ValidateProposalEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ValidateProposalEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: CacheNewProposalEvent
+     */
+    cacheNewProposalEvent(input: CacheProposalEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: CacheProposalEventResponse) => void)): grpc.ClientUnaryCall {
+        const method = NewProposalEventService.methods[1];
+        return this.makeUnaryRequest<CacheProposalEventRequest, CacheProposalEventResponse>(`/${NewProposalEventService.typeName}/${method.name}`, (value: CacheProposalEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CacheProposalEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

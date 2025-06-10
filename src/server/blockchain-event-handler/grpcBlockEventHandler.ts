@@ -7,9 +7,9 @@ export default function reportCreatedBlockEvent(
     call: ServerUnaryCall<CreatedBlockEvent, ReportBlockEventResponse>,
     callback: sendUnaryData<ReportBlockEventResponse>
 ): void {
-    const { topic, height } = call.request;
+    const { topic, length, height } = call.request;
 
-    logger.info(`[BlockEvent] CreatedBlockEvent - Topic: ${topic}, Height: ${height}`);
+    logger.info(`[BlockEvent] CreatedBlockEvent - Topic: ${topic}, Length: ${length}, Height: ${height}`);
 
     {
         // TODO: MongoDB service code section
@@ -17,7 +17,7 @@ export default function reportCreatedBlockEvent(
 
     const response: ReportBlockEventResponse = {
         success: true,
-        message: `Block event { topic: ${topic}, height: ${height} }`
+        message: `Block event { topic: ${topic}, length: ${length}, height: ${height} }`
     };
 
     logger.info(`[BlockEvent] ReportBlockEventResponse - Message: ${response.message}, Success: ${response.success}`);

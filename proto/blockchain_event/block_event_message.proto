@@ -9,7 +9,8 @@ service CreatedBlockEventService {
 
 message CreatedBlockEvent {
     string topic = 1;
-    uint32 height = 2;
+    uint32 length = 2;
+    uint32 height = 3;
 }
 
 message ReportBlockEventResponse {

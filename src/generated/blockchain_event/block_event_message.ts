@@ -20,7 +20,11 @@ export interface CreatedBlockEvent {
      */
     topic: string;
     /**
-     * @generated from protobuf field: uint32 height = 2
+     * @generated from protobuf field: uint32 length = 2
+     */
+    length: number;
+    /**
+     * @generated from protobuf field: uint32 height = 3
      */
     height: number;
 }
@@ -42,12 +46,14 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
     constructor() {
         super("block_event_message.CreatedBlockEvent", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "height", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 2, name: "length", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "height", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<CreatedBlockEvent>): CreatedBlockEvent {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
+        message.length = 0;
         message.height = 0;
         if (value !== undefined)
             reflectionMergePartial<CreatedBlockEvent>(this, message, value);
@@ -61,7 +67,10 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* uint32 height */ 2:
+                case /* uint32 length */ 2:
+                    message.length = reader.uint32();
+                    break;
+                case /* uint32 height */ 3:
                     message.height = reader.uint32();
                     break;
                 default:
@@ -79,9 +88,12 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* uint32 height = 2; */
+        /* uint32 length = 2; */
+        if (message.length !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.length);
+        /* uint32 height = 3; */
         if (message.height !== 0)
-            writer.tag(2, WireType.Varint).uint32(message.height);
+            writer.tag(3, WireType.Varint).uint32(message.height);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
