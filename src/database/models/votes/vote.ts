@@ -12,17 +12,18 @@ export interface IVote extends Document {
     createdAt: Date;
     updatedAt: Date;
     expiredAt: Date;
+    settledAt?: Date;
     expired: boolean;
     blockHeights: IBlockHeight;
     result: IBalletResult;
 }
 
 const VoteSchema: Schema<IVote> = new Schema({
-    topic: { type: String, required: true, unique: true },
-    duration: { type: Number, required: true },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-    expiredAt: { type: Date, required: false },
+    topic: { type: String, required: true, unique: true, immutable: true },
+    duration: { type: Number, required: true, immutable: true },
+    createdAt: { type: Date, default: Date.now, immutable: true },
+    expiredAt: { type: Date, required: false, immutable: true },
+    settledAt: { type: Date, required: false, immutable: true },
     expired: { type: Boolean, default: false },
     blockHeights: {
         type: [blockHeightSchema],

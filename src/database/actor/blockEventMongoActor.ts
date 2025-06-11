@@ -1,8 +1,9 @@
 import { VoteModel, IVote } from "../models/votes/vote.js";
 import { IBlockHeight } from './../models/votes/block.js';
+
 import logger from "../../config/logger.js";
 
-export class BlockEventMongoDBActor {
+export default class BlockEventMongoDBActor {
     public async addBlockToVote(topic: string, length: number, height: number): Promise<IVote | null> {
         try {
             logger.info(`[BlockEventMongoDBActor] Attempting to add block - Topic: "${topic}", Length: ${length}, Height: ${height}`);

@@ -1,26 +1,36 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
 import { ExpiredPendingEvent, ReportPendingEventResponse } from "../../generated/blockchain_event/pending_event_message.js";
+import PendingEventMongoActor from '../../database/actor/pendingEventMongoActor.js';
 import logger from '../../config/logger.js';
 
-export default function reportExpiredPendingEvent(
+const actor = new PendingEventMongoActor();
+
+export default async function reportExpiredPendingEvent(
     call: ServerUnaryCall<ExpiredPendingEvent, ReportPendingEventResponse>,
     callback: sendUnaryData<ReportPendingEventResponse>
-): void {
+): Promise<void> {
     const { topic, count, options } = call.request;
 
-    logger.debug(`[PendingEvent] ExpiredPendingEvent - Topic: ${topic}, Count: ${count}, Options: ${JSON.stringify(options)}`);
+    logger.debug(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}"`);
 
-    {
-        // TODO: MongoDB service code section
+    let cached: boolean = true;
+    let status: string = "";
+
+    try {
+        await actor.saveVoteResult(topic, count, options);
+        status = "OK";
+        logger.info(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}", Count: ${count}, Options: ${JSON.stringify(options)}`);
+    } catch (error: unknown) {
+        cached = false;
+        status = "UNKNOWN_ERROR";
+        logger.error(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}", Unknown error:`, error);
     }
 
     const response: ReportPendingEventResponse = {
-        success: true,
-        message: `Pending event { topic: ${topic}, count: ${count}, options: ${JSON.stringify(options)} }`
+        cached: cached,
+        status: status
     };
-
-    logger.debug(`[PendingEvent] ReportPendingEventResponse - Message: ${response.message}, Success: ${response.success}`);
 
     callback(null, response);
 }

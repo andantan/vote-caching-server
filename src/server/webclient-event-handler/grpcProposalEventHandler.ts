@@ -1,7 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import * as ProposalEvent from "../../generated/web_event/proposal_event_message.js";
-import { ProposalEventMongoDBActor } from "../../database/actor/proposalEventMongoActor.js";
+import ProposalEventMongoDBActor from "../../database/actor/proposalEventMongoActor.js";
 import logger from "../../config/logger.js";
 
 const actor = new ProposalEventMongoDBActor()
@@ -15,7 +15,7 @@ export async function validateNewProposalEvent(
     logger.info(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}"`);
 
     let validation = true;
-    let status = '';
+    let status = "";
 
     try {
         const validatedVote = await actor.findIfExistsProposal(topic);
@@ -51,7 +51,7 @@ export async function cacheNewProposalEvent(
     logger.info(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}"`);
 
     let cached = true;
-    let status = '';
+    let status = "";
 
     try {
         await actor.saveNewProposal(topic, duration);

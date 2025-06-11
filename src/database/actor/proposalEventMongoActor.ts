@@ -1,7 +1,7 @@
 import { VoteModel, IVote } from "../models/votes/vote.js";
 import logger from "../../config/logger.js";
 
-export class ProposalEventMongoDBActor {
+export default class ProposalEventMongoDBActor {
     public async saveNewProposal(topic: string, duration: number): Promise<IVote> {
         logger.info(`[ProposalEventMongoDBActor] Attempting to save new proposal - Topic: "${topic}", Duration: ${duration}`);
 

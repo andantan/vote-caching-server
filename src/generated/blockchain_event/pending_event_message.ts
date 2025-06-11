@@ -20,9 +20,9 @@ export interface ExpiredPendingEvent {
      */
     topic: string;
     /**
-     * @generated from protobuf field: int64 count = 2
+     * @generated from protobuf field: uint32 count = 2
      */
-    count: bigint;
+    count: number;
     /**
      * @generated from protobuf field: map<string, uint32> options = 3
      */
@@ -35,27 +35,27 @@ export interface ExpiredPendingEvent {
  */
 export interface ReportPendingEventResponse {
     /**
-     * @generated from protobuf field: bool success = 1
+     * @generated from protobuf field: bool cached = 1
      */
-    success: boolean;
+    cached: boolean;
     /**
-     * @generated from protobuf field: string message = 2
+     * @generated from protobuf field: string status = 2
      */
-    message: string;
+    status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
     constructor() {
         super("pending_event_message.ExpiredPendingEvent", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "count", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 3, name: "options", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 13 /*ScalarType.UINT32*/ } }
         ]);
     }
     create(value?: PartialMessage<ExpiredPendingEvent>): ExpiredPendingEvent {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
-        message.count = 0n;
+        message.count = 0;
         message.options = {};
         if (value !== undefined)
             reflectionMergePartial<ExpiredPendingEvent>(this, message, value);
@@ -69,8 +69,8 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* int64 count */ 2:
-                    message.count = reader.int64().toBigInt();
+                case /* uint32 count */ 2:
+                    message.count = reader.uint32();
                     break;
                 case /* map<string, uint32> options */ 3:
                     this.binaryReadMap3(message.options, reader, options);
@@ -106,9 +106,9 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* int64 count = 2; */
-        if (message.count !== 0n)
-            writer.tag(2, WireType.Varint).int64(message.count);
+        /* uint32 count = 2; */
+        if (message.count !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.count);
         /* map<string, uint32> options = 3; */
         for (let k of globalThis.Object.keys(message.options))
             writer.tag(3, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.Varint).uint32(message.options[k]).join();
@@ -126,14 +126,14 @@ export const ExpiredPendingEvent = new ExpiredPendingEvent$Type();
 class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResponse> {
     constructor() {
         super("pending_event_message.ReportPendingEventResponse", [
-            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<ReportPendingEventResponse>): ReportPendingEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.success = false;
-        message.message = "";
+        message.cached = false;
+        message.status = "";
         if (value !== undefined)
             reflectionMergePartial<ReportPendingEventResponse>(this, message, value);
         return message;
@@ -143,11 +143,11 @@ class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResp
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bool success */ 1:
-                    message.success = reader.bool();
+                case /* bool cached */ 1:
+                    message.cached = reader.bool();
                     break;
-                case /* string message */ 2:
-                    message.message = reader.string();
+                case /* string status */ 2:
+                    message.status = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -161,12 +161,12 @@ class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResp
         return message;
     }
     internalBinaryWrite(message: ReportPendingEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bool success = 1; */
-        if (message.success !== false)
-            writer.tag(1, WireType.Varint).bool(message.success);
-        /* string message = 2; */
-        if (message.message !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.message);
+        /* bool cached = 1; */
+        if (message.cached !== false)
+            writer.tag(1, WireType.Varint).bool(message.cached);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

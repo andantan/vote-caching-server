@@ -1,7 +1,7 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
 import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
-import { BlockEventMongoDBActor } from "../../database/actor/blockEventMongoActor.js";
+import BlockEventMongoDBActor from "../../database/actor/blockEventMongoActor.js";
 import logger from '../../config/logger.js';
 
 const actor = new BlockEventMongoDBActor();
@@ -14,8 +14,8 @@ export async function reportCreatedBlockEvent(
 
     logger.info(`[BlockEvent] CreatedBlockEvent - Topic: ${topic}`);
 
-    let cached = true;
-    let status = "";
+    let cached: boolean = true;
+    let status: string = "";
 
     try {
         await actor.addBlockToVote(topic, length, height);
