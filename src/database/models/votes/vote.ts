@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Schema, Document } from "mongoose";
 
-import { IBalletResult, balletResultSchema } from "./ballet.js";
+import { IVoteResult, voteResultSchema } from "./result.js";
 import { IBlockHeight, blockHeightSchema } from "./block.js";
 import * as MongoConfig from "../../../../config/connection_mongodb_config.json";
 
@@ -14,11 +14,11 @@ export interface IVote extends Document {
     expiredAt: Date;
     settledAt?: Date;
     expired: boolean;
-    blockHeights: IBlockHeight;
-    result: IBalletResult;
+    blockHeights: IBlockHeight[];
+    result: IVoteResult;
 }
 
-const VoteSchema: Schema<IVote> = new Schema({
+export const VoteSchema: Schema<IVote> = new Schema({
     topic: { type: String, required: true, unique: true, immutable: true },
     duration: { type: Number, required: true, immutable: true },
     createdAt: { type: Date, default: Date.now, immutable: true },
@@ -30,7 +30,7 @@ const VoteSchema: Schema<IVote> = new Schema({
         default: []
     },
     result: {
-        type: balletResultSchema,
+        type: voteResultSchema,
         default: () => ({ count: 0, options: {} })
     }
 }, {

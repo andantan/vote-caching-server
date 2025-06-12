@@ -4,8 +4,10 @@
 import { NewBallotEventService } from "./ballot_event_message";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { CacheBallotEventResponse } from "./ballot_event_message";
+import type { CacheBallotEventRequest } from "./ballot_event_message";
 import type { ValidateBallotEventResponse } from "./ballot_event_message";
-import type { NewBallotEvent } from "./ballot_event_message";
+import type { ValidateBallotEventRequest } from "./ballot_event_message";
 import * as grpc from "@grpc/grpc-js";
 /**
  * @generated from protobuf service ballot_event_message.NewBallotEventService
@@ -14,10 +16,17 @@ export interface INewBallotEventServiceClient {
     /**
      * @generated from protobuf rpc: ValidateNewBallotEvent
      */
-    validateNewBallotEvent(input: NewBallotEvent, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewBallotEvent(input: NewBallotEvent, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewBallotEvent(input: NewBallotEvent, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
-    validateNewBallotEvent(input: NewBallotEvent, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewBallotEvent(input: ValidateBallotEventRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewBallotEvent(input: ValidateBallotEventRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewBallotEvent(input: ValidateBallotEventRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
+    validateNewBallotEvent(input: ValidateBallotEventRequest, callback: (err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: CacheNewBallotEvent
+     */
+    cacheNewBallotEvent(input: CacheBallotEventRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewBallotEvent(input: CacheBallotEventRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewBallotEvent(input: CacheBallotEventRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void): grpc.ClientUnaryCall;
+    cacheNewBallotEvent(input: CacheBallotEventRequest, callback: (err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service ballot_event_message.NewBallotEventService
@@ -31,8 +40,15 @@ export class NewBallotEventServiceClient extends grpc.Client implements INewBall
     /**
      * @generated from protobuf rpc: ValidateNewBallotEvent
      */
-    validateNewBallotEvent(input: NewBallotEvent, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void)): grpc.ClientUnaryCall {
+    validateNewBallotEvent(input: ValidateBallotEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: ValidateBallotEventResponse) => void)): grpc.ClientUnaryCall {
         const method = NewBallotEventService.methods[0];
-        return this.makeUnaryRequest<NewBallotEvent, ValidateBallotEventResponse>(`/${NewBallotEventService.typeName}/${method.name}`, (value: NewBallotEvent): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ValidateBallotEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+        return this.makeUnaryRequest<ValidateBallotEventRequest, ValidateBallotEventResponse>(`/${NewBallotEventService.typeName}/${method.name}`, (value: ValidateBallotEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ValidateBallotEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: CacheNewBallotEvent
+     */
+    cacheNewBallotEvent(input: CacheBallotEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: CacheBallotEventResponse) => void)): grpc.ClientUnaryCall {
+        const method = NewBallotEventService.methods[1];
+        return this.makeUnaryRequest<CacheBallotEventRequest, CacheBallotEventResponse>(`/${NewBallotEventService.typeName}/${method.name}`, (value: CacheBallotEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CacheBallotEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

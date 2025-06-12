@@ -12,19 +12,21 @@ export async function reportCreatedBlockEvent(
 ): Promise<void> {
     const { topic, length, height } = call.request;
 
-    logger.info(`[BlockEvent] CreatedBlockEvent - Topic: ${topic}`);
+    logger.debug(`[BlockEvent::reportCreatedBlockEvent] Received block event: Topic="${topic}", Length=${length}, Height=${height}`);
 
     let cached: boolean = true;
     let status: string = "";
 
     try {
         await actor.addBlockToVote(topic, length, height);
+
+        cached = true;
         status = "OK";
-        logger.info(`[ProposalEvent] CreatedBlockEvent - Topic: "${topic}", Length: ${length}, Height: ${height}`);
+        logger.info(`[BlockEvent::reportCreatedBlockEvent] Block successfully cached: Topic="${topic}", Height=${height}`);
     } catch (error: unknown) {
         cached = false;
         status = "UNKNOWN_ERROR";
-        logger.error(`[ProposalEvent] CreatedBlockEvent - Topic: "${topic}", Unknown error:`, error);
+        logger.error(`[BlockEvent::reportCreatedBlockEvent] Failed to cache block: Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
     }
 
     const response: ReportBlockEventResponse = {

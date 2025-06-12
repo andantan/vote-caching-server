@@ -6,9 +6,9 @@ import { newProposalEventServiceDefinition } from "../generated/web_event/propos
 import { newBallotEventServiceDefinition } from "../generated/web_event/ballot_event_message.grpc-server.js";
 
 import { reportCreatedBlockEvent } from "./blockchain-event-handler/grpcBlockEventHandler.js";
-import reportExpiredPendingEvent from "./blockchain-event-handler/grpcPendingEventHandler.js";
+import { reportExpiredPendingEvent } from "./blockchain-event-handler/grpcPendingEventHandler.js";
 import { validateNewProposalEvent, cacheNewProposalEvent } from "./webclient-event-handler/grpcProposalEventHandler.js";
-import validateNewBallotEvent from "./webclient-event-handler/grpcBallotEventHandler.js";
+import { validateNewBallotEvent, cacheNewBallotEvent } from "./webclient-event-handler/grpcBallotEventHandler.js";
 
 import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
 import logger from "../config/logger.js"
@@ -28,10 +28,12 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
     logger.info("[webclient-event-handler::ProposalEvent] NewProposalEventService::cacheNewProposalEvent registered");
 
     server.addService(newBallotEventServiceDefinition, {
-        ValidateNewBallotEvent: validateNewBallotEvent
+        ValidateNewBallotEvent: validateNewBallotEvent,
+        CacheNewBallotEvent: cacheNewBallotEvent
     });
 
     logger.info("[webclient-event-handler::BallotEvent] newBallotEventService::validateNewBallotEvent registered");
+    logger.info("[webclient-event-handler::BallotEvent] newBallotEventService::cacheNewBallotEvent registered");
     
     server.addService(createdBlockEventServiceDefinition, {
         ReportCreatedBlockEvent: reportCreatedBlockEvent,
@@ -64,6 +66,7 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
     });
 
     logger.info(`gRPC server is now listening on port ${port}`);
-
+    logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+    
     return server;
 }

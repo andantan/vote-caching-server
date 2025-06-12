@@ -3,17 +3,31 @@ syntax = "proto3";
 package ballot_event_message;
 
 service NewBallotEventService {
-    rpc ValidateNewBallotEvent(NewBallotEvent) 
-    returns (ValidateBallotEventResponse);
+  rpc ValidateNewBallotEvent(ValidateBallotEventRequest)
+      returns (ValidateBallotEventResponse);
+
+  rpc CacheNewBallotEvent(CacheBallotEventRequest)
+      returns (CacheBallotEventResponse);
 }
 
-message NewBallotEvent {
-    string hash = 1;
-    string option = 2;
-    string topic = 3;
+message ValidateBallotEventRequest {
+  string user_hash = 1;
+  string topic = 2;
 }
 
 message ValidateBallotEventResponse {
-    bool success = 1;
-    string message = 2;
+  bool validation = 1;
+  string status = 2;
+}
+
+message CacheBallotEventRequest {
+  string user_hash = 1;
+  string vote_hash = 2;
+  string topic = 3;
+  string option = 4;
+}
+
+message CacheBallotEventResponse {
+  bool cached = 1;
+  string status = 2;
 }

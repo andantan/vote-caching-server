@@ -12,19 +12,15 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
- * @generated from protobuf message ballot_event_message.NewBallotEvent
+ * @generated from protobuf message ballot_event_message.ValidateBallotEventRequest
  */
-export interface NewBallotEvent {
+export interface ValidateBallotEventRequest {
     /**
-     * @generated from protobuf field: string hash = 1
+     * @generated from protobuf field: string user_hash = 1
      */
-    hash: string;
+    userHash: string;
     /**
-     * @generated from protobuf field: string option = 2
-     */
-    option: string;
-    /**
-     * @generated from protobuf field: string topic = 3
+     * @generated from protobuf field: string topic = 2
      */
     topic: string;
 }
@@ -33,44 +29,73 @@ export interface NewBallotEvent {
  */
 export interface ValidateBallotEventResponse {
     /**
-     * @generated from protobuf field: bool success = 1
+     * @generated from protobuf field: bool validation = 1
      */
-    success: boolean;
+    validation: boolean;
     /**
-     * @generated from protobuf field: string message = 2
+     * @generated from protobuf field: string status = 2
      */
-    message: string;
+    status: string;
+}
+/**
+ * @generated from protobuf message ballot_event_message.CacheBallotEventRequest
+ */
+export interface CacheBallotEventRequest {
+    /**
+     * @generated from protobuf field: string user_hash = 1
+     */
+    userHash: string;
+    /**
+     * @generated from protobuf field: string vote_hash = 2
+     */
+    voteHash: string;
+    /**
+     * @generated from protobuf field: string topic = 3
+     */
+    topic: string;
+    /**
+     * @generated from protobuf field: string option = 4
+     */
+    option: string;
+}
+/**
+ * @generated from protobuf message ballot_event_message.CacheBallotEventResponse
+ */
+export interface CacheBallotEventResponse {
+    /**
+     * @generated from protobuf field: bool cached = 1
+     */
+    cached: boolean;
+    /**
+     * @generated from protobuf field: string status = 2
+     */
+    status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
-class NewBallotEvent$Type extends MessageType<NewBallotEvent> {
+class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventRequest> {
     constructor() {
-        super("ballot_event_message.NewBallotEvent", [
-            { no: 1, name: "hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "option", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("ballot_event_message.ValidateBallotEventRequest", [
+            { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<NewBallotEvent>): NewBallotEvent {
+    create(value?: PartialMessage<ValidateBallotEventRequest>): ValidateBallotEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.hash = "";
-        message.option = "";
+        message.userHash = "";
         message.topic = "";
         if (value !== undefined)
-            reflectionMergePartial<NewBallotEvent>(this, message, value);
+            reflectionMergePartial<ValidateBallotEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: NewBallotEvent): NewBallotEvent {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ValidateBallotEventRequest): ValidateBallotEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string hash */ 1:
-                    message.hash = reader.string();
+                case /* string user_hash */ 1:
+                    message.userHash = reader.string();
                     break;
-                case /* string option */ 2:
-                    message.option = reader.string();
-                    break;
-                case /* string topic */ 3:
+                case /* string topic */ 2:
                     message.topic = reader.string();
                     break;
                 default:
@@ -84,16 +109,13 @@ class NewBallotEvent$Type extends MessageType<NewBallotEvent> {
         }
         return message;
     }
-    internalBinaryWrite(message: NewBallotEvent, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string hash = 1; */
-        if (message.hash !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.hash);
-        /* string option = 2; */
-        if (message.option !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.option);
-        /* string topic = 3; */
+    internalBinaryWrite(message: ValidateBallotEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string user_hash = 1; */
+        if (message.userHash !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.userHash);
+        /* string topic = 2; */
         if (message.topic !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.topic);
+            writer.tag(2, WireType.LengthDelimited).string(message.topic);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -101,21 +123,21 @@ class NewBallotEvent$Type extends MessageType<NewBallotEvent> {
     }
 }
 /**
- * @generated MessageType for protobuf message ballot_event_message.NewBallotEvent
+ * @generated MessageType for protobuf message ballot_event_message.ValidateBallotEventRequest
  */
-export const NewBallotEvent = new NewBallotEvent$Type();
+export const ValidateBallotEventRequest = new ValidateBallotEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventResponse> {
     constructor() {
         super("ballot_event_message.ValidateBallotEventResponse", [
-            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 1, name: "validation", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<ValidateBallotEventResponse>): ValidateBallotEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.success = false;
-        message.message = "";
+        message.validation = false;
+        message.status = "";
         if (value !== undefined)
             reflectionMergePartial<ValidateBallotEventResponse>(this, message, value);
         return message;
@@ -125,11 +147,11 @@ class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventRe
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bool success */ 1:
-                    message.success = reader.bool();
+                case /* bool validation */ 1:
+                    message.validation = reader.bool();
                     break;
-                case /* string message */ 2:
-                    message.message = reader.string();
+                case /* string status */ 2:
+                    message.status = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -143,12 +165,12 @@ class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventRe
         return message;
     }
     internalBinaryWrite(message: ValidateBallotEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bool success = 1; */
-        if (message.success !== false)
-            writer.tag(1, WireType.Varint).bool(message.success);
-        /* string message = 2; */
-        if (message.message !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.message);
+        /* bool validation = 1; */
+        if (message.validation !== false)
+            writer.tag(1, WireType.Varint).bool(message.validation);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -159,9 +181,136 @@ class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventRe
  * @generated MessageType for protobuf message ballot_event_message.ValidateBallotEventResponse
  */
 export const ValidateBallotEventResponse = new ValidateBallotEventResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> {
+    constructor() {
+        super("ballot_event_message.CacheBallotEventRequest", [
+            { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "vote_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "option", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<CacheBallotEventRequest>): CacheBallotEventRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.userHash = "";
+        message.voteHash = "";
+        message.topic = "";
+        message.option = "";
+        if (value !== undefined)
+            reflectionMergePartial<CacheBallotEventRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheBallotEventRequest): CacheBallotEventRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string user_hash */ 1:
+                    message.userHash = reader.string();
+                    break;
+                case /* string vote_hash */ 2:
+                    message.voteHash = reader.string();
+                    break;
+                case /* string topic */ 3:
+                    message.topic = reader.string();
+                    break;
+                case /* string option */ 4:
+                    message.option = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: CacheBallotEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string user_hash = 1; */
+        if (message.userHash !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.userHash);
+        /* string vote_hash = 2; */
+        if (message.voteHash !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.voteHash);
+        /* string topic = 3; */
+        if (message.topic !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.topic);
+        /* string option = 4; */
+        if (message.option !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.option);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message ballot_event_message.CacheBallotEventRequest
+ */
+export const CacheBallotEventRequest = new CacheBallotEventRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class CacheBallotEventResponse$Type extends MessageType<CacheBallotEventResponse> {
+    constructor() {
+        super("ballot_event_message.CacheBallotEventResponse", [
+            { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<CacheBallotEventResponse>): CacheBallotEventResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.cached = false;
+        message.status = "";
+        if (value !== undefined)
+            reflectionMergePartial<CacheBallotEventResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheBallotEventResponse): CacheBallotEventResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool cached */ 1:
+                    message.cached = reader.bool();
+                    break;
+                case /* string status */ 2:
+                    message.status = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: CacheBallotEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool cached = 1; */
+        if (message.cached !== false)
+            writer.tag(1, WireType.Varint).bool(message.cached);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message ballot_event_message.CacheBallotEventResponse
+ */
+export const CacheBallotEventResponse = new CacheBallotEventResponse$Type();
 /**
  * @generated ServiceType for protobuf service ballot_event_message.NewBallotEventService
  */
 export const NewBallotEventService = new ServiceType("ballot_event_message.NewBallotEventService", [
-    { name: "ValidateNewBallotEvent", options: {}, I: NewBallotEvent, O: ValidateBallotEventResponse }
+    { name: "ValidateNewBallotEvent", options: {}, I: ValidateBallotEventRequest, O: ValidateBallotEventResponse },
+    { name: "CacheNewBallotEvent", options: {}, I: CacheBallotEventRequest, O: CacheBallotEventResponse }
 ]);

@@ -6,7 +6,7 @@ import logger from "../../config/logger.js";
 export default class BlockEventMongoDBActor {
     public async addBlockToVote(topic: string, length: number, height: number): Promise<IVote | null> {
         try {
-            logger.info(`[BlockEventMongoDBActor] Attempting to add block - Topic: "${topic}", Length: ${length}, Height: ${height}`);
+            logger.debug(`[BlockEventMongoDBActor::addBlockToVote] Attempting to add block. Topic: "${topic}", Length: ${length}, Height: ${height}`);
     
             const blockHeight: IBlockHeight = { 
                 height: height, 
@@ -24,17 +24,17 @@ export default class BlockEventMongoDBActor {
             );
 
             if (!updatedVote) {
-                logger.warn(`[BlockEventMongoDBActor] No proposal found with topic "${topic}" to add block, or update failed.`);
+                logger.warn(`[BlockEventMongoDBActor::addBlockToVote] Failed to add block. No proposal found for topic: "${topic}", or update failed.`);
                 return null;
             }
 
-            logger.info(`[ProposalEventMongoActor] New block saved successfully - Topic: "${topic}", Length: ${length}, Height: ${height}`);
+            logger.info(`[BlockEventMongoDBActor::addBlockToVote] Successfully added block. Topic: "${topic}", Height: ${height}`);
             
             return updatedVote;
         } catch (error: unknown) {
             const errorMessage = `Failed to add block to vote for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[BlockEventMongoDBActor] MongoDB add block error:`, error);
-            throw new Error(errorMessage); 
+            logger.error(`[BlockEventMongoDBActor::addBlockToVote] MongoDB operation error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
         }
     }
 }

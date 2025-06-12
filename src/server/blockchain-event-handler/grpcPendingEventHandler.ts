@@ -6,25 +6,27 @@ import logger from '../../config/logger.js';
 
 const actor = new PendingEventMongoActor();
 
-export default async function reportExpiredPendingEvent(
+export async function reportExpiredPendingEvent(
     call: ServerUnaryCall<ExpiredPendingEvent, ReportPendingEventResponse>,
     callback: sendUnaryData<ReportPendingEventResponse>
 ): Promise<void> {
     const { topic, count, options } = call.request;
 
-    logger.debug(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}"`);
+    logger.debug(`[PendingEvent::reportExpiredPendingEvent] Received expired pending event: Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}`);
 
     let cached: boolean = true;
     let status: string = "";
 
     try {
         await actor.saveVoteResult(topic, count, options);
+
+        cached = true;
         status = "OK";
-        logger.info(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}", Count: ${count}, Options: ${JSON.stringify(options)}`);
+        logger.info(`[PendingEvent::reportExpiredPendingEvent] Vote results successfully cached: Topic="${topic}", TotalCount=${count}`);
     } catch (error: unknown) {
         cached = false;
         status = "UNKNOWN_ERROR";
-        logger.error(`[PendingEvent] ExpiredPendingEvent - Topic: "${topic}", Unknown error:`, error);
+        logger.error(`[PendingEvent::reportExpiredPendingEvent] Failed to save vote results: Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}. Error:`, error);
     }
 
     const response: ReportPendingEventResponse = {

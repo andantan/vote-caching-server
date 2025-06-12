@@ -12,7 +12,7 @@ export async function validateNewProposalEvent(
 ): Promise<void> {
     const { topic } = call.request;
 
-    logger.info(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}"`);
+    logger.debug(`[ProposalEvent::validateNewProposalEvent] Received validation request for Topic: "${topic}"`);
 
     let validation = true;
     let status = "";
@@ -21,17 +21,21 @@ export async function validateNewProposalEvent(
         const validatedVote = await actor.findIfExistsProposal(topic);
 
         if (validatedVote === null) {
+            validation = true;
             status = "OK";
-            logger.info(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", Status: "${status}", Validation: ${validation}`);
+            
+            logger.info(`[ProposalEvent::validateNewProposalEvent] Proposal validation successful. Topic: "${topic}", Status: "${status}"`);
         } else {
             validation = false;
             status = validatedVote.expired ? "PROPOSAL_EXPIRED" : "PROPOSAL_ALREADY_OPEN";
-            logger.warn(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", Status: "${status}", Validation: ${validation}`);
+
+            logger.warn(`[ProposalEvent::validateNewProposalEvent] Proposal validation failed: Topic: "${topic}", Status: "${status}"`);
         }
+
     } catch (error: unknown) {
         validation = false;
         status = "UNKNOWN_ERROR";
-        logger.error(`[ProposalEvent] ValidateNewProposalEvent - Topic: "${topic}", UNKNOWN_ERROR: `, error);
+        logger.error(`[ProposalEvent::validateNewProposalEvent] Unhandled error during proposal validation. Topic: "${topic}". Error:`, error);
     }
 
     const response: ProposalEvent.ValidateProposalEventResponse = {
@@ -48,19 +52,23 @@ export async function cacheNewProposalEvent(
 ): Promise<void> {
     const { topic, duration } = call.request;
 
-    logger.info(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}"`);
+    logger.debug(`[ProposalEvent::cacheNewProposalEvent] Received request to cache new proposal. Topic: "${topic}", Duration: ${duration}`);
 
     let cached = true;
     let status = "";
 
     try {
         await actor.saveNewProposal(topic, duration);
+
+        cached = true;
         status = "OK";
-        logger.info(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}", Status: "${status}", Cached: ${cached}`);
+
+        logger.info(`[ProposalEvent::cacheNewProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
     } catch (error: unknown) {
         cached = false;
         status = "UNKNOWN_ERROR";
-        logger.error(`[ProposalEvent] CacheNewProposalEvent - Topic: "${topic}", Unknown error:`, error);
+
+        logger.error(`[ProposalEvent::cacheNewProposalEvent] Unhandled error during proposal caching. Topic: "${topic}", Duration: ${duration}. Error:`, error);
     }
 
     const response: ProposalEvent.CacheProposalEventResponse = {

@@ -1,15 +1,15 @@
 import { Schema } from "mongoose";
 
-export interface IBalletOptions {
+export interface IVoteOptions {
     [option: string]: number;
 }
 
-export interface IBalletResult {
+export interface IVoteResult {
     count: number;
-    options: IBalletOptions;
+    options: IVoteOptions;
 }
 
-export const balletResultSchema: Schema<IBalletResult> = new Schema({
+export const voteResultSchema: Schema<IVoteResult> = new Schema({
     count: { type: Number, default: 0 },
     options: { type: Map, of: Number, default: {} }
 }, {
