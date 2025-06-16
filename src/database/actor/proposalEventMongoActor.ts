@@ -3,7 +3,7 @@ import logger from "../../config/logger.js";
 
 export default class ProposalEventMongoActor {
     public async saveNewProposal(topic: string, duration: number, options: string[]): Promise<IVote> {
-        logger.debug(`[ProposalEventMongoDBActor::saveNewProposal] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}`);
+        logger.debug(`[ProposalEventMongoActor::saveNewProposal] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}`);
 
         try {
             const newVote: IVote = new VoteModel({
@@ -14,18 +14,18 @@ export default class ProposalEventMongoActor {
 
             const savedVote = await newVote.save();
             
-            logger.info(`[ProposalEventMongoDBActor::saveNewProposal] Successfully saved new proposal. Topic: "${savedVote.topic}"`);
+            logger.info(`[ProposalEventMongoActor::saveNewProposal] Successfully saved new proposal. Topic: "${savedVote.topic}"`);
 
             return savedVote;
         } catch (error: unknown) {
             const errorMessage = `Failed to save new proposal for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[ProposalEventMongoDBActor::saveNewProposal] MongoDB operation error: ${errorMessage}`, error);
+            logger.error(`[ProposalEventMongoActor::saveNewProposal] MongoDB operation error: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }
 
     public async findIfExistsProposal(topic: string): Promise<IVote | null> {
-        logger.debug(`[ProposalEventMongoDBActor::findIfExistsProposal] Checking for existing proposal. Topic: "${topic}"`);
+        logger.debug(`[ProposalEventMongoActor::findIfExistsProposal] Checking for existing proposal. Topic: "${topic}"`);
 
         try {
             const vote = await VoteModel.findOne({
@@ -33,15 +33,15 @@ export default class ProposalEventMongoActor {
             })
 
             if (vote) {
-                logger.info(`[ProposalEventMongoDBActor::findIfExistsProposal] Existing proposal found. Topic: "${topic}"`);
+                logger.info(`[ProposalEventMongoActor::findIfExistsProposal] Existing proposal found. Topic: "${topic}"`);
             } else {
-                logger.info(`[ProposalEventMongoDBActor::findIfExistsProposal] No existing proposal found. Topic: "${topic}"`);
+                logger.info(`[ProposalEventMongoActor::findIfExistsProposal] No existing proposal found. Topic: "${topic}"`);
             }
 
             return vote
         } catch (error: unknown) {
             const errorMessage = `Failed to check existence for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[ProposalEventMongoDBActor::findIfExistsProposal] MongoDB operation error: ${errorMessage}`, error);
+            logger.error(`[ProposalEventMongoActor::findIfExistsProposal] MongoDB operation error: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }

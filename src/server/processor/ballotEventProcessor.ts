@@ -58,7 +58,7 @@ export class BallotEventProcessor {
             // strict section end
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor] Failed to validate/create user for UserHash: "${userHash}". Error:`, error);
-            throw new BallotEventError(BallotEventErrorStatus.MONGO_ACCESS_ERROR, { cause: error });
+            throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
     }
 
@@ -69,7 +69,7 @@ export class BallotEventProcessor {
             alreadyVoted = await this.ballotActor.findIfExistsBallot(userHash, topic);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor] Database access error during duplicate vote validation for UserHash: "${userHash}", Topic: "${topic}". Error:`, error);
-            throw new BallotEventError(BallotEventErrorStatus.MONGO_ACCESS_ERROR, { cause: error });
+            throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (alreadyVoted !== null) {
@@ -87,7 +87,7 @@ export class BallotEventProcessor {
             existingProposal = await this.proposalActor.findIfExistsProposal(topic);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor] Database access error during proposal existence validation for Topic: "${topic}". Error:`, error);
-            throw new BallotEventError(BallotEventErrorStatus.MONGO_ACCESS_ERROR, { cause: error });
+            throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (existingProposal === null) {
@@ -110,7 +110,7 @@ export class BallotEventProcessor {
             validOption = await this.proposalActor.isValidVoteOption(topic, option);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor] Database access error during option validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
-            throw new BallotEventError(BallotEventErrorStatus.MONGO_ACCESS_ERROR, { cause: error });
+            throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (!validOption) {
@@ -119,6 +119,17 @@ export class BallotEventProcessor {
         }
 
         logger.info(`[BallotEventProcessor] Option validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
+    }
+
+    public async addBallotToCache(userHash: string, voteHash: string, topic: string, option: string): Promise<void> {
+        logger.debug(`[BallotEventProcessor] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
+        try {
+            await this.ballotActor.addBallotToUser(userHash, voteHash, topic, option);
+            logger.info(`[BallotEventProcessor] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
+        } catch (error: unknown) {
+            logger.error(`[BallotEventProcessor] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
+            throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+        }
     }
 }
 

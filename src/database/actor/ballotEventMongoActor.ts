@@ -1,5 +1,4 @@
 import { UserModel, IUser } from "../models/users/user.js";
-import { VoteModel } from "../models/votes/vote.js";
 import { IBallot } from "../models/users/ballot.js";
 
 import logger from "../../config/logger.js";
