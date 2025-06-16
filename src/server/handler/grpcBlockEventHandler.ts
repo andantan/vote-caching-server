@@ -1,10 +1,12 @@
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
-import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
-import BlockEventMongoDBActor from "../../database/actor/blockEventMongoActor.js";
 import logger from '../../config/logger.js';
 
-const actor = new BlockEventMongoDBActor();
+import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
+
+import { BlockEventError, BlockEventErrorStatus } from '../error/blockEventError.js';
+import { blockEventProcessor } from '../processor/blockEventProcessor.js';
+
 
 export async function reportCreatedBlockEvent(
     call: ServerUnaryCall<CreatedBlockEvent, ReportBlockEventResponse>,
@@ -12,27 +14,31 @@ export async function reportCreatedBlockEvent(
 ): Promise<void> {
     const { topic, length, height } = call.request;
 
-    logger.debug(`[BlockEvent::reportCreatedBlockEvent] Received block event: Topic="${topic}", Length=${length}, Height=${height}`);
+    logger.debug(`[grpcBlockEventHandler::reportCreatedBlockEvent] Received block event: Topic="${topic}", Length=${length}, Height=${height}`);
 
-    let cached: boolean = true;
-    let status: string = "";
+    let cachedResult: boolean = true;
+    let statusCode: string = "";
 
     try {
-        await actor.addBlockToVote(topic, length, height);
+        await blockEventProcessor.addBlockToVote(topic, length, height);
 
-        cached = true;
-        status = "OK";
-        logger.info(`[BlockEvent::reportCreatedBlockEvent] Block successfully cached: Topic="${topic}", Height=${height}`);
+        logger.info(`[grpcBlockEventHandler::reportCreatedBlockEvent] Block successfully processed and cached: Topic="${topic}", Height=${height}`);
     } catch (error: unknown) {
-        cached = false;
-        status = "UNKNOWN_ERROR";
-        logger.error(`[BlockEvent::reportCreatedBlockEvent] Failed to cache block: Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
-    }
+        cachedResult = false;
 
-    const response: ReportBlockEventResponse = {
-        cached: cached,
-        status: status
-    };
-    
-    callback(null, response);
+        if (error instanceof BlockEventError) {
+            statusCode = error.status;
+            logger.warn(`[grpcBlockEventHandler::reportCreatedBlockEvent] Failed to process/cache block: Topic="${topic}", Length=${length}, Height=${height}. Status: "${statusCode}". Internal error message: "${error.message}"`);
+        } else {
+            statusCode = BlockEventErrorStatus.UNKNOWN_ERROR;
+            logger.error(`[grpcBlockEventHandler::reportCreatedBlockEvent] Unhandled or unexpected error during block event processing: Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
+        }
+    } finally {
+        const response: ReportBlockEventResponse = {
+            cached: cachedResult,
+            status: statusCode
+        };
+
+        callback(null, response);
+    }
 }

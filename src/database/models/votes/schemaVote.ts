@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { Schema, Document } from "mongoose";
 
-import { IVoteResult, voteResultSchema } from "./result.js";
-import { IBlockHeight, blockHeightSchema } from "./block.js";
+import { IVoteResult, voteResultSchema } from "./schemaResult.js";
+import { IBlockHeight, blockHeightSchema } from "./schemaBlock.js";
 import * as MongoConfig from "../../../../config/connection_mongodb_config.json";
 
 export interface IVote extends Document {

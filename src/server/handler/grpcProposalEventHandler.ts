@@ -16,7 +16,7 @@ export async function validateNewProposalEvent(
     logger.debug(`[grpcProposalEventHandler::validateNewProposalEvent] Received validation request for Topic: "${topic}"`);
 
     let validation = true;
-    let statusCode = "";
+    let statusCode = "OK";
 
     try {
         await proposalEventProcessor.validateNewProposal(topic);
@@ -55,18 +55,18 @@ export async function cacheNewProposalEvent(
     let statusCode: string = "OK";
 
     try {
-        await proposalEventProcessor.saveNewProposal(topic, duration, options);
+        await proposalEventProcessor.saveProposalToCache(topic, duration, options);
 
-        logger.info(`[grpcProposalEventHandler] New proposal successfully cached. Topic: "${topic}".`);
+        logger.info(`[grpcProposalEventHandler::cacheNewProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
     } catch (error: unknown) {
         cachedResult = false;
 
         if (error instanceof ProposalEventError) {
             statusCode = error.status;
-            logger.warn(`[grpcProposalEventHandler] Proposal caching failed: Topic: "${topic}", Duration: ${duration}. Status: "${statusCode}". Internal error message: "${error.message}"`);
+            logger.warn(`[grpcProposalEventHandler::cacheNewProposalEvent] Proposal caching failed: Topic: "${topic}", Duration: ${duration}. Status: "${statusCode}". Internal error message: "${error.message}"`);
         } else {
             statusCode = ProposalEventErrorStatus.UNKNOWN_ERROR;
-            logger.error(`[grpcProposalEventHandler] Unhandled or unexpected error during proposal caching. Topic: "${topic}", Duration: ${duration}. Error:`, error);
+            logger.error(`[grpcProposalEventHandler::cacheNewProposalEvent] Unhandled or unexpected error during proposal caching. Topic: "${topic}", Duration: ${duration}. Error:`, error);
         }
     } finally {
         const response: ProposalEvent.CacheProposalEventResponse = {

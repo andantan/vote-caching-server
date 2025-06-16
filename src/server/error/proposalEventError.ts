@@ -10,7 +10,7 @@ export class ProposalEventError extends Error {
     public readonly type: string;
 
     constructor(status: ProposalEventErrorStatus, options?: { cause?: unknown }) {
-        super(`Ballot Event error: ${status}`, options);
+        super(`Proposal Event error: ${status}`, options);
 
         this.type = "ProposalEventError";
         this.status = status;

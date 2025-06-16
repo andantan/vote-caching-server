@@ -1,24 +1,21 @@
 import logger from "../../config/logger";
 
-import BallotEventMongoActor from "../../database/actor/ballotEventMongoActor";
-import ProposalEventMongoActor from "../../database/actor/proposalEventMongoActor";
-import UserEventMongoActor from "../../database/actor/userEventMongoActor";
-import { IUser } from "../../database/models/users/user";
-import { IVote } from "../../database/models/votes/vote";
+import MongoUserCollectionActor from "../../database/actor/mongoUserCollectionActor";
+import MongoVoteCollectionActor from "../../database/actor/mongoVoteCollectionActor";
+import { IUser } from "../../database/models/users/schemaUser";
+import { IVote } from "../../database/models/votes/schemaVote";
 
 import { BallotEventError, BallotEventErrorStatus } from "../error/ballotEventError";
 
 export class BallotEventProcessor {
-    private readonly userActor: UserEventMongoActor;
-    private readonly ballotActor: BallotEventMongoActor;
-    private readonly proposalActor: ProposalEventMongoActor;
+    private readonly userCollection: MongoUserCollectionActor;
+    private readonly voteCollection: MongoVoteCollectionActor;
 
     private static instance: BallotEventProcessor;
 
     private constructor() {
-        this.userActor = new UserEventMongoActor();
-        this.ballotActor = new BallotEventMongoActor();
-        this.proposalActor = new ProposalEventMongoActor();
+        this.userCollection = new MongoUserCollectionActor();
+        this.voteCollection = new MongoVoteCollectionActor();
     }
 
     public static getInstance(): BallotEventProcessor {
@@ -29,7 +26,7 @@ export class BallotEventProcessor {
     }
 
     public async validateNewBallot(userHash: string, topic: string, option: string): Promise<void> {
-        logger.debug(`[BallotEventProcessor] Starting validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}"`);
+        logger.debug(`[BallotEventProcessor::validateNewBallot] Starting validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}"`);
 
         try {
             await this.validateUser(userHash);
@@ -37,13 +34,13 @@ export class BallotEventProcessor {
             await this.validateExistence(topic);
             await this.validateOption(userHash, topic, option);
 
-            logger.info(`[BallotEventProcessor] All ballot validations passed. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "OK".`);
+            logger.info(`[BallotEventProcessor::validateNewBallot] All ballot validations passed. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "OK".`);
         } catch (error: unknown) {
             if (error instanceof BallotEventError) {
-                logger.warn(`[BallotEventProcessor] Ballot validation failed for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "${error.status}". Cause: "${error.message}"`);
+                logger.warn(`[BallotEventProcessor::validateNewBallot] Ballot validation failed for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "${error.status}". Cause: "${error.message}"`);
                 throw error;
             } else {
-                logger.error(`[BallotEventProcessor] Unexpected error during ballot validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
+                logger.error(`[BallotEventProcessor::validateNewBallot] Unexpected error during ballot validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
                 throw new BallotEventError(BallotEventErrorStatus.UNKNOWN_ERROR, { cause: error });
             }
         }
@@ -52,12 +49,12 @@ export class BallotEventProcessor {
     private async validateUser(userHash: string): Promise<void> {
         try {
             // strict section -> Will migrate to register logic
-            logger.debug(`[BallotEventProcessor] Checking/Creating user for UserHash: "${userHash}" (Temporary user registration logic)`);
-            await this.userActor.saveNewUserIfNotExists(userHash);
-            logger.debug(`[BallotEventProcessor] User check/creation complete for UserHash: "${userHash}"`);
+            logger.debug(`[BallotEventProcessor::validateUser] Checking/Creating user for UserHash: "${userHash}" (Temporary user registration logic)`);
+            await this.userCollection.saveNewUserIfNotExists(userHash);
+            logger.debug(`[BallotEventProcessor::validateUser] User check/creation complete for UserHash: "${userHash}"`);
             // strict section end
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor] Failed to validate/create user for UserHash: "${userHash}". Error:`, error);
+            logger.error(`[BallotEventProcessor::validateUser] Failed to validate/create user for UserHash: "${userHash}". Error:`, error);
             throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
     }
@@ -66,68 +63,68 @@ export class BallotEventProcessor {
         let alreadyVoted: IUser | null;
 
         try {
-            alreadyVoted = await this.ballotActor.findIfExistsBallot(userHash, topic);
+            alreadyVoted = await this.userCollection.findIfExistsBallot(userHash, topic);
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor] Database access error during duplicate vote validation for UserHash: "${userHash}", Topic: "${topic}". Error:`, error);
+            logger.error(`[BallotEventProcessor::validateDuplication] Database access error during duplicate vote validation for UserHash: "${userHash}", Topic: "${topic}". Error:`, error);
             throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (alreadyVoted !== null) {
-            logger.warn(`[BallotEventProcessor] Validation failed: Duplicate ballot submission. UserHash: "${userHash}", Topic: "${topic}".`);
+            logger.warn(`[BallotEventProcessor::validateDuplication] Validation failed: Duplicate ballot submission. UserHash: "${userHash}", Topic: "${topic}".`);
             throw new BallotEventError(BallotEventErrorStatus.DUPLICATE_VOTE_SUBMISSION);
         }
 
-        logger.info(`[BallotEventProcessor] No duplicate vote found for UserHash: "${userHash}", Topic: "${topic}".`);
+        logger.info(`[BallotEventProcessor::validateDuplication] No duplicate vote found for UserHash: "${userHash}", Topic: "${topic}".`);
     }
 
     private async validateExistence(topic: string): Promise<void> {
         let existingProposal: IVote | null;
 
         try {
-            existingProposal = await this.proposalActor.findIfExistsProposal(topic);
+            existingProposal = await this.voteCollection.findIfExistsProposal(topic);
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor] Database access error during proposal existence validation for Topic: "${topic}". Error:`, error);
+            logger.error(`[BallotEventProcessor::validateExistence] Database access error during proposal existence validation for Topic: "${topic}". Error:`, error);
             throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (existingProposal === null) {
-            logger.warn(`[BallotEventProcessor] Validation failed: Proposal does not exist. Topic: "${topic}".`);
+            logger.warn(`[BallotEventProcessor::validateExistence] Validation failed: Proposal does not exist. Topic: "${topic}".`);
             throw new BallotEventError(BallotEventErrorStatus.PROPOSAL_NOT_FOUND);
         }
 
         if (existingProposal.expired) {
-            logger.warn(`[BallotEventProcessor] Validation failed: Proposal is expired. Topic: "${topic}".`);
+            logger.warn(`[BallotEventProcessor::validateExistence] Validation failed: Proposal is expired. Topic: "${topic}".`);
             throw new BallotEventError(BallotEventErrorStatus.PROPOSAL_EXPIRED);
         }
 
-        logger.info(`[BallotEventProcessor] Proposal found and is open. UserHash: Topic: "${topic}".`);
+        logger.info(`[BallotEventProcessor::validateExistence] Proposal found and is open. UserHash: Topic: "${topic}".`);
     }
 
     private async validateOption(userHash: string, topic: string, option: string): Promise<void> {
         let validOption: boolean;
 
         try {
-            validOption = await this.proposalActor.isValidVoteOption(topic, option);
+            validOption = await this.voteCollection.isValidVoteOption(topic, option);
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor] Database access error during option validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
+            logger.error(`[BallotEventProcessor::validateOption] Database access error during option validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
             throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
 
         if (!validOption) {
-            logger.warn(`[BallotEventProcessor] Validation failed: Invalid option selected. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
+            logger.warn(`[BallotEventProcessor::validateOption] Validation failed: Invalid option selected. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
             throw new BallotEventError(BallotEventErrorStatus.INVALID_OPTION);
         }
 
-        logger.info(`[BallotEventProcessor] Option validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
+        logger.info(`[BallotEventProcessor::validateOption] Option validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
     }
 
     public async addBallotToCache(userHash: string, voteHash: string, topic: string, option: string): Promise<void> {
-        logger.debug(`[BallotEventProcessor] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
+        logger.debug(`[BallotEventProcessor::addBallotToCache] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
         try {
-            await this.ballotActor.addBallotToUser(userHash, voteHash, topic, option);
-            logger.info(`[BallotEventProcessor] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
+            await this.userCollection.addBallotToUser(userHash, voteHash, topic, option);
+            logger.info(`[BallotEventProcessor::addBallotToCache] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
+            logger.error(`[BallotEventProcessor::addBallotToCache] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
             throw new BallotEventError(BallotEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
         }
     }

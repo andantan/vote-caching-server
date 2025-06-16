@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Schema, Document } from "mongoose";
 
-import { IBallot, ballotSchema } from "./ballot";
+import { IBallot, ballotSchema } from "./schemaBallot";
 
 import * as MongoConfig from "../../../../config/connection_mongodb_config.json";
 

@@ -1,5 +1,5 @@
-import { VoteModel } from "../models/votes/vote";
-import { UserModel } from "../models/users/user";
+import { VoteModel } from "../models/votes/schemaVote";
+import { UserModel } from "../models/users/schemaUser";
 import logger from "../../config/logger";
 
 export default async function initializeAllModelIndexes() {
