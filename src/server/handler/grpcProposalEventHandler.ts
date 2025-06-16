@@ -1,10 +1,10 @@
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import * as ProposalEvent from "../../generated/web_event/proposal_event_message.js";
-import ProposalEventMongoDBActor from "../../database/actor/proposalEventMongoActor.js";
+import ProposalEventMongoActor from "../../database/actor/proposalEventMongoActor.js";
 import logger from "../../config/logger.js";
 
-const actor = new ProposalEventMongoDBActor()
+const actor = new ProposalEventMongoActor()
 
 export async function validateNewProposalEvent(
     call: ServerUnaryCall<ProposalEvent.ValidateProposalEventRequest, ProposalEvent.ValidateProposalEventResponse>,
@@ -50,7 +50,7 @@ export async function cacheNewProposalEvent(
     call: ServerUnaryCall<ProposalEvent.CacheProposalEventRequest, ProposalEvent.CacheProposalEventResponse>,
     callback: sendUnaryData<ProposalEvent.CacheProposalEventResponse>
 ): Promise<void> {
-    const { topic, duration } = call.request;
+    const { topic, duration, options } = call.request;
 
     logger.debug(`[ProposalEvent::cacheNewProposalEvent] Received request to cache new proposal. Topic: "${topic}", Duration: ${duration}`);
 
@@ -58,7 +58,7 @@ export async function cacheNewProposalEvent(
     let status = "";
 
     try {
-        await actor.saveNewProposal(topic, duration);
+        await actor.saveNewProposal(topic, duration, options);
 
         cached = true;
         status = "OK";

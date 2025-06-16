@@ -5,10 +5,10 @@ import { expiredPendingEventServiceDefinition } from "../generated/blockchain_ev
 import { newProposalEventServiceDefinition } from "../generated/web_event/proposal_event_message.grpc-server.js";
 import { newBallotEventServiceDefinition } from "../generated/web_event/ballot_event_message.grpc-server.js";
 
-import { reportCreatedBlockEvent } from "./blockchain-event-handler/grpcBlockEventHandler.js";
-import { reportExpiredPendingEvent } from "./blockchain-event-handler/grpcPendingEventHandler.js";
-import { validateNewProposalEvent, cacheNewProposalEvent } from "./webclient-event-handler/grpcProposalEventHandler.js";
-import { validateNewBallotEvent, cacheNewBallotEvent } from "./webclient-event-handler/grpcBallotEventHandler.js";
+import { reportCreatedBlockEvent } from "./handler/grpcBlockEventHandler.js";
+import { reportExpiredPendingEvent } from "./handler/grpcPendingEventHandler.js";
+import { validateNewProposalEvent, cacheNewProposalEvent } from "./handler/grpcProposalEventHandler.js";
+import { validateNewBallotEvent, cacheNewBallotEvent } from "./handler/grpcBallotEventHandler.js";
 
 import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
 import logger from "../config/logger.js"

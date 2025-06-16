@@ -13,6 +13,7 @@ service NewBallotEventService {
 message ValidateBallotEventRequest {
   string user_hash = 1;
   string topic = 2;
+  string option = 3;
 }
 
 message ValidateBallotEventResponse {

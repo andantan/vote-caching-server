@@ -22,6 +22,7 @@ message ValidateProposalEventResponse {
 message CacheProposalEventRequest {
   string topic = 1;
   uint32 duration = 2;
+  repeated string options = 3;
 }
 
 message CacheProposalEventResponse {

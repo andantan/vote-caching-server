@@ -45,6 +45,10 @@ export interface CacheProposalEventRequest {
      * @generated from protobuf field: uint32 duration = 2
      */
     duration: number;
+    /**
+     * @generated from protobuf field: repeated string options = 3
+     */
+    options: string[];
 }
 /**
  * @generated from protobuf message proposal_event_message.CacheProposalEventResponse
@@ -166,13 +170,15 @@ class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventReque
     constructor() {
         super("proposal_event_message.CacheProposalEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "duration", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 2, name: "duration", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<CacheProposalEventRequest>): CacheProposalEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
         message.duration = 0;
+        message.options = [];
         if (value !== undefined)
             reflectionMergePartial<CacheProposalEventRequest>(this, message, value);
         return message;
@@ -187,6 +193,9 @@ class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventReque
                     break;
                 case /* uint32 duration */ 2:
                     message.duration = reader.uint32();
+                    break;
+                case /* repeated string options */ 3:
+                    message.options.push(reader.string());
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -206,6 +215,9 @@ class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventReque
         /* uint32 duration = 2; */
         if (message.duration !== 0)
             writer.tag(2, WireType.Varint).uint32(message.duration);
+        /* repeated string options = 3; */
+        for (let i = 0; i < message.options.length; i++)
+            writer.tag(3, WireType.LengthDelimited).string(message.options[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

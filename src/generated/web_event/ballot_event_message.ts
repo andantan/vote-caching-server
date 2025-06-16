@@ -23,6 +23,10 @@ export interface ValidateBallotEventRequest {
      * @generated from protobuf field: string topic = 2
      */
     topic: string;
+    /**
+     * @generated from protobuf field: string option = 3
+     */
+    option: string;
 }
 /**
  * @generated from protobuf message ballot_event_message.ValidateBallotEventResponse
@@ -76,13 +80,15 @@ class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventReq
     constructor() {
         super("ballot_event_message.ValidateBallotEventRequest", [
             { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "option", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<ValidateBallotEventRequest>): ValidateBallotEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.userHash = "";
         message.topic = "";
+        message.option = "";
         if (value !== undefined)
             reflectionMergePartial<ValidateBallotEventRequest>(this, message, value);
         return message;
@@ -97,6 +103,9 @@ class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventReq
                     break;
                 case /* string topic */ 2:
                     message.topic = reader.string();
+                    break;
+                case /* string option */ 3:
+                    message.option = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -116,6 +125,9 @@ class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventReq
         /* string topic = 2; */
         if (message.topic !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.topic);
+        /* string option = 3; */
+        if (message.option !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.option);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

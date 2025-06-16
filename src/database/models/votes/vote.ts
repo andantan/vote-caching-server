@@ -9,6 +9,7 @@ export interface IVote extends Document {
     _id: mongoose.Types.ObjectId;
     topic: string;
     duration: number;
+    options: string[];
     createdAt: Date;
     updatedAt: Date;
     expiredAt: Date;
@@ -21,6 +22,7 @@ export interface IVote extends Document {
 export const VoteSchema: Schema<IVote> = new Schema({
     topic: { type: String, required: true, unique: true, immutable: true },
     duration: { type: Number, required: true, immutable: true },
+    options: { type: [String], required: true, immutable: true },
     createdAt: { type: Date, default: Date.now, immutable: true },
     expiredAt: { type: Date, required: false, immutable: true },
     settledAt: { type: Date, required: false, immutable: true },
