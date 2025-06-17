@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package ballot_event_message;
+package ballot_create_event_message;
 
 service NewBallotEventService {
   rpc ValidateNewBallotEvent(ValidateBallotEventRequest)

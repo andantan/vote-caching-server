@@ -1,4 +1,4 @@
-import { UserModel, IUser } from "../models/users/schemaUser.js";
+import { UserModel, IUser, NullableUser } from "../models/users/schemaUser.js";
 import { IBallot } from "../models/users/schemaBallot.js";
 
 import logger from "../../config/logger.js";
@@ -31,11 +31,11 @@ export default class MongoUserCollectionActor {
         }
     }
 
-    public async findIfExistsUser(userHash: string): Promise<IUser | null> {
+    public async findIfExistsUser(userHash: string): Promise<NullableUser> {
         logger.debug(`[MongoUserCollectionActor::findIfExistsUser] Checking for existing user. UserHash: "${userHash}"`);
 
         try {
-            const user = await UserModel.findOne({
+            const user: NullableUser = await UserModel.findOne({
                 userHash: userHash
             });
 
@@ -53,7 +53,7 @@ export default class MongoUserCollectionActor {
         }
     }
 
-    public async addBallotToUser(userHash: string, voteHash: string, topic: string, option: string): Promise<IUser | null> {
+    public async addBallotToUser(userHash: string, voteHash: string, topic: string, option: string): Promise<NullableUser> {
         logger.debug(`[MongoUserCollectionActor::addBallotToUser] Attempting to add ballot for user "${userHash}" on topic "${topic}". VoteHash: "${voteHash}"`);
 
         try {
@@ -88,11 +88,11 @@ export default class MongoUserCollectionActor {
         }
     }
 
-    public async findIfExistsBallot(userHash: string, topic: string): Promise<IUser | null> {
+    public async findIfExistsBallot(userHash: string, topic: string): Promise<NullableUser> {
         logger.debug(`[MongoUserCollectionActor::findIfExistsBallot] Checking for existing ballot. UserHash: "${userHash}", Topic: "${topic}"`);
 
         try {
-            const user = await UserModel.findOne(
+            const user: NullableUser = await UserModel.findOne(
                 {
                     userHash: userHash,
                     "ballots.topic": topic
@@ -109,6 +109,37 @@ export default class MongoUserCollectionActor {
         } catch (error: unknown) {
             const errorMessage = `Failed to check existing ballot for UserHash "${userHash}" and Topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::findIfExistsBallot] MongoDB query error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
+    public async findUserBallots(userHash: string): Promise<IBallot[] | null> {
+        logger.debug(`[MongoUserCollectionActor::findUserBallots] Finding all ballots for UserHash: "${userHash}"`);
+
+        try {
+            const user = await UserModel.findOne(
+                {
+                    userHash: userHash
+                },
+                {
+                    _id: false,
+                    ballots: true
+                }
+            ).lean<Pick<IUser, "ballots" | "userHash">>();
+
+            if (!user) {
+                logger.warn(`[MongoUserCollectionActor::findUserBallots] User with hash "${userHash}" not found.`);
+                return null;
+            }
+
+            const ballots: IBallot[] = user.ballots || [];
+
+            logger.info(`[UserEventMongoActor::findUserBallots] Found ${ballots.length} ballots for UserHash: "${userHash}".`);
+
+            return ballots;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to find user ballots for UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[UserEventMongoActor::findUserBallots] MongoDB query error: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }

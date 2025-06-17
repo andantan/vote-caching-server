@@ -2,22 +2,22 @@ import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
 import logger from '../../config/logger.js';
 
-import { CreatedBlockEvent, ReportBlockEventResponse } from "../../generated/blockchain_event/block_event_message.js";
+import * as Event from "../../generated/blockchain_event/block_event_message.js";
 
 import { BlockEventError, BlockEventErrorStatus } from '../error/blockEventError.js';
 import { blockEventProcessor } from '../processor/blockEventProcessor.js';
 
 
 export async function reportCreatedBlockEvent(
-    call: ServerUnaryCall<CreatedBlockEvent, ReportBlockEventResponse>,
-    callback: sendUnaryData<ReportBlockEventResponse>
+    call: ServerUnaryCall<Event.CreatedBlockEvent, Event.ReportBlockEventResponse>,
+    callback: sendUnaryData<Event.ReportBlockEventResponse>
 ): Promise<void> {
     const { topic, length, height } = call.request;
 
     logger.debug(`[grpcBlockEventHandler::reportCreatedBlockEvent] Received block event: Topic="${topic}", Length=${length}, Height=${height}`);
 
     let cachedResult: boolean = true;
-    let statusCode: string = "";
+    let statusCode: string = "OK";
 
     try {
         await blockEventProcessor.addBlockToVote(topic, length, height);
@@ -34,7 +34,7 @@ export async function reportCreatedBlockEvent(
             logger.error(`[grpcBlockEventHandler::reportCreatedBlockEvent] Unhandled or unexpected error during block event processing: Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
         }
     } finally {
-        const response: ReportBlockEventResponse = {
+        const response: Event.ReportBlockEventResponse = {
             cached: cachedResult,
             status: statusCode
         };

@@ -2,15 +2,15 @@ import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 
 import logger from '../../config/logger.js';
 
-import { ExpiredPendingEvent, ReportPendingEventResponse } from "../../generated/blockchain_event/pending_event_message.js";
+import * as Event from "../../generated/blockchain_event/pending_event_message.js";
 
 import { PendingEventError, PendingEventErrorStatus } from '../error/pendingEventError.js';
 import { pendingEventProcessor } from '../processor/pendingEventProcessor.js';
 
 
 export async function reportExpiredPendingEvent(
-    call: ServerUnaryCall<ExpiredPendingEvent, ReportPendingEventResponse>,
-    callback: sendUnaryData<ReportPendingEventResponse>
+    call: ServerUnaryCall<Event.ExpiredPendingEvent, Event.ReportPendingEventResponse>,
+    callback: sendUnaryData<Event.ReportPendingEventResponse>
 ): Promise<void> {
     const { topic, count, options } = call.request;
 
@@ -33,7 +33,7 @@ export async function reportExpiredPendingEvent(
             logger.error(`[grpcPendingEventHandler::reportExpiredPendingEvent] Unhandled or unexpected error during pending event processing: Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}. Error:`, error);
         }
     } finally {
-        const response: ReportPendingEventResponse = {
+        const response: Event.ReportPendingEventResponse = {
             cached: cachedResult,
             status: statusCode
         };

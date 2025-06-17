@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package proposal_event_message;
+package proposal_create_event_message;
 
 service NewProposalEventService {
   rpc ValidateNewProposalEvent(ValidateProposalEventRequest)

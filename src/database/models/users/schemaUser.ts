@@ -21,4 +21,5 @@ export const UserSchema: Schema<IUser> = new Schema({
     timestamps: true
 });
 
+export type NullableUser = IUser | null;
 export const UserModel = mongoose.model<IUser>('User', UserSchema, MongoConfig.MongoUserCollection);

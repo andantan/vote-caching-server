@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package ballot_query_event_message;
+
+service BallotQueryEventService {
+    rpc GetUserBallots(GetUserBallotsRequest)
+        returns (GetUserBallotsResponse);
+}
+
+message GetUserBallotsRequest {
+    string user_hash = 1;
+}
+
+message GetUserBallotsResponse {
+    bool queried = 1;
+    string status = 2;
+    repeated Ballot ballots = 3;
+}
+
+message Ballot {
+    string vote_hash = 1;
+    string topic = 2;
+    google.protobuf.Timestamp submitted_at = 3;
+}
