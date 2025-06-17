@@ -41,7 +41,15 @@ export async function getUserBallots(
 
         if (error instanceof BallotQueryEventError) {
             statusCode = error.status;
-            logger.error(`[grpcBallotQueryEventHandler::getUserBallots] Processed error getting ballots for UserHash: "${userHash}". Status: "${statusCode}". Internal message: "${error.message}"`);
+
+            switch (statusCode) {
+                case "USER_NOT_FOUND":
+                    logger.warn(`[grpcBallotQueryEventHandler::getUserBallots] User with hash "${userHash}" not found.`);
+                    break;
+                default:
+                    logger.error(`[grpcBallotQueryEventHandler::getUserBallots] Processed error getting ballots for UserHash: "${userHash}". Status: "${statusCode}". Internal message: "${error.message}"`);
+                    break;
+            }
         } else {
             statusCode = BallotQueryEventErrorStatus.UNKNOWN_ERROR;
             logger.error(`[grpcBallotQueryEventHandler::getUserBallots] Unhandled or unexpected error getting ballots for UserHash: "${userHash}". Error:`, error);
