@@ -57,10 +57,6 @@ export interface CacheBallotEventRequest {
      * @generated from protobuf field: string topic = 3
      */
     topic: string;
-    /**
-     * @generated from protobuf field: string option = 4
-     */
-    option: string;
 }
 /**
  * @generated from protobuf message ballot_create_event_message.CacheBallotEventResponse
@@ -199,8 +195,7 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
         super("ballot_create_event_message.CacheBallotEventRequest", [
             { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "vote_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "option", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 3, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<CacheBallotEventRequest>): CacheBallotEventRequest {
@@ -208,7 +203,6 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
         message.userHash = "";
         message.voteHash = "";
         message.topic = "";
-        message.option = "";
         if (value !== undefined)
             reflectionMergePartial<CacheBallotEventRequest>(this, message, value);
         return message;
@@ -226,9 +220,6 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
                     break;
                 case /* string topic */ 3:
                     message.topic = reader.string();
-                    break;
-                case /* string option */ 4:
-                    message.option = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -251,9 +242,6 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
         /* string topic = 3; */
         if (message.topic !== "")
             writer.tag(3, WireType.LengthDelimited).string(message.topic);
-        /* string option = 4; */
-        if (message.option !== "")
-            writer.tag(4, WireType.LengthDelimited).string(message.option);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

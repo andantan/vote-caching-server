@@ -118,10 +118,10 @@ export class BallotCreateEventProcessor {
         logger.info(`[BallotEventProcessor::validateOption] Option validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
     }
 
-    public async addBallotToCache(userHash: string, voteHash: string, topic: string, option: string): Promise<void> {
+    public async addBallotToCache(userHash: string, voteHash: string, topic: string): Promise<void> {
         logger.debug(`[BallotEventProcessor::addBallotToCache] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
         try {
-            await this.userCollection.addBallotToUser(userHash, voteHash, topic, option);
+            await this.userCollection.addBallotToUser(userHash, voteHash, topic);
             logger.info(`[BallotEventProcessor::addBallotToCache] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::addBallotToCache] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);

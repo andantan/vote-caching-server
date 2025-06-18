@@ -53,7 +53,7 @@ export default class MongoUserCollectionActor {
         }
     }
 
-    public async addBallotToUser(userHash: string, voteHash: string, topic: string, option: string): Promise<NullableUser> {
+    public async addBallotToUser(userHash: string, voteHash: string, topic: string): Promise<NullableUser> {
         logger.debug(`[MongoUserCollectionActor::addBallotToUser] Attempting to add ballot for user "${userHash}" on topic "${topic}". VoteHash: "${voteHash}"`);
 
         try {

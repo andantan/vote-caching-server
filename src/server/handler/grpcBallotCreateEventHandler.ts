@@ -49,15 +49,15 @@ export async function cacheNewBallotEvent(
     call: ServerUnaryCall<Event.CacheBallotEventRequest, Event.CacheBallotEventResponse>,
     callback: sendUnaryData<Event.CacheBallotEventResponse>
 ): Promise<void> {
-    const { userHash, voteHash, topic, option } = call.request;
+    const { userHash, voteHash, topic } = call.request;
 
-    logger.debug(`[grpcBallotCreateEventHandler::cacheNewBallotEvent] Received validation request for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}"`);
+    logger.debug(`[grpcBallotCreateEventHandler::cacheNewBallotEvent] Received validation request for UserHash: "${userHash}", Topic: "${topic}"`);
 
     let cachedResult: boolean = true;
     let statusCode: string = "OK";
 
     try {
-        await ballotCreateEventProcessor.addBallotToCache(userHash, voteHash, topic, option);
+        await ballotCreateEventProcessor.addBallotToCache(userHash, voteHash, topic);
 
         logger.info(`[grpcBallotCreateEventHandler::cacheNewBallotEvent] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
     } catch (error: unknown) {

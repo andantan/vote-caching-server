@@ -25,7 +25,6 @@ message CacheBallotEventRequest {
   string user_hash = 1;
   string vote_hash = 2;
   string topic = 3;
-  string option = 4;
 }
 
 message CacheBallotEventResponse {
