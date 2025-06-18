@@ -28,7 +28,7 @@ export class PendingEventProcessor {
             logger.info(`[PendingEventProcessor::saveVoteResult] Vote results successfully saved: Topic="${topic}", TotalCount=${count}`);
         } catch (error: unknown) {
             logger.error(`[PendingEventProcessor::saveVoteResult] Database access error during saving vote results. Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}. Error:`, error);
-            throw new PendingEventError(PendingEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new PendingEventError(PendingEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }
 }

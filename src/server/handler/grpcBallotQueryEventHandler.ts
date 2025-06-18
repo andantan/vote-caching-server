@@ -43,7 +43,7 @@ export async function getUserBallots(
             statusCode = error.status;
 
             switch (statusCode) {
-                case "USER_NOT_FOUND":
+                case BallotQueryEventErrorStatus.USER_NOT_FOUND:
                     logger.warn(`[grpcBallotQueryEventHandler::getUserBallots] User with hash "${userHash}" not found.`);
                     break;
                 default:

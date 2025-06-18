@@ -6,12 +6,12 @@ import { IBallot } from "../../database/models/users/schemaBallot";
 import { BallotQueryEventError, BallotQueryEventErrorStatus } from "../error/ballotQueryEventError";
 
 export class BallotQueryEventProcessor {
-    private readonly userActor: MongoUserCollectionActor;
+    private readonly userCollection: MongoUserCollectionActor;
 
     private static instance: BallotQueryEventProcessor;
 
     private constructor() {
-        this.userActor = new MongoUserCollectionActor();
+        this.userCollection = new MongoUserCollectionActor();
     }
 
     public static getInstance(): BallotQueryEventProcessor {
@@ -28,12 +28,13 @@ export class BallotQueryEventProcessor {
         let ballots: IBallot[] | null;
         
         try {
-            ballots = await this.userActor.findUserBallots(userHash);
+            ballots = await this.userCollection.findUserBallots(userHash);
         } catch (error: unknown) {
             logger.error(`[BallotQueryEventProcessor::getUserBallots] Database access error during ballot retrieval for UserHash: "${userHash}". Error:`, error);
-            throw new BallotQueryEventError(BallotQueryEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotQueryEventError(BallotQueryEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
 
+        // Matching user does not exist.
         if (ballots === null) {
             logger.warn(`[BallotQueryEventProcessor::getUserBallots] User with hash "${userHash}" not found.`);
             throw new BallotQueryEventError(BallotQueryEventErrorStatus.USER_NOT_FOUND);

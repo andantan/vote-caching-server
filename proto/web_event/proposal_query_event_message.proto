@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package proposal_query_event_message;
+
+message Proposal {
+  string topic = 1;
+  int32 duration = 2;
+  bool expired = 3;
+
+  Result result = 4;
+  repeated BlockHeight block_heights = 5;
+
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp expired_at = 7;
+
+  repeated string options = 8;
+}
+
+message BlockHeight {
+  int32 height = 1;
+  int32 length = 2;
+}
+
+message Result {
+  int32 count = 1;
+  map<string, int32> options = 2;
+}
+
+service ProposalQueryEventService {
+  rpc GetProposal(GetProposalRequest)
+      returns (GetProposalResponse);
+}
+
+message GetProposalRequest {
+  string topic = 1;
+}
+
+message GetProposalResponse {
+  bool queried = 1;
+  string status = 2;
+  Proposal proposals = 3;
+}
+

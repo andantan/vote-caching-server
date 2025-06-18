@@ -45,7 +45,7 @@ export class ProposalCreateEventProcessor {
             existingProposal = await this.voteCollection.findIfExistsProposal(topic);
         } catch (error: unknown) {
             logger.error(`[ProposalCreateEventProcessor::validateExistence] Database access error during proposal existence check for Topic: "${topic}". Error:`, error);
-            throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
 
         if (existingProposal !== null) {
@@ -69,7 +69,7 @@ export class ProposalCreateEventProcessor {
             logger.info(`[ProposalCreateEventProcessor::saveProposalToCache] New proposal successfully saved. Topic: "${topic}".`);
         } catch (error: unknown) {
             logger.error(`[ProposalCreateEventProcessor::saveProposalToCache] Database access error during new proposal saving. Topic: "${topic}", Duration: ${duration}. Error:`, error);
-            throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }
 }

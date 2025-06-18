@@ -28,7 +28,7 @@ export class BlockEventProcessor {
             logger.info(`[BlockEventProcessor::addBlockToVote] Block successfully cached: Topic="${topic}", Height=${height}`);
         } catch (error: unknown) {
             logger.error(`[BlockEventProcessor::addBlockToVote] Database access error during block caching. Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
-            throw new BlockEventError(BlockEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BlockEventError(BlockEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }
 }

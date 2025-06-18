@@ -15,3 +15,5 @@ export const voteResultSchema: Schema<IVoteResult> = new Schema({
 }, {
     _id: false
 })
+
+export type resultOptionMap = { [key: string]: number };

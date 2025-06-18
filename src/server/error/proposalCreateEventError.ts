@@ -1,15 +1,20 @@
-export enum ProposalCreateEventErrorStatus {
+import { CommonErrorStatus } from "./common/commonEventError";
+
+export enum ProposalCreateEventSpecificStatus {
     PROPOSAL_EXPIRED = "PROPOSAL_EXPIRED",
     PROPOSAL_ALREADY_OPEN = "PROPOSAL_ALREADY_OPEN",
-    UNKNOWN_ERROR = "UNKNOWN_ERROR",
-    CACHE_ACCESS_ERROR = "CACHE_ACCESS_ERROR"
 }
 
+export const ProposalCreateEventErrorStatus = {
+    ...CommonErrorStatus,
+    ...ProposalCreateEventSpecificStatus
+} as const;
+
 export class ProposalCreateEventError extends Error {
-    public readonly status: ProposalCreateEventErrorStatus;
+    public readonly status: typeof ProposalCreateEventErrorStatus[keyof typeof ProposalCreateEventErrorStatus];
     public readonly type: string;
 
-    constructor(status: ProposalCreateEventErrorStatus, options?: { cause?: unknown }) {
+    constructor(status: typeof ProposalCreateEventErrorStatus[keyof typeof ProposalCreateEventErrorStatus], options?: { cause?: unknown }) {
         super(`Proposal Create Event error: ${status}`, options);
 
         this.type = "ProposalCreateEventError";

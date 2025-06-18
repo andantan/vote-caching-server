@@ -1,13 +1,19 @@
-export enum PendingEventErrorStatus {
-    CACHE_ACCESS_ERROR = "CACHE_ACCESS_ERROR",
-    UNKNOWN_ERROR = "UNKNOWN_ERROR",
+import { CommonErrorStatus } from "./common/commonEventError";
+
+export enum PendingEventErrorSpecificStatus {
+    // TODO: Identify this status
 }
 
+export const PendingEventErrorStatus = {
+    ...PendingEventErrorSpecificStatus,
+    ...CommonErrorStatus,
+} as const;
+
 export class PendingEventError extends Error {
-    public readonly status: PendingEventErrorStatus;
+    public readonly status: typeof PendingEventErrorStatus[keyof typeof PendingEventErrorStatus];
     public readonly name: string;
 
-    constructor(status: PendingEventErrorStatus, options?: { cause?: unknown }) {
+    constructor(status: typeof PendingEventErrorStatus[keyof typeof PendingEventErrorStatus], options?: { cause?: unknown }) {
         super(`Pending Event Error: ${status}`, options);
         this.name = 'PendingEventError';
         this.status = status;

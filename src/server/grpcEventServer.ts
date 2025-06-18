@@ -1,6 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
 
 import { newProposalEventServiceDefinition } from "../generated/web_event/proposal_create_event_message.grpc-server.js";
+import { proposalQueryEventServiceDefinition } from "../generated/web_event/proposal_query_event_message.grpc-server.js";
 import { newBallotEventServiceDefinition } from "../generated/web_event/ballot_create_event_message.grpc-server.js";
 import { ballotQueryEventServiceDefinition } from "../generated/web_event/ballot_query_event_message.grpc-server.js";
 import { expiredPendingEventServiceDefinition } from "../generated/blockchain_event/pending_event_message.grpc-server.js";
@@ -8,6 +9,7 @@ import { createdBlockEventServiceDefinition } from "../generated/blockchain_even
 
 import { validateNewProposalEvent, cacheNewProposalEvent } from "./handler/grpcProposalCreateEventHandler.js";
 import { validateNewBallotEvent, cacheNewBallotEvent } from "./handler/grpcBallotCreateEventHandler.js";
+import { getProposal } from "./handler/grpcProposalQueryEventHandler.js";
 import { getUserBallots } from "./handler/grpcBallotQueryEventHandler.js";
 import { reportExpiredPendingEvent } from "./handler/grpcPendingEventHandler.js";
 import { reportCreatedBlockEvent } from "./handler/grpcBlockEventHandler.js";
@@ -29,6 +31,12 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
     logger.info("[webclient-event-handler::ProposalCreateEvent] NewProposalEventService::validateNewProposalEvent registered");
     logger.info("[webclient-event-handler::ProposalCreateEvent] NewProposalEventService::cacheNewProposalEvent registered");
 
+    server.addService(proposalQueryEventServiceDefinition, {
+        GetProposal: getProposal
+    });
+
+    logger.info("[webclient-event-handler::ProposalQueryEvent] ProposalQueryEventService::getProposal registered");
+
     server.addService(newBallotEventServiceDefinition, {
         ValidateNewBallotEvent: validateNewBallotEvent,
         CacheNewBallotEvent: cacheNewBallotEvent
@@ -41,7 +49,7 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
         GetUserBallots: getUserBallots 
     });
 
-    logger.info("[webclient-event-handler::BallotQueryEvent] QueryBallotEventService::getUserBallots registered");
+    logger.info("[webclient-event-handler::BallotQueryEvent] BallotQueryEventService::getUserBallots registered");
     
     server.addService(createdBlockEventServiceDefinition, {
         ReportCreatedBlockEvent: reportCreatedBlockEvent,

@@ -55,7 +55,7 @@ export class BallotCreateEventProcessor {
             // strict section end
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::validateUser] Failed to validate/create user for UserHash: "${userHash}". Error:`, error);
-            throw new BallotCreateEventError(BallotCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }
 
@@ -66,7 +66,7 @@ export class BallotCreateEventProcessor {
             alreadyVoted = await this.userCollection.findIfExistsBallot(userHash, topic);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::validateDuplication] Database access error during duplicate vote validation for UserHash: "${userHash}", Topic: "${topic}". Error:`, error);
-            throw new BallotCreateEventError(BallotCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
 
         if (alreadyVoted !== null) {
@@ -84,7 +84,7 @@ export class BallotCreateEventProcessor {
             existingProposal = await this.voteCollection.findIfExistsProposal(topic);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::validateExistence] Database access error during proposal existence validation for Topic: "${topic}". Error:`, error);
-            throw new BallotCreateEventError(BallotCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
 
         if (existingProposal === null) {
@@ -107,7 +107,7 @@ export class BallotCreateEventProcessor {
             validOption = await this.voteCollection.isValidVoteOption(topic, option);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::validateOption] Database access error during option validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
-            throw new BallotCreateEventError(BallotCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
 
         if (!validOption) {
@@ -125,7 +125,7 @@ export class BallotCreateEventProcessor {
             logger.info(`[BallotEventProcessor::addBallotToCache] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
         } catch (error: unknown) {
             logger.error(`[BallotEventProcessor::addBallotToCache] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
-            throw new BallotCreateEventError(BallotCreateEventErrorStatus.CACHE_ACCESS_ERROR, { cause: error });
+            throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }
 }
