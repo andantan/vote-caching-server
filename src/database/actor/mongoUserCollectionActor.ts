@@ -37,7 +37,7 @@ export default class MongoUserCollectionActor {
         try {
             const user: NullableUser = await UserModel.findOne({
                 userHash: userHash
-            });
+            }).lean();
 
             if (user) {
                 logger.info(`[MongoUserCollectionActor::findIfExistsUser] User found. UserHash: "${userHash}"`);
@@ -97,7 +97,7 @@ export default class MongoUserCollectionActor {
                     userHash: userHash,
                     "ballots.topic": topic
                 }
-            );
+            ).lean();
 
             if (user) {
                 logger.info(`[MongoUserCollectionActor::findIfExistsBallot] Existing ballot found. UserHash: "${userHash}", Topic: "${topic}"`);

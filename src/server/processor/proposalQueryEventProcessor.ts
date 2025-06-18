@@ -2,7 +2,6 @@ import logger from "../../config/logger";
 
 import MongoVoteCollectionActor from "../../database/actor/mongoVoteCollectionActor";
 
-import { resultOptionMap } from "../../database/models/votes/schemaResult";
 import { IVote } from './../../database/models/votes/schemaVote';
 
 import { ProposalQueryEventError, ProposalQueryEventErrorStatus } from './../error/proposalQueryEventError';
@@ -49,9 +48,9 @@ export class ProposalQueryEventProcessor {
     }
 
     public toGrpcProposal(proposal: IVote): Proposal {
-        const resultOptions: resultOptionMap = Object.fromEntries(
-            Object.entries(proposal.result.options).filter(([key]) => !key.startsWith('$__'))
-        ) as resultOptionMap;
+        const resultOptions: { [key: string]: number } = Object.fromEntries(
+            Object.entries(proposal.result.options)
+        ) as { [key: string]: number };
 
         const grpcResult: Result = Result.create({
             count: proposal.result.count,

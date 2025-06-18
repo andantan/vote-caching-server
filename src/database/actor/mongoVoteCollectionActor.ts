@@ -33,7 +33,7 @@ export default class MongoVoteCollectionActor {
         try {
             const vote = await VoteModel.findOne({
                 topic: topic
-            })
+            }).lean();
 
             if (vote) {
                 logger.info(`[MongoVoteCollectionActor::findIfExistsProposal] Existing proposal found. Topic: "${topic}"`);
@@ -41,7 +41,7 @@ export default class MongoVoteCollectionActor {
                 logger.info(`[MongoVoteCollectionActor::findIfExistsProposal] No existing proposal found. Topic: "${topic}"`);
             }
 
-            return vote
+            return vote as IVote | null;
         } catch (error: unknown) {
             const errorMessage = `Failed to check existence for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoVoteCollectionActor::findIfExistsProposal] MongoDB operation error: ${errorMessage}`, error);
@@ -57,7 +57,7 @@ export default class MongoVoteCollectionActor {
                 {
                     topic: topic
                 }
-            ).select("options");
+            ).select("options").lean();
 
             if (!proposal) {
                 logger.warn(`[MongoVoteCollectionActor::isValidVoteOption] Proposal not found for topic: "${topic}". Cannot validate option.`);
