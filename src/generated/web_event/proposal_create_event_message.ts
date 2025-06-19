@@ -12,18 +12,18 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
- * @generated from protobuf message proposal_create_event_message.ValidateProposalEventRequest
+ * @generated from protobuf message proposal_create_event_message.ProposalValidateEventRequest
  */
-export interface ValidateProposalEventRequest {
+export interface ProposalValidateEventRequest {
     /**
      * @generated from protobuf field: string topic = 1
      */
     topic: string;
 }
 /**
- * @generated from protobuf message proposal_create_event_message.ValidateProposalEventResponse
+ * @generated from protobuf message proposal_create_event_message.ProposalValidateEventResponse
  */
-export interface ValidateProposalEventResponse {
+export interface ProposalValidateEventResponse {
     /**
      * @generated from protobuf field: bool validation = 1
      */
@@ -34,9 +34,9 @@ export interface ValidateProposalEventResponse {
     status: string;
 }
 /**
- * @generated from protobuf message proposal_create_event_message.CacheProposalEventRequest
+ * @generated from protobuf message proposal_create_event_message.ProposalCacheEventRequest
  */
-export interface CacheProposalEventRequest {
+export interface ProposalCacheEventRequest {
     /**
      * @generated from protobuf field: string topic = 1
      */
@@ -51,9 +51,9 @@ export interface CacheProposalEventRequest {
     options: string[];
 }
 /**
- * @generated from protobuf message proposal_create_event_message.CacheProposalEventResponse
+ * @generated from protobuf message proposal_create_event_message.ProposalCacheEventResponse
  */
-export interface CacheProposalEventResponse {
+export interface ProposalCacheEventResponse {
     /**
      * @generated from protobuf field: bool cached = 1
      */
@@ -64,20 +64,20 @@ export interface CacheProposalEventResponse {
     status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
-class ValidateProposalEventRequest$Type extends MessageType<ValidateProposalEventRequest> {
+class ProposalValidateEventRequest$Type extends MessageType<ProposalValidateEventRequest> {
     constructor() {
-        super("proposal_create_event_message.ValidateProposalEventRequest", [
+        super("proposal_create_event_message.ProposalValidateEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ValidateProposalEventRequest>): ValidateProposalEventRequest {
+    create(value?: PartialMessage<ProposalValidateEventRequest>): ProposalValidateEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
         if (value !== undefined)
-            reflectionMergePartial<ValidateProposalEventRequest>(this, message, value);
+            reflectionMergePartial<ProposalValidateEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ValidateProposalEventRequest): ValidateProposalEventRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ProposalValidateEventRequest): ProposalValidateEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -96,7 +96,7 @@ class ValidateProposalEventRequest$Type extends MessageType<ValidateProposalEven
         }
         return message;
     }
-    internalBinaryWrite(message: ValidateProposalEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ProposalValidateEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
@@ -107,26 +107,26 @@ class ValidateProposalEventRequest$Type extends MessageType<ValidateProposalEven
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_create_event_message.ValidateProposalEventRequest
+ * @generated MessageType for protobuf message proposal_create_event_message.ProposalValidateEventRequest
  */
-export const ValidateProposalEventRequest = new ValidateProposalEventRequest$Type();
+export const ProposalValidateEventRequest = new ProposalValidateEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ValidateProposalEventResponse$Type extends MessageType<ValidateProposalEventResponse> {
+class ProposalValidateEventResponse$Type extends MessageType<ProposalValidateEventResponse> {
     constructor() {
-        super("proposal_create_event_message.ValidateProposalEventResponse", [
+        super("proposal_create_event_message.ProposalValidateEventResponse", [
             { no: 1, name: "validation", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ValidateProposalEventResponse>): ValidateProposalEventResponse {
+    create(value?: PartialMessage<ProposalValidateEventResponse>): ProposalValidateEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.validation = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<ValidateProposalEventResponse>(this, message, value);
+            reflectionMergePartial<ProposalValidateEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ValidateProposalEventResponse): ValidateProposalEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ProposalValidateEventResponse): ProposalValidateEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -148,7 +148,7 @@ class ValidateProposalEventResponse$Type extends MessageType<ValidateProposalEve
         }
         return message;
     }
-    internalBinaryWrite(message: ValidateProposalEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ProposalValidateEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool validation = 1; */
         if (message.validation !== false)
             writer.tag(1, WireType.Varint).bool(message.validation);
@@ -162,28 +162,28 @@ class ValidateProposalEventResponse$Type extends MessageType<ValidateProposalEve
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_create_event_message.ValidateProposalEventResponse
+ * @generated MessageType for protobuf message proposal_create_event_message.ProposalValidateEventResponse
  */
-export const ValidateProposalEventResponse = new ValidateProposalEventResponse$Type();
+export const ProposalValidateEventResponse = new ProposalValidateEventResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventRequest> {
+class ProposalCacheEventRequest$Type extends MessageType<ProposalCacheEventRequest> {
     constructor() {
-        super("proposal_create_event_message.CacheProposalEventRequest", [
+        super("proposal_create_event_message.ProposalCacheEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "duration", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 3, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CacheProposalEventRequest>): CacheProposalEventRequest {
+    create(value?: PartialMessage<ProposalCacheEventRequest>): ProposalCacheEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
         message.duration = 0;
         message.options = [];
         if (value !== undefined)
-            reflectionMergePartial<CacheProposalEventRequest>(this, message, value);
+            reflectionMergePartial<ProposalCacheEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheProposalEventRequest): CacheProposalEventRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ProposalCacheEventRequest): ProposalCacheEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -208,7 +208,7 @@ class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventReque
         }
         return message;
     }
-    internalBinaryWrite(message: CacheProposalEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ProposalCacheEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
@@ -225,26 +225,26 @@ class CacheProposalEventRequest$Type extends MessageType<CacheProposalEventReque
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_create_event_message.CacheProposalEventRequest
+ * @generated MessageType for protobuf message proposal_create_event_message.ProposalCacheEventRequest
  */
-export const CacheProposalEventRequest = new CacheProposalEventRequest$Type();
+export const ProposalCacheEventRequest = new ProposalCacheEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CacheProposalEventResponse$Type extends MessageType<CacheProposalEventResponse> {
+class ProposalCacheEventResponse$Type extends MessageType<ProposalCacheEventResponse> {
     constructor() {
-        super("proposal_create_event_message.CacheProposalEventResponse", [
+        super("proposal_create_event_message.ProposalCacheEventResponse", [
             { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CacheProposalEventResponse>): CacheProposalEventResponse {
+    create(value?: PartialMessage<ProposalCacheEventResponse>): ProposalCacheEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.cached = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<CacheProposalEventResponse>(this, message, value);
+            reflectionMergePartial<ProposalCacheEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheProposalEventResponse): CacheProposalEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ProposalCacheEventResponse): ProposalCacheEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -266,7 +266,7 @@ class CacheProposalEventResponse$Type extends MessageType<CacheProposalEventResp
         }
         return message;
     }
-    internalBinaryWrite(message: CacheProposalEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ProposalCacheEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool cached = 1; */
         if (message.cached !== false)
             writer.tag(1, WireType.Varint).bool(message.cached);
@@ -280,13 +280,13 @@ class CacheProposalEventResponse$Type extends MessageType<CacheProposalEventResp
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_create_event_message.CacheProposalEventResponse
+ * @generated MessageType for protobuf message proposal_create_event_message.ProposalCacheEventResponse
  */
-export const CacheProposalEventResponse = new CacheProposalEventResponse$Type();
+export const ProposalCacheEventResponse = new ProposalCacheEventResponse$Type();
 /**
- * @generated ServiceType for protobuf service proposal_create_event_message.NewProposalEventService
+ * @generated ServiceType for protobuf service proposal_create_event_message.ProposalCreateEventService
  */
-export const NewProposalEventService = new ServiceType("proposal_create_event_message.NewProposalEventService", [
-    { name: "ValidateNewProposalEvent", options: {}, I: ValidateProposalEventRequest, O: ValidateProposalEventResponse },
-    { name: "CacheNewProposalEvent", options: {}, I: CacheProposalEventRequest, O: CacheProposalEventResponse }
+export const ProposalCreateEventService = new ServiceType("proposal_create_event_message.ProposalCreateEventService", [
+    { name: "ValidateProposalEvent", options: {}, I: ProposalValidateEventRequest, O: ProposalValidateEventResponse },
+    { name: "CacheProposalEvent", options: {}, I: ProposalCacheEventRequest, O: ProposalCacheEventResponse }
 ]);

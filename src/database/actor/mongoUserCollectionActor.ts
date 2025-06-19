@@ -8,22 +8,22 @@ export default class MongoUserCollectionActor {
         try {
             logger.debug(`[MongoUserCollectionActor::saveNewUserIfNotExists] Attempting to find or create user. UserHash: "${userHash}"`);
 
-            let user = await UserModel.findOne({ userHash: userHash });
-
-            if (user) {
-                logger.info(`[MongoUserCollectionActor::saveNewUserIfNotExists] User already exists. UserHash: "${userHash}"`);
-                return user;
-            }
-
-            const newUser = new UserModel({
-                userHash: userHash
+            let userDocument: NullableUser = await UserModel.findOne({ 
+                userHash: userHash 
             });
 
-            user = await newUser.save();
+            // User does not exists in user collection
+            if (!userDocument) {
+                const newUserDocument: IUser = new UserModel({
+                    userHash: userHash
+                });
 
-            logger.info(`[MongoUserCollectionActor::saveNewUserIfNotExists] Successfully created new user. UserHash: "${userHash}"`);
+                userDocument = await newUserDocument.save();
 
-            return user;
+                logger.info(`[MongoUserCollectionActor::saveNewUserIfNotExists] New user (${userHash}) successfully saved to users collection.`);
+            } 
+
+            return userDocument;
         } catch (error: unknown) {
             const errorMessage = `Failed to find or create user with UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::saveNewUserIfNotExists] MongoDB operation error: ${errorMessage}`, error);
@@ -35,17 +35,11 @@ export default class MongoUserCollectionActor {
         logger.debug(`[MongoUserCollectionActor::findIfExistsUser] Checking for existing user. UserHash: "${userHash}"`);
 
         try {
-            const user: NullableUser = await UserModel.findOne({
+            const userPojo: NullableUser = await UserModel.findOne({
                 userHash: userHash
             }).lean();
 
-            if (user) {
-                logger.info(`[MongoUserCollectionActor::findIfExistsUser] User found. UserHash: "${userHash}"`);
-            } else {
-                logger.info(`[MongoUserCollectionActor::findIfExistsUser] User not found. UserHash: "${userHash}"`);
-            }
-
-            return user;
+            return userPojo;
         } catch (error: unknown) {
             const errorMessage = `Failed to check existence for UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::findIfExistsUser] MongoDB operation error: ${errorMessage}`, error);
@@ -63,24 +57,21 @@ export default class MongoUserCollectionActor {
                 submittedAt: new Date()
             };
 
-            const updatedUser = await UserModel.findOneAndUpdate(
+            const updatedUserDocument = await UserModel.findOneAndUpdate(
                 { userHash: userHash },
-                { 
-                    $push: { 
-                        ballots: newBallot
-                    }
-                },
+                { $push: { ballots: newBallot } },
                 { new: true }
             );
 
-            if (!updatedUser) {
-                logger.warn(`[MongoUserCollectionActor::addBallotToUser] Failed to add ballot. User "${userHash}" not found.`);
+            // User does not exists in user collection
+            if (!updatedUserDocument) {
+                logger.info(`[MongoUserCollectionActor::addBallotToUser] User with UserHash "${userHash}" not found. Could not add ballot for topic "${topic}".`);
                 return null;
             }
 
             logger.info(`[MongoUserCollectionActor::addBallotToUser] Successfully added ballot for user "${userHash}" on topic "${topic}".`);
 
-            return updatedUser;
+            return updatedUserDocument;
         } catch (error: unknown) {
             const errorMessage = `Failed to add ballot for user "${userHash}" and vote "${voteHash}" on topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::addBallotToUser] MongoDB operation error: ${errorMessage}`, error);
@@ -92,20 +83,14 @@ export default class MongoUserCollectionActor {
         logger.debug(`[MongoUserCollectionActor::findIfExistsBallot] Checking for existing ballot. UserHash: "${userHash}", Topic: "${topic}"`);
 
         try {
-            const user: NullableUser = await UserModel.findOne(
+            const userPojo: NullableUser = await UserModel.findOne(
                 {
                     userHash: userHash,
                     "ballots.topic": topic
                 }
             ).lean();
 
-            if (user) {
-                logger.info(`[MongoUserCollectionActor::findIfExistsBallot] Existing ballot found. UserHash: "${userHash}", Topic: "${topic}"`);
-            } else {
-                logger.info(`[MongoUserCollectionActor::findIfExistsBallot] No existing ballot found. UserHash: "${userHash}", Topic: "${topic}"`);
-            }
-
-            return user;
+            return userPojo;
         } catch (error: unknown) {
             const errorMessage = `Failed to check existing ballot for UserHash "${userHash}" and Topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::findIfExistsBallot] MongoDB query error: ${errorMessage}`, error);
@@ -117,7 +102,7 @@ export default class MongoUserCollectionActor {
         logger.debug(`[MongoUserCollectionActor::findUserBallots] Finding all ballots for UserHash: "${userHash}"`);
 
         try {
-            const user = await UserModel.findOne(
+            const userPojo = await UserModel.findOne(
                 {
                     userHash: userHash
                 },
@@ -127,12 +112,12 @@ export default class MongoUserCollectionActor {
                 }
             ).lean<Pick<IUser, "ballots" | "userHash">>();
 
-            if (!user) {
-                logger.warn(`[MongoUserCollectionActor::findUserBallots] User with hash "${userHash}" not found.`);
+            // User does not exists in user collection
+            if (!userPojo) {
                 return null;
             }
 
-            const ballots: IBallot[] = user.ballots || [];
+            const ballots: IBallot[] = userPojo.ballots || [];
 
             logger.info(`[UserEventMongoActor::findUserBallots] Found ${ballots.length} ballots for UserHash: "${userHash}".`);
 

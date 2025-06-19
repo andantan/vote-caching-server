@@ -2,32 +2,32 @@ syntax = "proto3";
 
 package ballot_create_event_message;
 
-service NewBallotEventService {
-  rpc ValidateNewBallotEvent(ValidateBallotEventRequest)
-      returns (ValidateBallotEventResponse);
+service BallotCreateEventService {
+  rpc ValidateBallotEvent(BallotValidateEventRequest)
+      returns (BallotValidateEventResponse);
 
-  rpc CacheNewBallotEvent(CacheBallotEventRequest)
-      returns (CacheBallotEventResponse);
+  rpc CacheBallotEvent(BallotCacheEventRequest)
+      returns (BallotCacheEventResponse);
 }
 
-message ValidateBallotEventRequest {
+message BallotValidateEventRequest {
   string user_hash = 1;
   string topic = 2;
   string option = 3;
 }
 
-message ValidateBallotEventResponse {
+message BallotValidateEventResponse {
   bool validation = 1;
   string status = 2;
 }
 
-message CacheBallotEventRequest {
+message BallotCacheEventRequest{
   string user_hash = 1;
   string vote_hash = 2;
   string topic = 3;
 }
 
-message CacheBallotEventResponse {
+message BallotCacheEventResponse {
   bool cached = 1;
   string status = 2;
 }

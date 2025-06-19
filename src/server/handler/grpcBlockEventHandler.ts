@@ -8,33 +8,33 @@ import { BlockEventError, BlockEventErrorStatus } from '../error/blockEventError
 import { blockEventProcessor } from '../processor/blockEventProcessor.js';
 
 
-export async function reportCreatedBlockEvent(
-    call: ServerUnaryCall<Event.CreatedBlockEvent, Event.ReportBlockEventResponse>,
-    callback: sendUnaryData<Event.ReportBlockEventResponse>
+export async function reportBlockCreatedEvent(
+    call: ServerUnaryCall<Event.ReportBlockCreatedEventRequest, Event.ReportBlockCreatedEventResponse>,
+    callback: sendUnaryData<Event.ReportBlockCreatedEventResponse>
 ): Promise<void> {
-    const { topic, length, height } = call.request;
+    const { topic, transactionCount, height } = call.request;
 
-    logger.debug(`[grpcBlockEventHandler::reportCreatedBlockEvent] Received block event: Topic="${topic}", Length=${length}, Height=${height}`);
+    logger.debug(`[grpcBlockEventHandler::reportBlockCreatedEvent] Received block event: Topic="${topic}", TransactionCount=${transactionCount}, Height=${height}`);
 
     let cachedResult: boolean = true;
     let statusCode: string = "OK";
 
     try {
-        await blockEventProcessor.addBlockToVote(topic, length, height);
+        await blockEventProcessor.addBlockToVote(topic, transactionCount, height);
 
-        logger.info(`[grpcBlockEventHandler::reportCreatedBlockEvent] Block successfully processed and cached: Topic="${topic}", Height=${height}`);
+        logger.info(`[grpcBlockEventHandler::reportBlockCreatedEvent] Block successfully processed and cached: Topic="${topic}", Height=${height}`);
     } catch (error: unknown) {
         cachedResult = false;
 
         if (error instanceof BlockEventError) {
             statusCode = error.status;
-            logger.warn(`[grpcBlockEventHandler::reportCreatedBlockEvent] Failed to process/cache block: Topic="${topic}", Length=${length}, Height=${height}. Status: "${statusCode}". Internal error message: "${error.message}"`);
+            logger.warn(`[grpcBlockEventHandler::reportBlockCreatedEvent] Failed to process/cache block: Topic="${topic}", TransactionCount=${transactionCount}, Height=${height}. Status: "${statusCode}". Internal error message: "${error.message}"`);
         } else {
             statusCode = BlockEventErrorStatus.UNKNOWN_ERROR;
-            logger.error(`[grpcBlockEventHandler::reportCreatedBlockEvent] Unhandled or unexpected error during block event processing: Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
+            logger.error(`[grpcBlockEventHandler::reportBlockCreatedEvent] Unhandled or unexpected error during block event processing: Topic="${topic}", TransactionCount=${transactionCount}, Height=${height}. Error:`, error);
         }
     } finally {
-        const response: Event.ReportBlockEventResponse = {
+        const response: Event.ReportBlockCreatedEventResponse = {
             cached: cachedResult,
             status: statusCode
         };

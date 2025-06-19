@@ -2,18 +2,18 @@ syntax = "proto3";
 
 package block_event_message;
 
-service CreatedBlockEventService {
-    rpc ReportCreatedBlockEvent(CreatedBlockEvent) 
-    returns (ReportBlockEventResponse);
+service BlockEventService {
+  rpc ReportBlockCreatedEvent(ReportBlockCreatedEventRequest)
+      returns (ReportBlockCreatedEventResponse);
 }
 
-message CreatedBlockEvent {
-    string topic = 1;
-    uint32 length = 2;
-    uint32 height = 3;
+message ReportBlockCreatedEventRequest {
+  string topic = 1;
+  uint32 transaction_count = 2;
+  uint32 height = 3;
 }
 
-message ReportBlockEventResponse {
-    bool cached = 1;
-    string status = 2;
+message ReportBlockCreatedEventResponse {
+  bool cached = 1;
+  string status = 2;
 }

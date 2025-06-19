@@ -7,7 +7,7 @@ const logFormat = printf(({ level, message, timestamp }) => {
 });
 
 const logger: Logger = createLogger({
-  level: "debug",
+  level: "info",
   format: combine(
     colorize({ all: true }),
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),

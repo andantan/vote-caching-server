@@ -12,26 +12,26 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
- * @generated from protobuf message block_event_message.CreatedBlockEvent
+ * @generated from protobuf message block_event_message.ReportBlockCreatedEventRequest
  */
-export interface CreatedBlockEvent {
+export interface ReportBlockCreatedEventRequest {
     /**
      * @generated from protobuf field: string topic = 1
      */
     topic: string;
     /**
-     * @generated from protobuf field: uint32 length = 2
+     * @generated from protobuf field: uint32 transaction_count = 2
      */
-    length: number;
+    transactionCount: number;
     /**
      * @generated from protobuf field: uint32 height = 3
      */
     height: number;
 }
 /**
- * @generated from protobuf message block_event_message.ReportBlockEventResponse
+ * @generated from protobuf message block_event_message.ReportBlockCreatedEventResponse
  */
-export interface ReportBlockEventResponse {
+export interface ReportBlockCreatedEventResponse {
     /**
      * @generated from protobuf field: bool cached = 1
      */
@@ -42,24 +42,24 @@ export interface ReportBlockEventResponse {
     status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
-class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
+class ReportBlockCreatedEventRequest$Type extends MessageType<ReportBlockCreatedEventRequest> {
     constructor() {
-        super("block_event_message.CreatedBlockEvent", [
+        super("block_event_message.ReportBlockCreatedEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "length", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "transaction_count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 3, name: "height", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
-    create(value?: PartialMessage<CreatedBlockEvent>): CreatedBlockEvent {
+    create(value?: PartialMessage<ReportBlockCreatedEventRequest>): ReportBlockCreatedEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
-        message.length = 0;
+        message.transactionCount = 0;
         message.height = 0;
         if (value !== undefined)
-            reflectionMergePartial<CreatedBlockEvent>(this, message, value);
+            reflectionMergePartial<ReportBlockCreatedEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreatedBlockEvent): CreatedBlockEvent {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReportBlockCreatedEventRequest): ReportBlockCreatedEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -67,8 +67,8 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* uint32 length */ 2:
-                    message.length = reader.uint32();
+                case /* uint32 transaction_count */ 2:
+                    message.transactionCount = reader.uint32();
                     break;
                 case /* uint32 height */ 3:
                     message.height = reader.uint32();
@@ -84,13 +84,13 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
         }
         return message;
     }
-    internalBinaryWrite(message: CreatedBlockEvent, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ReportBlockCreatedEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* uint32 length = 2; */
-        if (message.length !== 0)
-            writer.tag(2, WireType.Varint).uint32(message.length);
+        /* uint32 transaction_count = 2; */
+        if (message.transactionCount !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.transactionCount);
         /* uint32 height = 3; */
         if (message.height !== 0)
             writer.tag(3, WireType.Varint).uint32(message.height);
@@ -101,26 +101,26 @@ class CreatedBlockEvent$Type extends MessageType<CreatedBlockEvent> {
     }
 }
 /**
- * @generated MessageType for protobuf message block_event_message.CreatedBlockEvent
+ * @generated MessageType for protobuf message block_event_message.ReportBlockCreatedEventRequest
  */
-export const CreatedBlockEvent = new CreatedBlockEvent$Type();
+export const ReportBlockCreatedEventRequest = new ReportBlockCreatedEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse> {
+class ReportBlockCreatedEventResponse$Type extends MessageType<ReportBlockCreatedEventResponse> {
     constructor() {
-        super("block_event_message.ReportBlockEventResponse", [
+        super("block_event_message.ReportBlockCreatedEventResponse", [
             { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ReportBlockEventResponse>): ReportBlockEventResponse {
+    create(value?: PartialMessage<ReportBlockCreatedEventResponse>): ReportBlockCreatedEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.cached = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<ReportBlockEventResponse>(this, message, value);
+            reflectionMergePartial<ReportBlockCreatedEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReportBlockEventResponse): ReportBlockEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReportBlockCreatedEventResponse): ReportBlockCreatedEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -142,7 +142,7 @@ class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse
         }
         return message;
     }
-    internalBinaryWrite(message: ReportBlockEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: ReportBlockCreatedEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool cached = 1; */
         if (message.cached !== false)
             writer.tag(1, WireType.Varint).bool(message.cached);
@@ -156,12 +156,12 @@ class ReportBlockEventResponse$Type extends MessageType<ReportBlockEventResponse
     }
 }
 /**
- * @generated MessageType for protobuf message block_event_message.ReportBlockEventResponse
+ * @generated MessageType for protobuf message block_event_message.ReportBlockCreatedEventResponse
  */
-export const ReportBlockEventResponse = new ReportBlockEventResponse$Type();
+export const ReportBlockCreatedEventResponse = new ReportBlockCreatedEventResponse$Type();
 /**
- * @generated ServiceType for protobuf service block_event_message.CreatedBlockEventService
+ * @generated ServiceType for protobuf service block_event_message.BlockEventService
  */
-export const CreatedBlockEventService = new ServiceType("block_event_message.CreatedBlockEventService", [
-    { name: "ReportCreatedBlockEvent", options: {}, I: CreatedBlockEvent, O: ReportBlockEventResponse }
+export const BlockEventService = new ServiceType("block_event_message.BlockEventService", [
+    { name: "ReportBlockCreatedEvent", options: {}, I: ReportBlockCreatedEventRequest, O: ReportBlockCreatedEventResponse }
 ]);

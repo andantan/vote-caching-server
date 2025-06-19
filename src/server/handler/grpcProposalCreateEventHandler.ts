@@ -7,13 +7,13 @@ import * as Event from "../../generated/web_event/proposal_create_event_message.
 import { ProposalCreateEventError, ProposalCreateEventErrorStatus } from "../error/proposalCreateEventError.js";
 import { proposalCreateEventProcessor } from "../processor/proposalCreateEventProcessor.js";
 
-export async function validateNewProposalEvent(
-    call: ServerUnaryCall<Event.ValidateProposalEventRequest, Event.ValidateProposalEventResponse>,
-    callback: sendUnaryData<Event.ValidateProposalEventResponse>
+export async function validateProposalEvent(
+    call: ServerUnaryCall<Event.ProposalValidateEventRequest, Event.ProposalValidateEventResponse>,
+    callback: sendUnaryData<Event.ProposalValidateEventResponse>
 ): Promise<void> {
     const { topic } = call.request;
 
-    logger.debug(`[grpcProposalCreateEventHandler::validateNewProposalEvent] Received validation request for Topic: "${topic}"`);
+    logger.debug(`[grpcProposalCreateEventHandler::validateProposalEvent] Received validation request for Topic: "${topic}"`);
 
     let validationResult = true;
     let statusCode = "OK";
@@ -21,20 +21,20 @@ export async function validateNewProposalEvent(
     try {
         await proposalCreateEventProcessor.validateNewProposal(topic);
 
-        logger.info(`[grpcProposalCreateEventHandler::validateNewProposalEvent] Proposal validation successful. Topic: "${topic}", Status: "${statusCode}"`);
+        logger.info(`[grpcProposalCreateEventHandler::validateProposalEvent] Proposal validation successful. Topic: "${topic}", Status: "${statusCode}"`);
     } catch (error: unknown) {
         validationResult = false;
 
         if (error instanceof ProposalCreateEventError) {
             statusCode = error.status;
-            logger.warn(`[grpcProposalCreateEventHandler::validateNewProposalEvent] Proposal validation failed: Topic: "${topic}". Status: "${statusCode}". Internal error message: "${error.message}"`);
+            logger.warn(`[grpcProposalCreateEventHandler::validateProposalEvent] Proposal validation failed: Topic: "${topic}". Status: "${statusCode}". Internal error message: "${error.message}"`);
         } else {
             statusCode = ProposalCreateEventErrorStatus.UNKNOWN_ERROR;
-            logger.error(`[grpcProposalCreateEventHandler::validateNewProposalEvent] Unhandled or unexpected error during proposal validation. Topic: "${topic}". Error:`, error);
+            logger.error(`[grpcProposalCreateEventHandler::validateProposalEvent] Unhandled or unexpected error during proposal validation. Topic: "${topic}". Error:`, error);
         }
         
     } finally {
-        const response: Event.ValidateProposalEventResponse = {
+        const response: Event.ProposalValidateEventResponse = {
             validation: validationResult,
             status: statusCode
         };
@@ -43,13 +43,13 @@ export async function validateNewProposalEvent(
     }
 }
 
-export async function cacheNewProposalEvent(
-    call: ServerUnaryCall<Event.CacheProposalEventRequest, Event.CacheProposalEventResponse>,
-    callback: sendUnaryData<Event.CacheProposalEventResponse>
+export async function cacheProposalEvent(
+    call: ServerUnaryCall<Event.ProposalCacheEventRequest, Event.ProposalCacheEventResponse>,
+    callback: sendUnaryData<Event.ProposalCacheEventResponse>
 ): Promise<void> {
     const { topic, duration, options } = call.request;
 
-    logger.debug(`[grpcProposalCreateEventHandler::cacheNewProposalEvent] Received request to cache new proposal. Topic: "${topic}", Duration: ${duration}`);
+    logger.debug(`[grpcProposalCreateEventHandler::cacheProposalEvent] Received request to cache new proposal. Topic: "${topic}", Duration: ${duration}`);
 
     let cachedResult: boolean = true;
     let statusCode: string = "OK";
@@ -57,19 +57,19 @@ export async function cacheNewProposalEvent(
     try {
         await proposalCreateEventProcessor.saveProposalToCache(topic, duration, options);
 
-        logger.info(`[grpcProposalCreateEventHandler::cacheNewProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
+        logger.info(`[grpcProposalCreateEventHandler::cacheProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
     } catch (error: unknown) {
         cachedResult = false;
 
         if (error instanceof ProposalCreateEventError) {
             statusCode = error.status;
-            logger.warn(`[grpcProposalCreateEventHandler::cacheNewProposalEvent] Proposal caching failed: Topic: "${topic}", Duration: ${duration}. Status: "${statusCode}". Internal error message: "${error.message}"`);
+            logger.warn(`[grpcProposalCreateEventHandler::cacheProposalEvent] Proposal caching failed: Topic: "${topic}", Duration: ${duration}. Status: "${statusCode}". Internal error message: "${error.message}"`);
         } else {
             statusCode = ProposalCreateEventErrorStatus.UNKNOWN_ERROR;
-            logger.error(`[grpcProposalCreateEventHandler::cacheNewProposalEvent] Unhandled or unexpected error during proposal caching. Topic: "${topic}", Duration: ${duration}. Error:`, error);
+            logger.error(`[grpcProposalCreateEventHandler::cacheProposalEvent] Unhandled or unexpected error during proposal caching. Topic: "${topic}", Duration: ${duration}. Error:`, error);
         }
     } finally {
-        const response: Event.CacheProposalEventResponse = {
+        const response: Event.ProposalCacheEventResponse = {
             cached: cachedResult,
             status: statusCode
         };

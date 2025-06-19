@@ -20,14 +20,14 @@ export class BlockEventProcessor {
         return BlockEventProcessor.instance;
     }
 
-    public async addBlockToVote(topic: string, length: number, height: number): Promise<void> {
-        logger.debug(`[BlockEventProcessor::addBlockToVote] Attempting to process and cache block: Topic="${topic}", Length=${length}, Height=${height}`);
+    public async addBlockToVote(topic: string, transactionCount: number, height: number): Promise<void> {
+        logger.debug(`[BlockEventProcessor::addBlockToVote] Attempting to process and cache block: Topic="${topic}", TransactionCount=${transactionCount}, Height=${height}`);
 
         try {
-            await this.voteCollection.addBlockToVote(topic, length, height);
+            await this.voteCollection.addBlockToVote(topic, transactionCount, height);
             logger.info(`[BlockEventProcessor::addBlockToVote] Block successfully cached: Topic="${topic}", Height=${height}`);
         } catch (error: unknown) {
-            logger.error(`[BlockEventProcessor::addBlockToVote] Database access error during block caching. Topic="${topic}", Length=${length}, Height=${height}. Error:`, error);
+            logger.error(`[BlockEventProcessor::addBlockToVote] Database access error during block caching. Topic="${topic}", TransactionCount=${transactionCount}, Height=${height}. Error:`, error);
             throw new BlockEventError(BlockEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }

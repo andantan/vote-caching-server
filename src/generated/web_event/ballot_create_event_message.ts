@@ -12,9 +12,9 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
- * @generated from protobuf message ballot_create_event_message.ValidateBallotEventRequest
+ * @generated from protobuf message ballot_create_event_message.BallotValidateEventRequest
  */
-export interface ValidateBallotEventRequest {
+export interface BallotValidateEventRequest {
     /**
      * @generated from protobuf field: string user_hash = 1
      */
@@ -29,9 +29,9 @@ export interface ValidateBallotEventRequest {
     option: string;
 }
 /**
- * @generated from protobuf message ballot_create_event_message.ValidateBallotEventResponse
+ * @generated from protobuf message ballot_create_event_message.BallotValidateEventResponse
  */
-export interface ValidateBallotEventResponse {
+export interface BallotValidateEventResponse {
     /**
      * @generated from protobuf field: bool validation = 1
      */
@@ -42,9 +42,9 @@ export interface ValidateBallotEventResponse {
     status: string;
 }
 /**
- * @generated from protobuf message ballot_create_event_message.CacheBallotEventRequest
+ * @generated from protobuf message ballot_create_event_message.BallotCacheEventRequest
  */
-export interface CacheBallotEventRequest {
+export interface BallotCacheEventRequest {
     /**
      * @generated from protobuf field: string user_hash = 1
      */
@@ -59,9 +59,9 @@ export interface CacheBallotEventRequest {
     topic: string;
 }
 /**
- * @generated from protobuf message ballot_create_event_message.CacheBallotEventResponse
+ * @generated from protobuf message ballot_create_event_message.BallotCacheEventResponse
  */
-export interface CacheBallotEventResponse {
+export interface BallotCacheEventResponse {
     /**
      * @generated from protobuf field: bool cached = 1
      */
@@ -72,24 +72,24 @@ export interface CacheBallotEventResponse {
     status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
-class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventRequest> {
+class BallotValidateEventRequest$Type extends MessageType<BallotValidateEventRequest> {
     constructor() {
-        super("ballot_create_event_message.ValidateBallotEventRequest", [
+        super("ballot_create_event_message.BallotValidateEventRequest", [
             { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "option", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ValidateBallotEventRequest>): ValidateBallotEventRequest {
+    create(value?: PartialMessage<BallotValidateEventRequest>): BallotValidateEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.userHash = "";
         message.topic = "";
         message.option = "";
         if (value !== undefined)
-            reflectionMergePartial<ValidateBallotEventRequest>(this, message, value);
+            reflectionMergePartial<BallotValidateEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ValidateBallotEventRequest): ValidateBallotEventRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: BallotValidateEventRequest): BallotValidateEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -114,7 +114,7 @@ class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventReq
         }
         return message;
     }
-    internalBinaryWrite(message: ValidateBallotEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: BallotValidateEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_hash = 1; */
         if (message.userHash !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userHash);
@@ -131,26 +131,26 @@ class ValidateBallotEventRequest$Type extends MessageType<ValidateBallotEventReq
     }
 }
 /**
- * @generated MessageType for protobuf message ballot_create_event_message.ValidateBallotEventRequest
+ * @generated MessageType for protobuf message ballot_create_event_message.BallotValidateEventRequest
  */
-export const ValidateBallotEventRequest = new ValidateBallotEventRequest$Type();
+export const BallotValidateEventRequest = new BallotValidateEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventResponse> {
+class BallotValidateEventResponse$Type extends MessageType<BallotValidateEventResponse> {
     constructor() {
-        super("ballot_create_event_message.ValidateBallotEventResponse", [
+        super("ballot_create_event_message.BallotValidateEventResponse", [
             { no: 1, name: "validation", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ValidateBallotEventResponse>): ValidateBallotEventResponse {
+    create(value?: PartialMessage<BallotValidateEventResponse>): BallotValidateEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.validation = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<ValidateBallotEventResponse>(this, message, value);
+            reflectionMergePartial<BallotValidateEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ValidateBallotEventResponse): ValidateBallotEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: BallotValidateEventResponse): BallotValidateEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -172,7 +172,7 @@ class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventRe
         }
         return message;
     }
-    internalBinaryWrite(message: ValidateBallotEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: BallotValidateEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool validation = 1; */
         if (message.validation !== false)
             writer.tag(1, WireType.Varint).bool(message.validation);
@@ -186,28 +186,28 @@ class ValidateBallotEventResponse$Type extends MessageType<ValidateBallotEventRe
     }
 }
 /**
- * @generated MessageType for protobuf message ballot_create_event_message.ValidateBallotEventResponse
+ * @generated MessageType for protobuf message ballot_create_event_message.BallotValidateEventResponse
  */
-export const ValidateBallotEventResponse = new ValidateBallotEventResponse$Type();
+export const BallotValidateEventResponse = new BallotValidateEventResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> {
+class BallotCacheEventRequest$Type extends MessageType<BallotCacheEventRequest> {
     constructor() {
-        super("ballot_create_event_message.CacheBallotEventRequest", [
+        super("ballot_create_event_message.BallotCacheEventRequest", [
             { no: 1, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "vote_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CacheBallotEventRequest>): CacheBallotEventRequest {
+    create(value?: PartialMessage<BallotCacheEventRequest>): BallotCacheEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.userHash = "";
         message.voteHash = "";
         message.topic = "";
         if (value !== undefined)
-            reflectionMergePartial<CacheBallotEventRequest>(this, message, value);
+            reflectionMergePartial<BallotCacheEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheBallotEventRequest): CacheBallotEventRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: BallotCacheEventRequest): BallotCacheEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -232,7 +232,7 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
         }
         return message;
     }
-    internalBinaryWrite(message: CacheBallotEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: BallotCacheEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string user_hash = 1; */
         if (message.userHash !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.userHash);
@@ -249,26 +249,26 @@ class CacheBallotEventRequest$Type extends MessageType<CacheBallotEventRequest> 
     }
 }
 /**
- * @generated MessageType for protobuf message ballot_create_event_message.CacheBallotEventRequest
+ * @generated MessageType for protobuf message ballot_create_event_message.BallotCacheEventRequest
  */
-export const CacheBallotEventRequest = new CacheBallotEventRequest$Type();
+export const BallotCacheEventRequest = new BallotCacheEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class CacheBallotEventResponse$Type extends MessageType<CacheBallotEventResponse> {
+class BallotCacheEventResponse$Type extends MessageType<BallotCacheEventResponse> {
     constructor() {
-        super("ballot_create_event_message.CacheBallotEventResponse", [
+        super("ballot_create_event_message.BallotCacheEventResponse", [
             { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<CacheBallotEventResponse>): CacheBallotEventResponse {
+    create(value?: PartialMessage<BallotCacheEventResponse>): BallotCacheEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.cached = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<CacheBallotEventResponse>(this, message, value);
+            reflectionMergePartial<BallotCacheEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CacheBallotEventResponse): CacheBallotEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: BallotCacheEventResponse): BallotCacheEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -290,7 +290,7 @@ class CacheBallotEventResponse$Type extends MessageType<CacheBallotEventResponse
         }
         return message;
     }
-    internalBinaryWrite(message: CacheBallotEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: BallotCacheEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool cached = 1; */
         if (message.cached !== false)
             writer.tag(1, WireType.Varint).bool(message.cached);
@@ -304,13 +304,13 @@ class CacheBallotEventResponse$Type extends MessageType<CacheBallotEventResponse
     }
 }
 /**
- * @generated MessageType for protobuf message ballot_create_event_message.CacheBallotEventResponse
+ * @generated MessageType for protobuf message ballot_create_event_message.BallotCacheEventResponse
  */
-export const CacheBallotEventResponse = new CacheBallotEventResponse$Type();
+export const BallotCacheEventResponse = new BallotCacheEventResponse$Type();
 /**
- * @generated ServiceType for protobuf service ballot_create_event_message.NewBallotEventService
+ * @generated ServiceType for protobuf service ballot_create_event_message.BallotCreateEventService
  */
-export const NewBallotEventService = new ServiceType("ballot_create_event_message.NewBallotEventService", [
-    { name: "ValidateNewBallotEvent", options: {}, I: ValidateBallotEventRequest, O: ValidateBallotEventResponse },
-    { name: "CacheNewBallotEvent", options: {}, I: CacheBallotEventRequest, O: CacheBallotEventResponse }
+export const BallotCreateEventService = new ServiceType("ballot_create_event_message.BallotCreateEventService", [
+    { name: "ValidateBallotEvent", options: {}, I: BallotValidateEventRequest, O: BallotValidateEventResponse },
+    { name: "CacheBallotEvent", options: {}, I: BallotCacheEventRequest, O: BallotCacheEventResponse }
 ]);

@@ -2,30 +2,30 @@ syntax = "proto3";
 
 package proposal_create_event_message;
 
-service NewProposalEventService {
-  rpc ValidateNewProposalEvent(ValidateProposalEventRequest)
-    returns (ValidateProposalEventResponse);
+service ProposalCreateEventService {
+  rpc ValidateProposalEvent(ProposalValidateEventRequest)
+      returns (ProposalValidateEventResponse);
 
-  rpc CacheNewProposalEvent(CacheProposalEventRequest)
-    returns (CacheProposalEventResponse);
+  rpc CacheProposalEvent(ProposalCacheEventRequest)
+      returns (ProposalCacheEventResponse);
 }
 
-message ValidateProposalEventRequest {
+message ProposalValidateEventRequest {
   string topic = 1;
 }
 
-message ValidateProposalEventResponse {
+message ProposalValidateEventResponse {
   bool validation = 1;
   string status = 2;
 }
 
-message CacheProposalEventRequest {
+message ProposalCacheEventRequest {
   string topic = 1;
   uint32 duration = 2;
   repeated string options = 3;
 }
 
-message CacheProposalEventResponse {
+message ProposalCacheEventResponse {
   bool cached = 1;
   string status = 2;
 }
