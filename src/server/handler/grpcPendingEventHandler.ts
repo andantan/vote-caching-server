@@ -20,7 +20,7 @@ export async function reportPendingExpiredEvent(
     let statusCode: string = "OK";
 
     try {
-        await pendingEventProcessor.saveVoteResult(topic, count, options);
+        await pendingEventProcessor.processCacheResult(topic, count, options);
         logger.info(`[grpcPendingEventHandler::reportPendingExpiredEvent] Vote results successfully saved: Topic="${topic}", TotalCount=${count}`);
     } catch (error: unknown) {
         cachedResult = false;

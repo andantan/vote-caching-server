@@ -25,8 +25,8 @@ export class BallotCreateEventProcessor {
         return BallotCreateEventProcessor.instance;
     }
 
-    public async validateNewBallot(userHash: string, topic: string, option: string): Promise<void> {
-        logger.debug(`[BallotEventProcessor::validateNewBallot] Starting validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}"`);
+    public async processValidateBallot(userHash: string, topic: string, option: string): Promise<void> {
+        logger.debug(`[BallotEventProcessor::processValidateBallot] Starting validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}"`);
 
         try {
             await this.validateUser(userHash);
@@ -34,13 +34,13 @@ export class BallotCreateEventProcessor {
             await this.validateExistence(topic);
             await this.validateOption(userHash, topic, option);
 
-            logger.info(`[BallotEventProcessor::validateNewBallot] All ballot validations passed. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "OK".`);
+            logger.info(`[BallotEventProcessor::processValidateBallot] All ballot validations passed. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "OK".`);
         } catch (error: unknown) {
             if (error instanceof BallotCreateEventError) {
-                logger.warn(`[BallotEventProcessor::validateNewBallot] Ballot validation failed for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "${error.status}". Cause: "${error.message}"`);
+                logger.warn(`[BallotEventProcessor::processValidateBallot] Ballot validation failed for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "${error.status}". Cause: "${error.message}"`);
                 throw error;
             } else {
-                logger.error(`[BallotEventProcessor::validateNewBallot] Unexpected error during ballot validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
+                logger.error(`[BallotEventProcessor::processValidateBallot] Unexpected error during ballot validation for UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Error:`, error);
                 throw new BallotCreateEventError(BallotCreateEventErrorStatus.UNKNOWN_ERROR, { cause: error });
             }
         }
@@ -118,13 +118,13 @@ export class BallotCreateEventProcessor {
         logger.info(`[BallotEventProcessor::validateOption] Option validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}".`);
     }
 
-    public async addBallotToCache(userHash: string, voteHash: string, topic: string): Promise<void> {
-        logger.debug(`[BallotEventProcessor::addBallotToCache] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
+    public async processCacheBallot(userHash: string, voteHash: string, topic: string): Promise<void> {
+        logger.debug(`[BallotEventProcessor::processCacheBallot] Attempting to cache ballot for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}".`);
         try {
             await this.userCollection.addBallotToUser(userHash, voteHash, topic);
-            logger.info(`[BallotEventProcessor::addBallotToCache] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
+            logger.info(`[BallotEventProcessor::processCacheBallot] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
         } catch (error: unknown) {
-            logger.error(`[BallotEventProcessor::addBallotToCache] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
+            logger.error(`[BallotEventProcessor::processCacheBallot] Database access error during ballot caching for UserHash: "${userHash}", VoteHash: "${voteHash}", Topic: "${topic}". Error:`, error);
             throw new BallotCreateEventError(BallotCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }

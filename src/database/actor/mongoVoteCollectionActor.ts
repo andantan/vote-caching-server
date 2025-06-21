@@ -3,6 +3,16 @@ import logger from "../../config/logger.js";
 import { IVoteOptions, IVoteResult } from "../models/votes/schemaResult.js";
 import { VoteModel, IVote } from "../models/votes/schemaVote.js";
 import { IBlockHeight } from "../models/votes/schemaBlock.js";
+import { Filter, Paging } from "../../generated/web_event/proposal_query_event_message.js";
+
+export interface QueryFilter {
+    expired?: boolean
+};
+
+export interface QueryPaging {
+    skip: number
+    limit: number
+}
 
 export default class MongoVoteCollectionActor {
     public async saveNewVote(topic: string, duration: number, options: string[]): Promise<IVote> {
@@ -45,6 +55,47 @@ export default class MongoVoteCollectionActor {
         } catch (error: unknown) {
             const errorMessage = `Failed to check existence for topic "${topic}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoVoteCollectionActor::findIfExistsProposal] MongoDB operation error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
+    public async findProposalListWithFilter(filter: QueryFilter, paging: QueryPaging): Promise<IVote[]> {
+        const expired: boolean | undefined = filter.expired;
+        const skip: number = paging.skip;
+        const limit: number = paging.limit;
+        
+        logger.debug(`[MongoVoteCollectionActor::getFilteredProposals] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}`);
+
+        try {
+            const proposals: IVote[] = await VoteModel.find(filter)
+                .skip(skip)
+                .limit(limit)
+                .lean();
+                
+            logger.info(`[MongoVoteCollectionActor::getFilteredProposals] Retrieved ${proposals.length} proposals with Expired: ${expired}, Skip: ${skip}, Limit: ${limit}.`);
+
+            return proposals;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to retrieve filtered proposals with Expired: ${expired}, Skip: ${skip}, Limit: ${limit}. Error: ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[MongoVoteCollectionActor::getFilteredProposals] MongoDB operation failed: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
+    public async countProposalsWithFilter(queryFilter: QueryFilter): Promise<number> {
+        const expired: boolean | undefined = queryFilter.expired;
+
+        logger.debug(`[MongoVoteCollectionActor::countProposalsWithFilter] Attempting to count proposals with filter. Expired: ${expired}.`);
+
+        try {
+            const count: number = await VoteModel.countDocuments(queryFilter);
+
+            logger.info(`[MongoVoteCollectionActor::countProposalsWithFilter] Counted ${count} proposals with filter. Expired: ${expired}.`);
+
+            return count;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to count proposals with filter Expired: ${expired}. Error: ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[MongoVoteCollectionActor::countProposalsWithFilter] MongoDB count operation failed: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }

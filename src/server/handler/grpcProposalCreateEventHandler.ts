@@ -19,7 +19,7 @@ export async function validateProposalEvent(
     let statusCode = "OK";
 
     try {
-        await proposalCreateEventProcessor.validateNewProposal(topic);
+        await proposalCreateEventProcessor.processValidateProposal(topic);
 
         logger.info(`[grpcProposalCreateEventHandler::validateProposalEvent] Proposal validation successful. Topic: "${topic}", Status: "${statusCode}"`);
     } catch (error: unknown) {
@@ -55,7 +55,7 @@ export async function cacheProposalEvent(
     let statusCode: string = "OK";
 
     try {
-        await proposalCreateEventProcessor.saveProposalToCache(topic, duration, options);
+        await proposalCreateEventProcessor.processCacheProposal(topic, duration, options);
 
         logger.info(`[grpcProposalCreateEventHandler::cacheProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
     } catch (error: unknown) {

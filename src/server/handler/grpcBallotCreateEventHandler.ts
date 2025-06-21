@@ -20,7 +20,7 @@ export async function validateBallotEvent(
     let statusCode: string = "OK";
 
     try {
-        await ballotCreateEventProcessor.validateNewBallot(userHash, topic, option);
+        await ballotCreateEventProcessor.processValidateBallot(userHash, topic, option);
 
         logger.info(`[grpcBallotCreateEventHandler::validateBallotEvent] Ballot validation successful. UserHash: "${userHash}", Topic: "${topic}", Option: "${option}". Status: "OK"`);
     } catch (error: unknown) {
@@ -57,7 +57,7 @@ export async function cacheBallotEvent(
     let statusCode: string = "OK";
 
     try {
-        await ballotCreateEventProcessor.addBallotToCache(userHash, voteHash, topic);
+        await ballotCreateEventProcessor.processCacheBallot(userHash, voteHash, topic);
 
         logger.info(`[grpcBallotCreateEventHandler::cacheBallotEvent] Ballot successfully cached: UserHash: "${userHash}", Topic: "${topic}", VoteHash: "${voteHash}".`);
     } catch (error: unknown) {

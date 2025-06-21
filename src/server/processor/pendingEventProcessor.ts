@@ -20,14 +20,14 @@ export class PendingEventProcessor {
         return PendingEventProcessor.instance;
     }
 
-    public async saveVoteResult(topic: string, count: number, options: IVoteOptions): Promise<void> {
-        logger.debug(`[PendingEventProcessor::saveVoteResult] Attempting to save expired pending event result: Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}`);
+    public async processCacheResult(topic: string, count: number, options: IVoteOptions): Promise<void> {
+        logger.debug(`[PendingEventProcessor::processCacheResult] Attempting to save expired pending event result: Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}`);
 
         try {
             await this.voteCollection.saveVoteResult(topic, count, options);
-            logger.info(`[PendingEventProcessor::saveVoteResult] Vote results successfully saved: Topic="${topic}", TotalCount=${count}`);
+            logger.info(`[PendingEventProcessor::processCacheResult] Vote results successfully saved: Topic="${topic}", TotalCount=${count}`);
         } catch (error: unknown) {
-            logger.error(`[PendingEventProcessor::saveVoteResult] Database access error during saving vote results. Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}. Error:`, error);
+            logger.error(`[PendingEventProcessor::processCacheResult] Database access error during saving vote results. Topic="${topic}", Count=${count}, Options=${JSON.stringify(options)}. Error:`, error);
             throw new PendingEventError(PendingEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }

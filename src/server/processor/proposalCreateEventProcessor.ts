@@ -20,19 +20,19 @@ export class ProposalCreateEventProcessor {
         return ProposalCreateEventProcessor.instance;
     }
 
-    public async validateNewProposal(topic: string): Promise<void> {
-        logger.debug(`[ProposalCreateEventProcessor::validateNewProposal] Starting validation for new proposal: Topic: "${topic}"`);
+    public async processValidateProposal(topic: string): Promise<void> {
+        logger.debug(`[ProposalCreateEventProcessor::processValidateProposal] Starting validation for new proposal: Topic: "${topic}"`);
 
         try {
             await this.validateExistence(topic);
 
-            logger.info(`[ProposalCreateEventProcessor::validateNewProposal] Proposal is valid for creation: Topic: "${topic}".`);
+            logger.info(`[ProposalCreateEventProcessor::processValidateProposal] Proposal is valid for creation: Topic: "${topic}".`);
         } catch (error: unknown) {
             if (error instanceof ProposalCreateEventError) {
-                logger.warn(`[ProposalCreateEventProcessor::validateNewProposal] Proposal validation failed during new proposal check. Topic: "${topic}". Status: "${error.status}". Cause: "${error.message}"`);
+                logger.warn(`[ProposalCreateEventProcessor::processValidateProposal] Proposal validation failed during new proposal check. Topic: "${topic}". Status: "${error.status}". Cause: "${error.message}"`);
                 throw error;
             } else {
-                logger.error(`[ProposalCreateEventProcessor::validateNewProposal] Unexpected error during new proposal validation for Topic: "${topic}". Error:`, error);
+                logger.error(`[ProposalCreateEventProcessor::processValidateProposal] Unexpected error during new proposal validation for Topic: "${topic}". Error:`, error);
                 throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.UNKNOWN_ERROR, { cause: error });
             }
         }
@@ -61,14 +61,14 @@ export class ProposalCreateEventProcessor {
         logger.info(`[ProposalCreateEventProcessor::validateExistence] Proposal validation successful: Topic: "${topic}"`);
     }
 
-    public async saveProposalToCache(topic: string, duration: number, options: string[]): Promise<void> {
-        logger.debug(`[ProposalCreateEventProcessor::saveProposalToCache] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}.`);
+    public async processCacheProposal(topic: string, duration: number, options: string[]): Promise<void> {
+        logger.debug(`[ProposalCreateEventProcessor::processCacheProposal] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}.`);
         try {
             await this.voteCollection.saveNewVote(topic, duration, options);
             
-            logger.info(`[ProposalCreateEventProcessor::saveProposalToCache] New proposal successfully saved. Topic: "${topic}".`);
+            logger.info(`[ProposalCreateEventProcessor::processCacheProposal] New proposal successfully saved. Topic: "${topic}".`);
         } catch (error: unknown) {
-            logger.error(`[ProposalCreateEventProcessor::saveProposalToCache] Database access error during new proposal saving. Topic: "${topic}", Duration: ${duration}. Error:`, error);
+            logger.error(`[ProposalCreateEventProcessor::processCacheProposal] Database access error during new proposal saving. Topic: "${topic}", Duration: ${duration}. Error:`, error);
             throw new ProposalCreateEventError(ProposalCreateEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
         }
     }

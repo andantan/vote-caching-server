@@ -22,7 +22,7 @@ export async function getUserBallots(
     let ballots: Event.Ballot[] = [];
     
     try {
-        const userBallots = await ballotQueryEventProcessor.getUserBallots(userHash);
+        const userBallots = await ballotQueryEventProcessor.processBallotQuery(userHash);
 
         ballots = userBallots.map(ballot => {
             const ballotMessage: Event.Ballot = Event.Ballot.create({

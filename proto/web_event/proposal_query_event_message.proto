@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
+
 package proposal_query_event_message;
 
 message Proposal {
@@ -28,18 +29,40 @@ message Result {
   map<string, int32> options = 2;
 }
 
-service ProposalQueryEventService {
-  rpc GetProposal(GetProposalRequest)
-      returns (GetProposalResponse);
+message Filter {
+  optional bool expired = 1;
 }
 
-message GetProposalRequest {
+message Paging {
+  int32 skip = 1;
+  int32 limit = 2;
+}
+
+service ProposalQueryEventService {
+  rpc GetProposalDetail(GetProposalDetailRequest)
+      returns (GetProposalDetailResponse);
+
+  rpc GetFilteredProposalList(GetFilteredProposalListRequest)
+      returns (GetFilteredProposalListResponse);
+}
+
+message GetProposalDetailRequest {
   string topic = 1;
 }
 
-message GetProposalResponse {
+message GetProposalDetailResponse {
   bool queried = 1;
   string status = 2;
-  Proposal proposals = 3;
+  Proposal proposal = 3;
 }
 
+message GetFilteredProposalListRequest {
+  Filter filter = 1;
+  Paging paging = 2;
+}
+
+message GetFilteredProposalListResponse {
+  bool queried = 1;
+  string status = 2;
+  repeated Proposal proposal_list = 3;
+}

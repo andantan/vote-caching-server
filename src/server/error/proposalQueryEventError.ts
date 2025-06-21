@@ -2,6 +2,9 @@ import { CommonErrorStatus } from "./common/commonEventError";
 
 export enum ProposalQueryEventErrorSpecificStatus {
     PROPOSAL_NOT_FOUND = "PROPOSAL_NOT_FOUND",
+    PAGING_OUT_OF_BOUNDS = "PAGING_OUT_OF_BOUNDS",
+    SKIP_ZERO_PARAM = "SKIP_ZERO_PARAM",
+    LIMIT_ZERO_PARAM = "LIMIT_ZERO_PARAM"
 }
 
 export const ProposalQueryEventErrorStatus = {

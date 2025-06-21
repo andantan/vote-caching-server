@@ -78,18 +78,40 @@ export interface Result {
     };
 }
 /**
- * @generated from protobuf message proposal_query_event_message.GetProposalRequest
+ * @generated from protobuf message proposal_query_event_message.Filter
  */
-export interface GetProposalRequest {
+export interface Filter {
+    /**
+     * @generated from protobuf field: optional bool expired = 1
+     */
+    expired?: boolean;
+}
+/**
+ * @generated from protobuf message proposal_query_event_message.Paging
+ */
+export interface Paging {
+    /**
+     * @generated from protobuf field: int32 skip = 1
+     */
+    skip: number;
+    /**
+     * @generated from protobuf field: int32 limit = 2
+     */
+    limit: number;
+}
+/**
+ * @generated from protobuf message proposal_query_event_message.GetProposalDetailRequest
+ */
+export interface GetProposalDetailRequest {
     /**
      * @generated from protobuf field: string topic = 1
      */
     topic: string;
 }
 /**
- * @generated from protobuf message proposal_query_event_message.GetProposalResponse
+ * @generated from protobuf message proposal_query_event_message.GetProposalDetailResponse
  */
-export interface GetProposalResponse {
+export interface GetProposalDetailResponse {
     /**
      * @generated from protobuf field: bool queried = 1
      */
@@ -99,9 +121,39 @@ export interface GetProposalResponse {
      */
     status: string;
     /**
-     * @generated from protobuf field: proposal_query_event_message.Proposal proposals = 3
+     * @generated from protobuf field: proposal_query_event_message.Proposal proposal = 3
      */
-    proposals?: Proposal;
+    proposal?: Proposal;
+}
+/**
+ * @generated from protobuf message proposal_query_event_message.GetFilteredProposalListRequest
+ */
+export interface GetFilteredProposalListRequest {
+    /**
+     * @generated from protobuf field: proposal_query_event_message.Filter filter = 1
+     */
+    filter?: Filter;
+    /**
+     * @generated from protobuf field: proposal_query_event_message.Paging paging = 2
+     */
+    paging?: Paging;
+}
+/**
+ * @generated from protobuf message proposal_query_event_message.GetFilteredProposalListResponse
+ */
+export interface GetFilteredProposalListResponse {
+    /**
+     * @generated from protobuf field: bool queried = 1
+     */
+    queried: boolean;
+    /**
+     * @generated from protobuf field: string status = 2
+     */
+    status: string;
+    /**
+     * @generated from protobuf field: repeated proposal_query_event_message.Proposal proposal_list = 3
+     */
+    proposalList: Proposal[];
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Proposal$Type extends MessageType<Proposal> {
@@ -330,20 +382,121 @@ class Result$Type extends MessageType<Result> {
  */
 export const Result = new Result$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetProposalRequest$Type extends MessageType<GetProposalRequest> {
+class Filter$Type extends MessageType<Filter> {
     constructor() {
-        super("proposal_query_event_message.GetProposalRequest", [
+        super("proposal_query_event_message.Filter", [
+            { no: 1, name: "expired", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Filter>): Filter {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<Filter>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Filter): Filter {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* optional bool expired */ 1:
+                    message.expired = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Filter, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* optional bool expired = 1; */
+        if (message.expired !== undefined)
+            writer.tag(1, WireType.Varint).bool(message.expired);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proposal_query_event_message.Filter
+ */
+export const Filter = new Filter$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Paging$Type extends MessageType<Paging> {
+    constructor() {
+        super("proposal_query_event_message.Paging", [
+            { no: 1, name: "skip", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 2, name: "limit", kind: "scalar", T: 5 /*ScalarType.INT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Paging>): Paging {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.skip = 0;
+        message.limit = 0;
+        if (value !== undefined)
+            reflectionMergePartial<Paging>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Paging): Paging {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int32 skip */ 1:
+                    message.skip = reader.int32();
+                    break;
+                case /* int32 limit */ 2:
+                    message.limit = reader.int32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Paging, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int32 skip = 1; */
+        if (message.skip !== 0)
+            writer.tag(1, WireType.Varint).int32(message.skip);
+        /* int32 limit = 2; */
+        if (message.limit !== 0)
+            writer.tag(2, WireType.Varint).int32(message.limit);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proposal_query_event_message.Paging
+ */
+export const Paging = new Paging$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetProposalDetailRequest$Type extends MessageType<GetProposalDetailRequest> {
+    constructor() {
+        super("proposal_query_event_message.GetProposalDetailRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<GetProposalRequest>): GetProposalRequest {
+    create(value?: PartialMessage<GetProposalDetailRequest>): GetProposalDetailRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
         if (value !== undefined)
-            reflectionMergePartial<GetProposalRequest>(this, message, value);
+            reflectionMergePartial<GetProposalDetailRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetProposalRequest): GetProposalRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetProposalDetailRequest): GetProposalDetailRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -362,7 +515,7 @@ class GetProposalRequest$Type extends MessageType<GetProposalRequest> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetProposalRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: GetProposalDetailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
@@ -373,27 +526,27 @@ class GetProposalRequest$Type extends MessageType<GetProposalRequest> {
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_query_event_message.GetProposalRequest
+ * @generated MessageType for protobuf message proposal_query_event_message.GetProposalDetailRequest
  */
-export const GetProposalRequest = new GetProposalRequest$Type();
+export const GetProposalDetailRequest = new GetProposalDetailRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class GetProposalResponse$Type extends MessageType<GetProposalResponse> {
+class GetProposalDetailResponse$Type extends MessageType<GetProposalDetailResponse> {
     constructor() {
-        super("proposal_query_event_message.GetProposalResponse", [
+        super("proposal_query_event_message.GetProposalDetailResponse", [
             { no: 1, name: "queried", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "proposals", kind: "message", T: () => Proposal }
+            { no: 3, name: "proposal", kind: "message", T: () => Proposal }
         ]);
     }
-    create(value?: PartialMessage<GetProposalResponse>): GetProposalResponse {
+    create(value?: PartialMessage<GetProposalDetailResponse>): GetProposalDetailResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.queried = false;
         message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<GetProposalResponse>(this, message, value);
+            reflectionMergePartial<GetProposalDetailResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetProposalResponse): GetProposalResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetProposalDetailResponse): GetProposalDetailResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -404,8 +557,8 @@ class GetProposalResponse$Type extends MessageType<GetProposalResponse> {
                 case /* string status */ 2:
                     message.status = reader.string();
                     break;
-                case /* proposal_query_event_message.Proposal proposals */ 3:
-                    message.proposals = Proposal.internalBinaryRead(reader, reader.uint32(), options, message.proposals);
+                case /* proposal_query_event_message.Proposal proposal */ 3:
+                    message.proposal = Proposal.internalBinaryRead(reader, reader.uint32(), options, message.proposal);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -418,16 +571,16 @@ class GetProposalResponse$Type extends MessageType<GetProposalResponse> {
         }
         return message;
     }
-    internalBinaryWrite(message: GetProposalResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: GetProposalDetailResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* bool queried = 1; */
         if (message.queried !== false)
             writer.tag(1, WireType.Varint).bool(message.queried);
         /* string status = 2; */
         if (message.status !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.status);
-        /* proposal_query_event_message.Proposal proposals = 3; */
-        if (message.proposals)
-            Proposal.internalBinaryWrite(message.proposals, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* proposal_query_event_message.Proposal proposal = 3; */
+        if (message.proposal)
+            Proposal.internalBinaryWrite(message.proposal, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -435,12 +588,129 @@ class GetProposalResponse$Type extends MessageType<GetProposalResponse> {
     }
 }
 /**
- * @generated MessageType for protobuf message proposal_query_event_message.GetProposalResponse
+ * @generated MessageType for protobuf message proposal_query_event_message.GetProposalDetailResponse
  */
-export const GetProposalResponse = new GetProposalResponse$Type();
+export const GetProposalDetailResponse = new GetProposalDetailResponse$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetFilteredProposalListRequest$Type extends MessageType<GetFilteredProposalListRequest> {
+    constructor() {
+        super("proposal_query_event_message.GetFilteredProposalListRequest", [
+            { no: 1, name: "filter", kind: "message", T: () => Filter },
+            { no: 2, name: "paging", kind: "message", T: () => Paging }
+        ]);
+    }
+    create(value?: PartialMessage<GetFilteredProposalListRequest>): GetFilteredProposalListRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<GetFilteredProposalListRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetFilteredProposalListRequest): GetFilteredProposalListRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* proposal_query_event_message.Filter filter */ 1:
+                    message.filter = Filter.internalBinaryRead(reader, reader.uint32(), options, message.filter);
+                    break;
+                case /* proposal_query_event_message.Paging paging */ 2:
+                    message.paging = Paging.internalBinaryRead(reader, reader.uint32(), options, message.paging);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetFilteredProposalListRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* proposal_query_event_message.Filter filter = 1; */
+        if (message.filter)
+            Filter.internalBinaryWrite(message.filter, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* proposal_query_event_message.Paging paging = 2; */
+        if (message.paging)
+            Paging.internalBinaryWrite(message.paging, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proposal_query_event_message.GetFilteredProposalListRequest
+ */
+export const GetFilteredProposalListRequest = new GetFilteredProposalListRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GetFilteredProposalListResponse$Type extends MessageType<GetFilteredProposalListResponse> {
+    constructor() {
+        super("proposal_query_event_message.GetFilteredProposalListResponse", [
+            { no: 1, name: "queried", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "proposal_list", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => Proposal }
+        ]);
+    }
+    create(value?: PartialMessage<GetFilteredProposalListResponse>): GetFilteredProposalListResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.queried = false;
+        message.status = "";
+        message.proposalList = [];
+        if (value !== undefined)
+            reflectionMergePartial<GetFilteredProposalListResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GetFilteredProposalListResponse): GetFilteredProposalListResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool queried */ 1:
+                    message.queried = reader.bool();
+                    break;
+                case /* string status */ 2:
+                    message.status = reader.string();
+                    break;
+                case /* repeated proposal_query_event_message.Proposal proposal_list */ 3:
+                    message.proposalList.push(Proposal.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GetFilteredProposalListResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool queried = 1; */
+        if (message.queried !== false)
+            writer.tag(1, WireType.Varint).bool(message.queried);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
+        /* repeated proposal_query_event_message.Proposal proposal_list = 3; */
+        for (let i = 0; i < message.proposalList.length; i++)
+            Proposal.internalBinaryWrite(message.proposalList[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proposal_query_event_message.GetFilteredProposalListResponse
+ */
+export const GetFilteredProposalListResponse = new GetFilteredProposalListResponse$Type();
 /**
  * @generated ServiceType for protobuf service proposal_query_event_message.ProposalQueryEventService
  */
 export const ProposalQueryEventService = new ServiceType("proposal_query_event_message.ProposalQueryEventService", [
-    { name: "GetProposal", options: {}, I: GetProposalRequest, O: GetProposalResponse }
+    { name: "GetProposalDetail", options: {}, I: GetProposalDetailRequest, O: GetProposalDetailResponse },
+    { name: "GetFilteredProposalList", options: {}, I: GetFilteredProposalListRequest, O: GetFilteredProposalListResponse }
 ]);

@@ -20,7 +20,7 @@ export async function reportBlockCreatedEvent(
     let statusCode: string = "OK";
 
     try {
-        await blockEventProcessor.addBlockToVote(topic, transactionCount, height);
+        await blockEventProcessor.processCacheBlock(topic, transactionCount, height);
 
         logger.info(`[grpcBlockEventHandler::reportBlockCreatedEvent] Block successfully processed and cached: Topic="${topic}", Height=${height}`);
     } catch (error: unknown) {

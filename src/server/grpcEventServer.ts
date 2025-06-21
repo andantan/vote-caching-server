@@ -9,7 +9,7 @@ import { blockEventServiceDefinition } from "../generated/blockchain_event/block
 
 import { validateProposalEvent, cacheProposalEvent } from "./handler/grpcProposalCreateEventHandler.js";
 import { validateBallotEvent, cacheBallotEvent } from "./handler/grpcBallotCreateEventHandler.js";
-import { getProposal } from "./handler/grpcProposalQueryEventHandler.js";
+import { getProposalDetail, getFilteredProposalList } from "./handler/grpcProposalQueryEventHandler.js";
 import { getUserBallots } from "./handler/grpcBallotQueryEventHandler.js";
 import { reportPendingExpiredEvent } from "./handler/grpcPendingEventHandler.js";
 import { reportBlockCreatedEvent } from "./handler/grpcBlockEventHandler.js";
@@ -28,40 +28,42 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
         CacheProposalEvent: cacheProposalEvent
     });
 
-    logger.info("[webclient-event-handler::ProposalCreateEvent] ProposalCreateEventService::validateProposalEvent registered");
-    logger.info("[webclient-event-handler::ProposalCreateEvent] ProposalCreateEventService::cacheProposalEvent registered");
+    logger.debug("[webclient-event-handler::ProposalCreateEvent] ProposalCreateEventService::validateProposalEvent registered");
+    logger.debug("[webclient-event-handler::ProposalCreateEvent] ProposalCreateEventService::cacheProposalEvent registered");
 
     server.addService(proposalQueryEventServiceDefinition, {
-        GetProposal: getProposal
+        GetProposalDetail: getProposalDetail,
+        GetFilteredProposalList: getFilteredProposalList
     });
 
-    logger.info("[webclient-event-handler::ProposalQueryEvent] ProposalQueryEventService::getProposal registered");
+    logger.debug("[webclient-event-handler::ProposalQueryEvent] ProposalQueryEventService::getProposalDetail registered");
+    logger.debug("[webclient-event-handler::ProposalQueryEvent] ProposalQueryEventService::getFilteredProposalList registered");
 
     server.addService(ballotCreateEventServiceDefinition, {
         ValidateBallotEvent: validateBallotEvent,
         CacheBallotEvent: cacheBallotEvent
     });
 
-    logger.info("[webclient-event-handler::BallotCreateEvent] BallotCreateEventService::validateBallotEvent registered");
-    logger.info("[webclient-event-handler::BallotCreateEvent] BallotCreateEventService::cacheBallotEvent registered");
+    logger.debug("[webclient-event-handler::BallotCreateEvent] BallotCreateEventService::validateBallotEvent registered");
+    logger.debug("[webclient-event-handler::BallotCreateEvent] BallotCreateEventService::cacheBallotEvent registered");
 
     server.addService(ballotQueryEventServiceDefinition, {
         GetUserBallots: getUserBallots 
     });
 
-    logger.info("[webclient-event-handler::BallotQueryEvent] BallotQueryEventService::getUserBallots registered");
+    logger.debug("[webclient-event-handler::BallotQueryEvent] BallotQueryEventService::getUserBallots registered");
     
     server.addService(blockEventServiceDefinition, {
         ReportBlockCreatedEvent: reportBlockCreatedEvent,
     });
 
-    logger.info("[blockchain-event-handler::BlockEvent] CreatedBlockEventService::reportBlockCreatedEvent registered");
+    logger.debug("[blockchain-event-handler::BlockEvent] CreatedBlockEventService::reportBlockCreatedEvent registered");
     
     server.addService(pendingEventServiceDefinition, {
         ReportPendingExpiredEvent: reportPendingExpiredEvent
     });
 
-    logger.info("[blockchain-event-handler::PendingEvent] ExpiredPendingEventService::reportPendingExpiredEvent registered");
+    logger.debug("[blockchain-event-handler::PendingEvent] ExpiredPendingEventService::reportPendingExpiredEvent registered");
     
     await new Promise<void>((resolve, reject) => {
         server.bindAsync(
@@ -80,7 +82,7 @@ export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LI
     });
 
     logger.info(`gRPC server is now listening on port ${port}`);
-    logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+    logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
     
     return server;
 }

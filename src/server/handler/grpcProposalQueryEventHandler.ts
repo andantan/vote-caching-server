@@ -1,4 +1,3 @@
-import { Timestamp } from "../../generated/google/protobuf/timestamp.js";
 import { ServerUnaryCall, sendUnaryData } from "@grpc/grpc-js";
 
 import logger from "../../config/logger.js";
@@ -8,62 +7,112 @@ import * as Event from "../../generated/web_event/proposal_query_event_message.j
 import { proposalQueryEventProcessor } from "../processor/proposalQueryEventProcessor.js";
 import { ProposalQueryEventError, ProposalQueryEventErrorStatus } from "../error/proposalQueryEventError.js";
 
-interface GrpcProposal {
-    queried: boolean;
-    status: string;
-    proposals?: Event.Proposal;
-}
 
-export async function getProposal(
-    call: ServerUnaryCall<Event.GetProposalRequest, Event.GetProposalResponse>,
-    callback: sendUnaryData<Event.GetProposalResponse>
+export async function getProposalDetail(
+    call: ServerUnaryCall<Event.GetProposalDetailRequest, Event.GetProposalDetailResponse>,
+    callback: sendUnaryData<Event.GetProposalDetailResponse>
 ): Promise<void> {
     const { topic } = call.request;
 
-    logger.debug(`[grpcProposalQueryEventHandler::getProposal] Received GetProposal request for Topic: "${topic}"`);
+    logger.debug(`[grpcProposalQueryEventHandler::getProposalDetail] Received GetProposal request for Topic: "${topic}"`);
 
     let queried: boolean = true;
     let statusCode: string = "OK";
-    let grpcProposal: Event.Proposal | null = null;
+    let proposalMessage: Event.Proposal | null = null;
 
     try {
-        const proposal = await proposalQueryEventProcessor.getProposal(topic);
-        grpcProposal = proposalQueryEventProcessor.toGrpcProposal(proposal);
+        const proposal = await proposalQueryEventProcessor.processProposalDetailQuery(topic);
+        proposalMessage = proposalQueryEventProcessor.toProposalMessage(proposal);
 
-        logger.info(`[grpcProposalQueryEventHandler::getProposal] Successfully retrieved proposal for Topic: "${topic}".`);
-        
-        queried = true;
-        statusCode = "OK";
+        logger.info(`[grpcProposalQueryEventHandler::getProposalDetail] Successfully retrieved proposal for Topic: "${topic}".`);
     } catch (error: unknown) {
         queried = false;
-        grpcProposal = null;
+        proposalMessage = null;
 
         if (error instanceof ProposalQueryEventError) {
             statusCode = error.status;
 
             switch (statusCode) {
                 case ProposalQueryEventErrorStatus.PROPOSAL_NOT_FOUND:
-                    logger.warn(`[grpcProposalQueryEventHandler::getProposal] Proposal for Topic: "${topic}" not found.`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getProposalDetail] Proposal for Topic: "${topic}" not found.`);
+                    break;
+                case ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR:
+                    logger.error(`[grpcProposalQueryEventHandler::getProposalDetail] Database access error during filtered proposal retrieval. Status: "${statusCode}". Internal message: "${error.message}"`, error);
                     break;
                 default:
-                    logger.error(`[grpcProposalQueryEventHandler::getProposal] Processed error getting proposal for Topic: "${topic}". Status: "${status}". Internal message: "${error.message}"`, error);
+                    logger.error(`[grpcProposalQueryEventHandler::getProposalDetail] Processed error getting proposal for Topic: "${topic}". Status: "${statusCode}". Internal message: "${error.message}"`, error);
                     break;
             }
         } else {
             statusCode = ProposalQueryEventErrorStatus.UNKNOWN_ERROR;
-            logger.error(`[grpcProposalQueryEventHandler::getProposal] Unhandled or unexpected error getting proposal for Topic: "${topic}". Error:`, error);
+            logger.error(`[grpcProposalQueryEventHandler::getProposalDetail] Unhandled or unexpected error getting proposal for Topic: "${topic}". Error:`, error);
         }
     } finally {
-        const responseData: GrpcProposal = {
+        const response: Event.GetProposalDetailResponse = Event.GetProposalDetailResponse.create({
             queried: queried,
-            status: statusCode
-        };
-
-        if (grpcProposal !== null) {
-            responseData.proposals = grpcProposal;
-        }
+            status: statusCode,
+            ...(proposalMessage !== null && { proposal: proposalMessage }) 
+        });
         
-        const response: Event.GetProposalResponse = Event.GetProposalResponse.create(responseData);
+        callback(null, response);
+    }
+}
+
+export async function getFilteredProposalList(
+    call: ServerUnaryCall<Event.GetFilteredProposalListRequest, Event.GetFilteredProposalListResponse>,
+    callback: sendUnaryData<Event.GetFilteredProposalListResponse>
+): Promise<void> {
+    const { filter, paging } = call.request;
+
+    logger.debug(`[grpcProposalQueryEventHandler::getFilteredProposalList] Received GetFilteredProposalsRequest. Filter: ${JSON.stringify(filter)}, Paging: ${JSON.stringify(paging)}`);
+
+    let queried: boolean = true;
+    let statusCode: string = "OK";
+    let proposalMessageList: Event.Proposal[] = [];
+
+    try {
+        const proposals = await proposalQueryEventProcessor.processFilteredProposalListQuery(filter!, paging!);
+
+        proposalMessageList = proposals.map(proposalMessage => {
+            const grpcProposal: Event.Proposal = proposalQueryEventProcessor.toProposalMessage(proposalMessage);
+
+            return grpcProposal;
+        });
+
+        logger.info(`[grpcProposalQueryEventHandler::getFilteredProposalList] Successfully retrieved ${proposalMessageList.length} filtered proposals.`);
+    } catch (error: unknown) {
+        queried = false;
+
+        if (error instanceof ProposalQueryEventError) {
+            statusCode = error.status;
+
+            switch (statusCode) {
+                case ProposalQueryEventErrorStatus.LIMIT_ZERO_PARAM:
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid limit parameter received. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    break;
+                case ProposalQueryEventErrorStatus.PAGING_OUT_OF_BOUNDS:
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Requested page range is out of bounds. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    break;
+                case ProposalQueryEventErrorStatus.SKIP_ZERO_PARAM:
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid skip parameter received. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    break;
+                case ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR:
+                    logger.error(`[grpcProposalQueryEventHandler::getFilteredProposalList] Database access error during filtered proposal retrieval. Status: "${statusCode}". Internal message: "${error.message}"`, error);
+                    break;
+                default:
+                    logger.error(`[grpcProposalQueryEventHandler::getFilteredProposalList] Processed error getting filtered proposals. Status: "${statusCode}". Internal message: "${error.message}"`, error);
+                    break;
+            }
+        } else {
+            statusCode = ProposalQueryEventErrorStatus.UNKNOWN_ERROR;
+            logger.error(`[grpcProposalQueryEventHandler::getFilteredProposalList] Unhandled or unexpected error getting filtered proposals. Error:`, error);
+        }
+    } finally {
+        const response: Event.GetFilteredProposalListResponse = Event.GetFilteredProposalListResponse.create({
+            queried: queried,
+            status: statusCode,
+            proposalList: proposalMessageList 
+        });
         
         callback(null, response);
     }

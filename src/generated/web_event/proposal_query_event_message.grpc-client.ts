@@ -4,20 +4,29 @@
 import { ProposalQueryEventService } from "./proposal_query_event_message";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
-import type { GetProposalResponse } from "./proposal_query_event_message";
-import type { GetProposalRequest } from "./proposal_query_event_message";
+import type { GetFilteredProposalListResponse } from "./proposal_query_event_message";
+import type { GetFilteredProposalListRequest } from "./proposal_query_event_message";
+import type { GetProposalDetailResponse } from "./proposal_query_event_message";
+import type { GetProposalDetailRequest } from "./proposal_query_event_message";
 import * as grpc from "@grpc/grpc-js";
 /**
  * @generated from protobuf service proposal_query_event_message.ProposalQueryEventService
  */
 export interface IProposalQueryEventServiceClient {
     /**
-     * @generated from protobuf rpc: GetProposal
+     * @generated from protobuf rpc: GetProposalDetail
      */
-    getProposal(input: GetProposalRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetProposalResponse) => void): grpc.ClientUnaryCall;
-    getProposal(input: GetProposalRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: GetProposalResponse) => void): grpc.ClientUnaryCall;
-    getProposal(input: GetProposalRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetProposalResponse) => void): grpc.ClientUnaryCall;
-    getProposal(input: GetProposalRequest, callback: (err: grpc.ServiceError | null, value?: GetProposalResponse) => void): grpc.ClientUnaryCall;
+    getProposalDetail(input: GetProposalDetailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void): grpc.ClientUnaryCall;
+    getProposalDetail(input: GetProposalDetailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void): grpc.ClientUnaryCall;
+    getProposalDetail(input: GetProposalDetailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void): grpc.ClientUnaryCall;
+    getProposalDetail(input: GetProposalDetailRequest, callback: (err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: GetFilteredProposalList
+     */
+    getFilteredProposalList(input: GetFilteredProposalListRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void): grpc.ClientUnaryCall;
+    getFilteredProposalList(input: GetFilteredProposalListRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void): grpc.ClientUnaryCall;
+    getFilteredProposalList(input: GetFilteredProposalListRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void): grpc.ClientUnaryCall;
+    getFilteredProposalList(input: GetFilteredProposalListRequest, callback: (err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service proposal_query_event_message.ProposalQueryEventService
@@ -29,10 +38,17 @@ export class ProposalQueryEventServiceClient extends grpc.Client implements IPro
         this._binaryOptions = binaryOptions;
     }
     /**
-     * @generated from protobuf rpc: GetProposal
+     * @generated from protobuf rpc: GetProposalDetail
      */
-    getProposal(input: GetProposalRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetProposalResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetProposalResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: GetProposalResponse) => void)): grpc.ClientUnaryCall {
+    getProposalDetail(input: GetProposalDetailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: GetProposalDetailResponse) => void)): grpc.ClientUnaryCall {
         const method = ProposalQueryEventService.methods[0];
-        return this.makeUnaryRequest<GetProposalRequest, GetProposalResponse>(`/${ProposalQueryEventService.typeName}/${method.name}`, (value: GetProposalRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GetProposalResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+        return this.makeUnaryRequest<GetProposalDetailRequest, GetProposalDetailResponse>(`/${ProposalQueryEventService.typeName}/${method.name}`, (value: GetProposalDetailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GetProposalDetailResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: GetFilteredProposalList
+     */
+    getFilteredProposalList(input: GetFilteredProposalListRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: GetFilteredProposalListResponse) => void)): grpc.ClientUnaryCall {
+        const method = ProposalQueryEventService.methods[1];
+        return this.makeUnaryRequest<GetFilteredProposalListRequest, GetFilteredProposalListResponse>(`/${ProposalQueryEventService.typeName}/${method.name}`, (value: GetFilteredProposalListRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GetFilteredProposalListResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }
