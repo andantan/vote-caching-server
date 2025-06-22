@@ -33,11 +33,15 @@ message Filter {
   optional bool expired = 1;
 }
 
+message Sort {
+  string sortOrder = 1;
+  string sortBy = 2;
+}
+
 message Paging {
   int32 skip = 1;
   int32 limit = 2;
 }
-
 service ProposalQueryEventService {
   rpc GetProposalDetail(GetProposalDetailRequest)
       returns (GetProposalDetailResponse);
@@ -58,7 +62,8 @@ message GetProposalDetailResponse {
 
 message GetFilteredProposalListRequest {
   Filter filter = 1;
-  Paging paging = 2;
+  Sort sort = 2;
+  Paging paging = 3;
 }
 
 message GetFilteredProposalListResponse {

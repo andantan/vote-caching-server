@@ -3,15 +3,20 @@ import logger from "../../config/logger.js";
 import { IVoteOptions, IVoteResult } from "../models/votes/schemaResult.js";
 import { VoteModel, IVote } from "../models/votes/schemaVote.js";
 import { IBlockHeight } from "../models/votes/schemaBlock.js";
-import { Filter, Paging } from "../../generated/web_event/proposal_query_event_message.js";
+
 
 export interface QueryFilter {
-    expired?: boolean
+    expired?: boolean;
+    sort?: QuerySortOptions;
 };
 
+export type QuerySortOptions = {
+    [key in keyof IVote]?: 1 | -1;
+}
+
 export interface QueryPaging {
-    skip: number
-    limit: number
+    skip: number;
+    limit: number;
 }
 
 export default class MongoVoteCollectionActor {
@@ -59,15 +64,16 @@ export default class MongoVoteCollectionActor {
         }
     }
 
-    public async findProposalListWithFilter(filter: QueryFilter, paging: QueryPaging): Promise<IVote[]> {
+    public async findProposalListWithFilter(filter: QueryFilter, sort: QuerySortOptions, paging: QueryPaging): Promise<IVote[]> {
         const expired: boolean | undefined = filter.expired;
         const skip: number = paging.skip;
         const limit: number = paging.limit;
         
-        logger.debug(`[MongoVoteCollectionActor::getFilteredProposals] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}`);
+        logger.debug(`[MongoVoteCollectionActor::getFilteredProposals] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}, Sort: ${JSON.stringify(sort)}`);
 
         try {
             const proposals: IVote[] = await VoteModel.find(filter)
+                .sort(sort)
                 .skip(skip)
                 .limit(limit)
                 .lean();

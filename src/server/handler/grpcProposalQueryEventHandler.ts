@@ -62,16 +62,16 @@ export async function getFilteredProposalList(
     call: ServerUnaryCall<Event.GetFilteredProposalListRequest, Event.GetFilteredProposalListResponse>,
     callback: sendUnaryData<Event.GetFilteredProposalListResponse>
 ): Promise<void> {
-    const { filter, paging } = call.request;
+    const { filter, sort, paging } = call.request;
 
-    logger.debug(`[grpcProposalQueryEventHandler::getFilteredProposalList] Received GetFilteredProposalsRequest. Filter: ${JSON.stringify(filter)}, Paging: ${JSON.stringify(paging)}`);
+    logger.debug(`[grpcProposalQueryEventHandler::getFilteredProposalList] Received GetFilteredProposalsRequest. Filter: ${JSON.stringify(filter)}, Sort: ${JSON.stringify(sort)}, Paging: ${JSON.stringify(paging)}`);
 
     let queried: boolean = true;
     let statusCode: string = "OK";
     let proposalMessageList: Event.Proposal[] = [];
 
     try {
-        const proposals = await proposalQueryEventProcessor.processFilteredProposalListQuery(filter!, paging!);
+        const proposals = await proposalQueryEventProcessor.processFilteredProposalListQuery(filter!, sort!, paging!);
 
         proposalMessageList = proposals.map(proposalMessage => {
             const grpcProposal: Event.Proposal = proposalQueryEventProcessor.toProposalMessage(proposalMessage);
@@ -87,14 +87,20 @@ export async function getFilteredProposalList(
             statusCode = error.status;
 
             switch (statusCode) {
+                case ProposalQueryEventErrorStatus.INVALID_SORT_ORDER_PARAM:
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid sort order parameter received. Status: "${statusCode}".`);
+                    break;
+                case ProposalQueryEventErrorStatus.INVALID_SORT_BY_PARAM:
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid sort by parameter received. Status: "${statusCode}".`);
+                    break;
                 case ProposalQueryEventErrorStatus.LIMIT_ZERO_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid limit parameter received. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid limit parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.PAGING_OUT_OF_BOUNDS:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Requested page range is out of bounds. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Requested page range is out of bounds. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.SKIP_ZERO_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid skip parameter received. Status: "${statusCode}". Internal message: "${error.message}"`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid skip parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR:
                     logger.error(`[grpcProposalQueryEventHandler::getFilteredProposalList] Database access error during filtered proposal retrieval. Status: "${statusCode}". Internal message: "${error.message}"`, error);

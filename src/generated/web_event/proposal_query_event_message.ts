@@ -87,6 +87,19 @@ export interface Filter {
     expired?: boolean;
 }
 /**
+ * @generated from protobuf message proposal_query_event_message.Sort
+ */
+export interface Sort {
+    /**
+     * @generated from protobuf field: string sortOrder = 1
+     */
+    sortOrder: string;
+    /**
+     * @generated from protobuf field: string sortBy = 2
+     */
+    sortBy: string;
+}
+/**
  * @generated from protobuf message proposal_query_event_message.Paging
  */
 export interface Paging {
@@ -134,7 +147,11 @@ export interface GetFilteredProposalListRequest {
      */
     filter?: Filter;
     /**
-     * @generated from protobuf field: proposal_query_event_message.Paging paging = 2
+     * @generated from protobuf field: proposal_query_event_message.Sort sort = 2
+     */
+    sort?: Sort;
+    /**
+     * @generated from protobuf field: proposal_query_event_message.Paging paging = 3
      */
     paging?: Paging;
 }
@@ -428,6 +445,61 @@ class Filter$Type extends MessageType<Filter> {
  */
 export const Filter = new Filter$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class Sort$Type extends MessageType<Sort> {
+    constructor() {
+        super("proposal_query_event_message.Sort", [
+            { no: 1, name: "sortOrder", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "sortBy", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Sort>): Sort {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.sortOrder = "";
+        message.sortBy = "";
+        if (value !== undefined)
+            reflectionMergePartial<Sort>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Sort): Sort {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string sortOrder */ 1:
+                    message.sortOrder = reader.string();
+                    break;
+                case /* string sortBy */ 2:
+                    message.sortBy = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Sort, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string sortOrder = 1; */
+        if (message.sortOrder !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.sortOrder);
+        /* string sortBy = 2; */
+        if (message.sortBy !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.sortBy);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message proposal_query_event_message.Sort
+ */
+export const Sort = new Sort$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class Paging$Type extends MessageType<Paging> {
     constructor() {
         super("proposal_query_event_message.Paging", [
@@ -596,7 +668,8 @@ class GetFilteredProposalListRequest$Type extends MessageType<GetFilteredProposa
     constructor() {
         super("proposal_query_event_message.GetFilteredProposalListRequest", [
             { no: 1, name: "filter", kind: "message", T: () => Filter },
-            { no: 2, name: "paging", kind: "message", T: () => Paging }
+            { no: 2, name: "sort", kind: "message", T: () => Sort },
+            { no: 3, name: "paging", kind: "message", T: () => Paging }
         ]);
     }
     create(value?: PartialMessage<GetFilteredProposalListRequest>): GetFilteredProposalListRequest {
@@ -613,7 +686,10 @@ class GetFilteredProposalListRequest$Type extends MessageType<GetFilteredProposa
                 case /* proposal_query_event_message.Filter filter */ 1:
                     message.filter = Filter.internalBinaryRead(reader, reader.uint32(), options, message.filter);
                     break;
-                case /* proposal_query_event_message.Paging paging */ 2:
+                case /* proposal_query_event_message.Sort sort */ 2:
+                    message.sort = Sort.internalBinaryRead(reader, reader.uint32(), options, message.sort);
+                    break;
+                case /* proposal_query_event_message.Paging paging */ 3:
                     message.paging = Paging.internalBinaryRead(reader, reader.uint32(), options, message.paging);
                     break;
                 default:
@@ -631,9 +707,12 @@ class GetFilteredProposalListRequest$Type extends MessageType<GetFilteredProposa
         /* proposal_query_event_message.Filter filter = 1; */
         if (message.filter)
             Filter.internalBinaryWrite(message.filter, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
-        /* proposal_query_event_message.Paging paging = 2; */
+        /* proposal_query_event_message.Sort sort = 2; */
+        if (message.sort)
+            Sort.internalBinaryWrite(message.sort, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* proposal_query_event_message.Paging paging = 3; */
         if (message.paging)
-            Paging.internalBinaryWrite(message.paging, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+            Paging.internalBinaryWrite(message.paging, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

@@ -2,6 +2,8 @@ import { CommonErrorStatus } from "./common/commonEventError";
 
 export enum ProposalQueryEventErrorSpecificStatus {
     PROPOSAL_NOT_FOUND = "PROPOSAL_NOT_FOUND",
+    INVALID_SORT_ORDER_PARAM = "INVALID_SORT_ORDER_PARAM",
+    INVALID_SORT_BY_PARAM = "INVALID_SORT_BY_PARAM",
     PAGING_OUT_OF_BOUNDS = "PAGING_OUT_OF_BOUNDS",
     SKIP_ZERO_PARAM = "SKIP_ZERO_PARAM",
     LIMIT_ZERO_PARAM = "LIMIT_ZERO_PARAM"

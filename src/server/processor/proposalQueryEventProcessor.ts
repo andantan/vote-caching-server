@@ -1,11 +1,11 @@
 import logger from "../../config/logger";
 
-import MongoVoteCollectionActor, { QueryFilter, QueryPaging } from "../../database/actor/mongoVoteCollectionActor";
+import MongoVoteCollectionActor, { QueryFilter, QueryPaging, QuerySortOptions } from "../../database/actor/mongoVoteCollectionActor";
 
 import { IVote } from './../../database/models/votes/schemaVote';
 
 import { ProposalQueryEventError, ProposalQueryEventErrorStatus } from './../error/proposalQueryEventError';
-import { Proposal, Result, BlockHeight, Filter, Paging } from "../../generated/web_event/proposal_query_event_message";
+import { Proposal, Result, BlockHeight, Filter, Sort, Paging } from "../../generated/web_event/proposal_query_event_message";
 import { Timestamp } from "../../generated/google/protobuf/timestamp";
 
 type ResultOptions = { [key: string]: number };
@@ -28,15 +28,43 @@ export class ProposalQueryEventProcessor {
     }
 
     private _buildMongoQueryFilter(filter: Filter): QueryFilter {
-        const expired: boolean | undefined = filter.expired;
+        const expiredParam: boolean | undefined = filter.expired;
         const queryFilter: QueryFilter = {};
 
-        if (expired === true || expired === false) { 
-            queryFilter.expired = expired;
+        if (expiredParam === true || expiredParam === false) { 
+            queryFilter.expired = expiredParam;
         }
-        
+
         return queryFilter;
-    } 
+    }
+
+    private _buildMongoQuerySort(sort: Sort): QuerySortOptions {
+        const sortOrderParam: string | undefined = sort.sortOrder;
+        const sortByParam: string | undefined = sort.sortBy;
+
+        let querySort: QuerySortOptions = {};
+
+        if (sortByParam && sortOrderParam) {
+            const lowerCaseSortOrder = sortOrderParam.toLowerCase();
+            const isAsc = (lowerCaseSortOrder === "asc");
+            const isDesc = (lowerCaseSortOrder === "desc");
+
+            if (isAsc || isDesc) {
+                const validSortKey = sortByParam as keyof IVote;
+
+                querySort = { [validSortKey]: isAsc ? 1 : -1 } as QuerySortOptions;
+            } else {
+                logger.warn(`[MongoVoteCollectionActor::_buildMongoQueryFilter] Invalid sort order received: "${sortOrderParam}". Expected 'asc' or 'desc'. Not applying sort.`);
+                throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.INVALID_SORT_ORDER_PARAM);
+            }
+        } else if (sortByParam || sortOrderParam) {
+            logger.warn(`[MongoVoteCollectionActor::_buildMongoQueryFilter] Incomplete sort parameters. Both 'sortBy' and 'sortOrder' must be provided if sorting. Not applying sort.`);
+            throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.INVALID_SORT_BY_PARAM);
+        }
+
+        return querySort;
+    }
+
 
     private _buildMongoQueryPaging(paging: Paging): QueryPaging {
         let queryPaging: QueryPaging = {
@@ -76,7 +104,7 @@ export class ProposalQueryEventProcessor {
         return proposal;
     }
 
-    public async processFilteredProposalListQuery(filter: Filter, paging: Paging): Promise<IVote[]> {
+    public async processFilteredProposalListQuery(filter: Filter, sort: Sort, paging: Paging): Promise<IVote[]> {
         const expired: boolean | undefined = filter.expired;
         const skip: number = paging.skip;
         const limit: number = paging.limit;
@@ -84,6 +112,21 @@ export class ProposalQueryEventProcessor {
         logger.debug(`[ProposalQueryEventProcessor::processFilteredProposalListQuery] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}`);
 
         const queryFilter: QueryFilter = this._buildMongoQueryFilter(filter);
+        let querySort: QuerySortOptions = {};
+
+        try {
+            querySort = this._buildMongoQuerySort(sort);
+            logger.debug(querySort);
+        } catch (error: unknown) {
+            if (error instanceof ProposalQueryEventError) {
+                logger.warn(`[ProposalQueryEventProcessor::processFilteredProposalListQuery] Error building mongo query filter: Status: "${error.status}", Message: "${error.message}"`);
+                throw error;
+            }
+
+            logger.error(`[ProposalQueryEventProcessor::processFilteredProposalListQuery] Unexpected error during mongo query filter build:`, error);
+            throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
+        }
+
         const queryPaging: QueryPaging = this._buildMongoQueryPaging(paging);
 
         let totalCount: number = 0;
@@ -115,7 +158,7 @@ export class ProposalQueryEventProcessor {
         let proposals: IVote[] = [];
 
         try {
-            proposals = await this.voteCollection.findProposalListWithFilter(queryFilter, queryPaging);
+            proposals = await this.voteCollection.findProposalListWithFilter(queryFilter, querySort, queryPaging);
         } catch (error: unknown) {
             logger.error(`[ProposalQueryEventProcessor::processFilteredProposalListQuery] Database access error during filtered proposal retrieval. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}. Error:`, error);
             throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR, { cause: error });
