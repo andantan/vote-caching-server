@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package ballot_create_event_message;
+
+service BallotCreateEventService {
+  rpc ValidateBallotEvent(BallotValidateEventRequest)
+      returns (BallotValidateEventResponse);
+
+  rpc CacheBallotEvent(BallotCacheEventRequest)
+      returns (BallotCacheEventResponse);
+}
+
+message BallotValidateEventRequest {
+  string user_hash = 1;
+  string topic = 2;
+  string option = 3;
+}
+
+message BallotValidateEventResponse {
+  bool validation = 1;
+  string status = 2;
+}
+
+message BallotCacheEventRequest{
+  string user_hash = 1;
+  string vote_hash = 2;
+  string topic = 3;
+}
+
+message BallotCacheEventResponse {
+  bool cached = 1;
+  string status = 2;
+}

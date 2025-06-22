@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package proposal_create_event_message;
+
+service ProposalCreateEventService {
+  rpc ValidateProposalEvent(ProposalValidateEventRequest)
+      returns (ProposalValidateEventResponse);
+
+  rpc CacheProposalEvent(ProposalCacheEventRequest)
+      returns (ProposalCacheEventResponse);
+}
+
+message ProposalValidateEventRequest {
+  string topic = 1;
+}
+
+message ProposalValidateEventResponse {
+  bool validation = 1;
+  string status = 2;
+}
+
+message ProposalCacheEventRequest {
+  string topic = 1;
+  uint32 duration = 2;
+  repeated string options = 3;
+}
+
+message ProposalCacheEventResponse {
+  bool cached = 1;
+  string status = 2;
+}

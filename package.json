@@ -16,21 +16,29 @@
     "_mkdir-generated": "mkdirp src/generated",
     "_mkdir-generated-web-event": "mkdirp src/generated/web_event",
     "_mkdir-generated-blockchain-event": "mkdirp src/generated/blockchain_event",
-    "make-proto": "npm run _protoc-block-event && npm run _protoc-pending-event && npm run _protoc-proposal-event && npm run _protoc-ballot-event",
+    "make-proto": "npm run _make-block-proto && npm run _make-pending-proto && npm run _make-proposal-proto && npm run _make-ballot-proto",
+    "_make-block-proto": "npm run _protoc-block-event",
+    "_make-pending-proto": "npm run _protoc-pending-event",
+    "_make-proposal-proto": "npm run _protoc-proposal-create-event && npm run _protoc-proposal-query-event",
+    "_make-ballot-proto": "npm run _protoc-ballot-create-event && npm run _protoc-ballot-query-event",
     "_protoc-block-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/blockchain_event/block_event_message.proto",
     "_protoc-pending-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/blockchain_event/pending_event_message.proto",
-    "_protoc-proposal-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/proposal_event_message.proto",
-    "_protoc-ballot-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/ballot_event_message.proto"
+    "_protoc-proposal-create-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/proposal_create_event_message.proto",
+    "_protoc-proposal-query-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/proposal_query_event_message.proto",
+    "_protoc-ballot-create-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/ballot_create_event_message.proto",
+    "_protoc-ballot-query-event": "npm exec -- protoc -I ./proto --ts_out=client_grpc1,server_grpc1,output_legacy_commonjs:./src/generated/ ./proto/web_event/ballot_query_event_message.proto"
   },
   "author": "kyubin2892@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@protobuf-ts/runtime-rpc": "^2.11.0",
+    "mongoose": "^8.15.1",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "^2.11.0",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.15.29",
     "@types/winston": "^2.4.4",
     "eslint": "^9.28.0",

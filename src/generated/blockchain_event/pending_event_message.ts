@@ -12,17 +12,17 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
- * @generated from protobuf message pending_event_message.ExpiredPendingEvent
+ * @generated from protobuf message pending_event_message.PendingExpiredEventRequest
  */
-export interface ExpiredPendingEvent {
+export interface PendingExpiredEventRequest {
     /**
      * @generated from protobuf field: string topic = 1
      */
     topic: string;
     /**
-     * @generated from protobuf field: int64 count = 2
+     * @generated from protobuf field: uint32 count = 2
      */
-    count: bigint;
+    count: number;
     /**
      * @generated from protobuf field: map<string, uint32> options = 3
      */
@@ -31,37 +31,37 @@ export interface ExpiredPendingEvent {
     };
 }
 /**
- * @generated from protobuf message pending_event_message.ReportPendingEventResponse
+ * @generated from protobuf message pending_event_message.PendingExpiredEventResponse
  */
-export interface ReportPendingEventResponse {
+export interface PendingExpiredEventResponse {
     /**
-     * @generated from protobuf field: bool success = 1
+     * @generated from protobuf field: bool cached = 1
      */
-    success: boolean;
+    cached: boolean;
     /**
-     * @generated from protobuf field: string message = 2
+     * @generated from protobuf field: string status = 2
      */
-    message: string;
+    status: string;
 }
 // @generated message type with reflection information, may provide speed optimized methods
-class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
+class PendingExpiredEventRequest$Type extends MessageType<PendingExpiredEventRequest> {
     constructor() {
-        super("pending_event_message.ExpiredPendingEvent", [
+        super("pending_event_message.PendingExpiredEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "count", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "count", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 3, name: "options", kind: "map", K: 9 /*ScalarType.STRING*/, V: { kind: "scalar", T: 13 /*ScalarType.UINT32*/ } }
         ]);
     }
-    create(value?: PartialMessage<ExpiredPendingEvent>): ExpiredPendingEvent {
+    create(value?: PartialMessage<PendingExpiredEventRequest>): PendingExpiredEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
-        message.count = 0n;
+        message.count = 0;
         message.options = {};
         if (value !== undefined)
-            reflectionMergePartial<ExpiredPendingEvent>(this, message, value);
+            reflectionMergePartial<PendingExpiredEventRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ExpiredPendingEvent): ExpiredPendingEvent {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PendingExpiredEventRequest): PendingExpiredEventRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -69,8 +69,8 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* int64 count */ 2:
-                    message.count = reader.int64().toBigInt();
+                case /* uint32 count */ 2:
+                    message.count = reader.uint32();
                     break;
                 case /* map<string, uint32> options */ 3:
                     this.binaryReadMap3(message.options, reader, options);
@@ -86,8 +86,8 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
         }
         return message;
     }
-    private binaryReadMap3(map: ExpiredPendingEvent["options"], reader: IBinaryReader, options: BinaryReadOptions): void {
-        let len = reader.uint32(), end = reader.pos + len, key: keyof ExpiredPendingEvent["options"] | undefined, val: ExpiredPendingEvent["options"][any] | undefined;
+    private binaryReadMap3(map: PendingExpiredEventRequest["options"], reader: IBinaryReader, options: BinaryReadOptions): void {
+        let len = reader.uint32(), end = reader.pos + len, key: keyof PendingExpiredEventRequest["options"] | undefined, val: PendingExpiredEventRequest["options"][any] | undefined;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
@@ -97,18 +97,18 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
                 case 2:
                     val = reader.uint32();
                     break;
-                default: throw new globalThis.Error("unknown map entry field for pending_event_message.ExpiredPendingEvent.options");
+                default: throw new globalThis.Error("unknown map entry field for pending_event_message.PendingExpiredEventRequest.options");
             }
         }
         map[key ?? ""] = val ?? 0;
     }
-    internalBinaryWrite(message: ExpiredPendingEvent, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: PendingExpiredEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* int64 count = 2; */
-        if (message.count !== 0n)
-            writer.tag(2, WireType.Varint).int64(message.count);
+        /* uint32 count = 2; */
+        if (message.count !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.count);
         /* map<string, uint32> options = 3; */
         for (let k of globalThis.Object.keys(message.options))
             writer.tag(3, WireType.LengthDelimited).fork().tag(1, WireType.LengthDelimited).string(k).tag(2, WireType.Varint).uint32(message.options[k]).join();
@@ -119,35 +119,35 @@ class ExpiredPendingEvent$Type extends MessageType<ExpiredPendingEvent> {
     }
 }
 /**
- * @generated MessageType for protobuf message pending_event_message.ExpiredPendingEvent
+ * @generated MessageType for protobuf message pending_event_message.PendingExpiredEventRequest
  */
-export const ExpiredPendingEvent = new ExpiredPendingEvent$Type();
+export const PendingExpiredEventRequest = new PendingExpiredEventRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResponse> {
+class PendingExpiredEventResponse$Type extends MessageType<PendingExpiredEventResponse> {
     constructor() {
-        super("pending_event_message.ReportPendingEventResponse", [
-            { no: 1, name: "success", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "message", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("pending_event_message.PendingExpiredEventResponse", [
+            { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ReportPendingEventResponse>): ReportPendingEventResponse {
+    create(value?: PartialMessage<PendingExpiredEventResponse>): PendingExpiredEventResponse {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.success = false;
-        message.message = "";
+        message.cached = false;
+        message.status = "";
         if (value !== undefined)
-            reflectionMergePartial<ReportPendingEventResponse>(this, message, value);
+            reflectionMergePartial<PendingExpiredEventResponse>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReportPendingEventResponse): ReportPendingEventResponse {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PendingExpiredEventResponse): PendingExpiredEventResponse {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* bool success */ 1:
-                    message.success = reader.bool();
+                case /* bool cached */ 1:
+                    message.cached = reader.bool();
                     break;
-                case /* string message */ 2:
-                    message.message = reader.string();
+                case /* string status */ 2:
+                    message.status = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -160,13 +160,13 @@ class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResp
         }
         return message;
     }
-    internalBinaryWrite(message: ReportPendingEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bool success = 1; */
-        if (message.success !== false)
-            writer.tag(1, WireType.Varint).bool(message.success);
-        /* string message = 2; */
-        if (message.message !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.message);
+    internalBinaryWrite(message: PendingExpiredEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool cached = 1; */
+        if (message.cached !== false)
+            writer.tag(1, WireType.Varint).bool(message.cached);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -174,12 +174,12 @@ class ReportPendingEventResponse$Type extends MessageType<ReportPendingEventResp
     }
 }
 /**
- * @generated MessageType for protobuf message pending_event_message.ReportPendingEventResponse
+ * @generated MessageType for protobuf message pending_event_message.PendingExpiredEventResponse
  */
-export const ReportPendingEventResponse = new ReportPendingEventResponse$Type();
+export const PendingExpiredEventResponse = new PendingExpiredEventResponse$Type();
 /**
- * @generated ServiceType for protobuf service pending_event_message.ExpiredPendingEventService
+ * @generated ServiceType for protobuf service pending_event_message.PendingEventService
  */
-export const ExpiredPendingEventService = new ServiceType("pending_event_message.ExpiredPendingEventService", [
-    { name: "ReportExpiredPendingEvent", options: {}, I: ExpiredPendingEvent, O: ReportPendingEventResponse }
+export const PendingEventService = new ServiceType("pending_event_message.PendingEventService", [
+    { name: "ReportPendingExpiredEvent", options: {}, I: PendingExpiredEventRequest, O: PendingExpiredEventResponse }
 ]);
