@@ -54,17 +54,16 @@ export class ProposalQueryEventProcessor {
 
                 querySort = { [validSortKey]: isAsc ? 1 : -1 } as QuerySortOptions;
             } else {
-                logger.warn(`[MongoVoteCollectionActor::_buildMongoQueryFilter] Invalid sort order received: "${sortOrderParam}". Expected 'asc' or 'desc'. Not applying sort.`);
+                logger.warn(`[MongoVoteCollectionActor::_buildMongoQuerySort] Invalid sort order received: "${sortOrderParam}". Expected 'asc' or 'desc'. Not applying sort.`);
                 throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.INVALID_SORT_ORDER_PARAM);
             }
         } else if (sortByParam || sortOrderParam) {
-            logger.warn(`[MongoVoteCollectionActor::_buildMongoQueryFilter] Incomplete sort parameters. Both 'sortBy' and 'sortOrder' must be provided if sorting. Not applying sort.`);
+            logger.warn(`[MongoVoteCollectionActor::_buildMongoQuerySort] Incomplete sort parameters. Both 'sortBy' and 'sortOrder' must be provided if sorting. Not applying sort.`);
             throw new ProposalQueryEventError(ProposalQueryEventErrorStatus.INVALID_SORT_BY_PARAM);
         }
 
         return querySort;
     }
-
 
     private _buildMongoQueryPaging(paging: Paging): QueryPaging {
         let queryPaging: QueryPaging = {
