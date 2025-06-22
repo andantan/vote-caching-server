@@ -69,7 +69,7 @@ export default class MongoVoteCollectionActor {
         const skip: number = paging.skip;
         const limit: number = paging.limit;
         
-        logger.debug(`[MongoVoteCollectionActor::getFilteredProposals] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}, Sort: ${JSON.stringify(sort)}`);
+        logger.debug(`[MongoVoteCollectionActor::findProposalListWithFilter] Attempting to retrieve filtered proposals. Expired: ${expired}, Skip: ${skip}, Limit: ${limit}, Sort: ${JSON.stringify(sort)}`);
 
         try {
             const proposals: IVote[] = await VoteModel.find(filter)
@@ -78,12 +78,12 @@ export default class MongoVoteCollectionActor {
                 .limit(limit)
                 .lean();
                 
-            logger.info(`[MongoVoteCollectionActor::getFilteredProposals] Retrieved ${proposals.length} proposals with Expired: ${expired}, Skip: ${skip}, Limit: ${limit}.`);
+            logger.info(`[MongoVoteCollectionActor::findProposalListWithFilter] Retrieved ${proposals.length} proposals with Expired: ${expired}, Skip: ${skip}, Limit: ${limit}.`);
 
             return proposals;
         } catch (error: unknown) {
             const errorMessage = `Failed to retrieve filtered proposals with Expired: ${expired}, Skip: ${skip}, Limit: ${limit}. Error: ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[MongoVoteCollectionActor::getFilteredProposals] MongoDB operation failed: ${errorMessage}`, error);
+            logger.error(`[MongoVoteCollectionActor::findProposalListWithFilter] MongoDB operation failed: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }
