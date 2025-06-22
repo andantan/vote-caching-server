@@ -88,19 +88,19 @@ export async function getFilteredProposalList(
 
             switch (statusCode) {
                 case ProposalQueryEventErrorStatus.INVALID_SORT_ORDER_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid sort order parameter received. Status: "${statusCode}".`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposalList] Invalid sort order parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.INVALID_SORT_BY_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid sort by parameter received. Status: "${statusCode}".`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposalList] Invalid sort by parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.LIMIT_ZERO_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid limit parameter received. Status: "${statusCode}".`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposalList] Invalid limit parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.PAGING_OUT_OF_BOUNDS:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Requested page range is out of bounds. Status: "${statusCode}".`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposalList] Requested page range is out of bounds. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.SKIP_ZERO_PARAM:
-                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposals] Invalid skip parameter received. Status: "${statusCode}".`);
+                    logger.warn(`[grpcProposalQueryEventHandler::getFilteredProposalList] Invalid skip parameter received. Status: "${statusCode}".`);
                     break;
                 case ProposalQueryEventErrorStatus.DATABASE_ACCESS_ERROR:
                     logger.error(`[grpcProposalQueryEventHandler::getFilteredProposalList] Database access error during filtered proposal retrieval. Status: "${statusCode}". Internal message: "${error.message}"`, error);
