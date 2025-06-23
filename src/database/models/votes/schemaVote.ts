@@ -3,7 +3,7 @@ import { Schema, Document } from "mongoose";
 
 import { IVoteResult, voteResultSchema } from "./schemaResult.js";
 import { IBlockHeight, blockHeightSchema } from "./schemaBlock.js";
-import * as MongoConfig from "../../../../config/connection_mongodb_config.json";
+import { mongoConfig } from "../../../config/mongoConfig.js";
 
 export interface IVote extends Document {
     _id: mongoose.Types.ObjectId;
@@ -59,4 +59,4 @@ VoteSchema.pre('findOneAndUpdate', function(next) {
     next();
 });
 
-export const VoteModel = mongoose.model<IVote>('Vote', VoteSchema, MongoConfig.MongoVoteCollection);
+export const VoteModel = mongoose.model<IVote>('Vote', VoteSchema, mongoConfig.voteCollection);

@@ -1,12 +1,15 @@
+import * as env from "./config/env.js";
+
+env.loadEnv();
+
 import runGrpcServer from "./server/grpcEventServer.js";
 import connectMongoDB from "./database/mongoConnection.js";
 
-import * as grpcConfig from "../config/connection_grpc_listener_config.json";
 import logger from "./config/logger.js";
 
-const GRPC_EVENT_LISTENER_PORT: number = grpcConfig.GrpcEventListenerPort;
-
 async function main() {
+    const GRPC_EVENT_LISTENER_PORT: number = env.getNumberEnvVar("GRPC_EVENT_LISTENER_PORT");
+
     try {
         logger.info("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
         logger.info("Connecting to MongoDB...");

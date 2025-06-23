@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import { Schema, Document } from "mongoose";
 
 import { IBallot, ballotSchema } from "./schemaBallot";
-
-import * as MongoConfig from "../../../../config/connection_mongodb_config.json";
+import { mongoConfig } from "../../../config/mongoConfig";
 
 export interface IUser extends Document {
     _id: mongoose.Types.ObjectId;
@@ -22,4 +21,4 @@ export const UserSchema: Schema<IUser> = new Schema({
 });
 
 export type NullableUser = IUser | null;
-export const UserModel = mongoose.model<IUser>('User', UserSchema, MongoConfig.MongoUserCollection);
+export const UserModel = mongoose.model<IUser>('User', UserSchema, mongoConfig.userCollection);
