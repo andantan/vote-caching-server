@@ -14,13 +14,10 @@ import { getUserBallots } from "./handler/grpcBallotQueryEventHandler.js";
 import { reportPendingExpiredEvent } from "./handler/grpcPendingEventHandler.js";
 import { reportBlockCreatedEvent } from "./handler/grpcBlockEventHandler.js";
 
-import * as grpcConfig from "../../config/connection_grpc_listener_config.json";
 import logger from "../config/logger.js"
 
 
-const DEFAULT_GRPC_EVENT_LISTENER_PORT: number = grpcConfig.DefaultGrpcEventListenerPort;
-
-export default async function runGrpcServer(port: number = DEFAULT_GRPC_EVENT_LISTENER_PORT): Promise<grpc.Server> {
+export default async function runGrpcServer(port: number): Promise<grpc.Server> {
     const server = new grpc.Server();
 
     server.addService(proposalCreateEventServiceDefinition, {

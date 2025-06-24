@@ -2,7 +2,7 @@ import { VoteModel } from "../models/votes/schemaVote";
 import { UserModel } from "../models/users/schemaUser";
 import logger from "../../config/logger";
 
-export default async function initializeAllModelIndexes() {
+export default async function initIndexes() {
     try {
         await VoteModel.createIndexes();
 

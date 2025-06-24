@@ -1,20 +1,17 @@
 import mongoose from "mongoose";
 
 import logger from "../config/logger.js";
-import initializeAllModelIndexes from "./index/initializeIndexes.js";
-
-import * as mongoConfig from "../../config/connection_mongodb_config.json";
-
-const MongoURI: string = `mongodb://${mongoConfig.MongoHost}:${mongoConfig.MongoPort}/${mongoConfig.MongoDatabase}`;
+import initIndexes from "./index/initializeIndexes.js";
+import { mongoConfig } from "../config/mongoConfig.js";
 
 export default async function connectMongoDB(): Promise<void> {
     try {
-        await mongoose.connect(MongoURI);
-        logger.info("MongoDB connected successfully");
+        await mongoose.connect(mongoConfig.uri);
+        logger.info(`MongoDB connected successfully to: ${mongoConfig.uri}`);
 
-        await initializeAllModelIndexes();
+        await initIndexes();
     } catch (error: unknown) {
-        logger.error("MongoDB connection error: ", error)
+        logger.error(`MongoDB connection error to ${mongoConfig.uri}: `, error);
 
         process.exit(1)
     }
