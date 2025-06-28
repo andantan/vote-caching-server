@@ -5,8 +5,21 @@ import "google/protobuf/timestamp.proto";
 package user_create_event_message;
 
 service UserCreateEventService {
+  rpc ValidateUserEvent(UserValidateEventRequest)
+      returns (UserValidateEventResponse);
+
   rpc CacheUserEvent(UserCacheEventRequest)
       returns (UserCacheEventResponse);
+}
+
+message UserValidateEventRequest {
+  int32 uid = 1;
+  string user_hash = 2;
+}
+
+message UserValidateEventResponse {
+  bool validation = 1;
+  string status = 2;
 }
 
 message UserCacheEventRequest{

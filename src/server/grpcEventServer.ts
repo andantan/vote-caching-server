@@ -8,7 +8,7 @@ import { ballotQueryEventServiceDefinition } from "../generated/web_event/ballot
 import { pendingEventServiceDefinition } from "../generated/blockchain_event/pending_event_message.grpc-server.js";
 import { blockEventServiceDefinition } from "../generated/blockchain_event/block_event_message.grpc-server.js";
 
-import { cacheUserEvent } from "./handler/grpcUserCreateEventHandler";
+import { validateUserEvent, cacheUserEvent } from "./handler/grpcUserCreateEventHandler";
 import { validateProposalEvent, cacheProposalEvent } from "./handler/grpcProposalCreateEventHandler.js";
 import { validateBallotEvent, cacheBallotEvent } from "./handler/grpcBallotCreateEventHandler.js";
 import { getProposalDetail, getFilteredProposalList } from "./handler/grpcProposalQueryEventHandler.js";
@@ -23,9 +23,11 @@ export default async function runGrpcServer(port: number): Promise<grpc.Server> 
     const server = new grpc.Server();
 
     server.addService(userCreateEventServiceDefinition, {
+        ValidateUserEvent: validateUserEvent,
         CacheUserEvent: cacheUserEvent
     });
 
+    logger.debug("[webclient-event-handler::CacheUserEvent] UserCreateEventService::validateUserEvent registered");
     logger.debug("[webclient-event-handler::CacheUserEvent] UserCreateEventService::cacheUserEvent registered");
 
     server.addService(proposalCreateEventServiceDefinition, {

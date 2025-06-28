@@ -13,6 +13,32 @@ import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 import { Timestamp } from "../google/protobuf/timestamp";
 /**
+ * @generated from protobuf message user_create_event_message.UserValidateEventRequest
+ */
+export interface UserValidateEventRequest {
+    /**
+     * @generated from protobuf field: int32 uid = 1
+     */
+    uid: number;
+    /**
+     * @generated from protobuf field: string user_hash = 2
+     */
+    userHash: string;
+}
+/**
+ * @generated from protobuf message user_create_event_message.UserValidateEventResponse
+ */
+export interface UserValidateEventResponse {
+    /**
+     * @generated from protobuf field: bool validation = 1
+     */
+    validation: boolean;
+    /**
+     * @generated from protobuf field: string status = 2
+     */
+    status: string;
+}
+/**
  * @generated from protobuf message user_create_event_message.UserCacheEventRequest
  */
 export interface UserCacheEventRequest {
@@ -54,6 +80,116 @@ export interface UserCacheEventResponse {
      */
     userHash: string;
 }
+// @generated message type with reflection information, may provide speed optimized methods
+class UserValidateEventRequest$Type extends MessageType<UserValidateEventRequest> {
+    constructor() {
+        super("user_create_event_message.UserValidateEventRequest", [
+            { no: 1, name: "uid", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 2, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UserValidateEventRequest>): UserValidateEventRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.uid = 0;
+        message.userHash = "";
+        if (value !== undefined)
+            reflectionMergePartial<UserValidateEventRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UserValidateEventRequest): UserValidateEventRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int32 uid */ 1:
+                    message.uid = reader.int32();
+                    break;
+                case /* string user_hash */ 2:
+                    message.userHash = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UserValidateEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int32 uid = 1; */
+        if (message.uid !== 0)
+            writer.tag(1, WireType.Varint).int32(message.uid);
+        /* string user_hash = 2; */
+        if (message.userHash !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.userHash);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message user_create_event_message.UserValidateEventRequest
+ */
+export const UserValidateEventRequest = new UserValidateEventRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class UserValidateEventResponse$Type extends MessageType<UserValidateEventResponse> {
+    constructor() {
+        super("user_create_event_message.UserValidateEventResponse", [
+            { no: 1, name: "validation", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<UserValidateEventResponse>): UserValidateEventResponse {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.validation = false;
+        message.status = "";
+        if (value !== undefined)
+            reflectionMergePartial<UserValidateEventResponse>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: UserValidateEventResponse): UserValidateEventResponse {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* bool validation */ 1:
+                    message.validation = reader.bool();
+                    break;
+                case /* string status */ 2:
+                    message.status = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: UserValidateEventResponse, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* bool validation = 1; */
+        if (message.validation !== false)
+            writer.tag(1, WireType.Varint).bool(message.validation);
+        /* string status = 2; */
+        if (message.status !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.status);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message user_create_event_message.UserValidateEventResponse
+ */
+export const UserValidateEventResponse = new UserValidateEventResponse$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class UserCacheEventRequest$Type extends MessageType<UserCacheEventRequest> {
     constructor() {
@@ -199,5 +335,6 @@ export const UserCacheEventResponse = new UserCacheEventResponse$Type();
  * @generated ServiceType for protobuf service user_create_event_message.UserCreateEventService
  */
 export const UserCreateEventService = new ServiceType("user_create_event_message.UserCreateEventService", [
+    { name: "ValidateUserEvent", options: {}, I: UserValidateEventRequest, O: UserValidateEventResponse },
     { name: "CacheUserEvent", options: {}, I: UserCacheEventRequest, O: UserCacheEventResponse }
 ]);

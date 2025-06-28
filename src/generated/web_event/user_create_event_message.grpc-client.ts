@@ -6,11 +6,20 @@ import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
 import type { UserCacheEventResponse } from "./user_create_event_message";
 import type { UserCacheEventRequest } from "./user_create_event_message";
+import type { UserValidateEventResponse } from "./user_create_event_message";
+import type { UserValidateEventRequest } from "./user_create_event_message";
 import * as grpc from "@grpc/grpc-js";
 /**
  * @generated from protobuf service user_create_event_message.UserCreateEventService
  */
 export interface IUserCreateEventServiceClient {
+    /**
+     * @generated from protobuf rpc: ValidateUserEvent
+     */
+    validateUserEvent(input: UserValidateEventRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void): grpc.ClientUnaryCall;
+    validateUserEvent(input: UserValidateEventRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void): grpc.ClientUnaryCall;
+    validateUserEvent(input: UserValidateEventRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void): grpc.ClientUnaryCall;
+    validateUserEvent(input: UserValidateEventRequest, callback: (err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void): grpc.ClientUnaryCall;
     /**
      * @generated from protobuf rpc: CacheUserEvent
      */
@@ -29,10 +38,17 @@ export class UserCreateEventServiceClient extends grpc.Client implements IUserCr
         this._binaryOptions = binaryOptions;
     }
     /**
+     * @generated from protobuf rpc: ValidateUserEvent
+     */
+    validateUserEvent(input: UserValidateEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: UserValidateEventResponse) => void)): grpc.ClientUnaryCall {
+        const method = UserCreateEventService.methods[0];
+        return this.makeUnaryRequest<UserValidateEventRequest, UserValidateEventResponse>(`/${UserCreateEventService.typeName}/${method.name}`, (value: UserValidateEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): UserValidateEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: CacheUserEvent
      */
     cacheUserEvent(input: UserCacheEventRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UserCacheEventResponse) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: UserCacheEventResponse) => void), callback?: ((err: grpc.ServiceError | null, value?: UserCacheEventResponse) => void)): grpc.ClientUnaryCall {
-        const method = UserCreateEventService.methods[0];
+        const method = UserCreateEventService.methods[1];
         return this.makeUnaryRequest<UserCacheEventRequest, UserCacheEventResponse>(`/${UserCreateEventService.typeName}/${method.name}`, (value: UserCacheEventRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): UserCacheEventResponse => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

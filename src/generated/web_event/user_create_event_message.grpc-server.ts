@@ -3,11 +3,17 @@
 // tslint:disable
 import { UserCacheEventResponse } from "./user_create_event_message";
 import { UserCacheEventRequest } from "./user_create_event_message";
+import { UserValidateEventResponse } from "./user_create_event_message";
+import { UserValidateEventRequest } from "./user_create_event_message";
 import type * as grpc from "@grpc/grpc-js";
 /**
  * @generated from protobuf service user_create_event_message.UserCreateEventService
  */
 export interface IUserCreateEventService extends grpc.UntypedServiceImplementation {
+    /**
+     * @generated from protobuf rpc: ValidateUserEvent
+     */
+    validateUserEvent: grpc.handleUnaryCall<UserValidateEventRequest, UserValidateEventResponse>;
     /**
      * @generated from protobuf rpc: CacheUserEvent
      */
@@ -25,6 +31,16 @@ export interface IUserCreateEventService extends grpc.UntypedServiceImplementati
  * ```
  */
 export const userCreateEventServiceDefinition: grpc.ServiceDefinition<IUserCreateEventService> = {
+    validateUserEvent: {
+        path: "/user_create_event_message.UserCreateEventService/ValidateUserEvent",
+        originalName: "ValidateUserEvent",
+        requestStream: false,
+        responseStream: false,
+        responseDeserialize: bytes => UserValidateEventResponse.fromBinary(bytes),
+        requestDeserialize: bytes => UserValidateEventRequest.fromBinary(bytes),
+        responseSerialize: value => Buffer.from(UserValidateEventResponse.toBinary(value)),
+        requestSerialize: value => Buffer.from(UserValidateEventRequest.toBinary(value))
+    },
     cacheUserEvent: {
         path: "/user_create_event_message.UserCreateEventService/CacheUserEvent",
         originalName: "CacheUserEvent",

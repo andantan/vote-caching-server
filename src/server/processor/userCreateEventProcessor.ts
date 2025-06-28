@@ -24,7 +24,7 @@ export class UserCreateEventProcessor {
         return UserCreateEventProcessor.instance;
     }
 
-    public async processValidateNewUser(userHash: string, uid: number): Promise<void> {
+    public async processValidateNewUser(uid: number, userHash: string): Promise<void> {
         logger.debug(`[UserCreateEventProcessor::processValidateNewUser] Validating new user with UID: "${uid}", UserHash: "${userHash}"`);
 
         if (typeof uid !== 'number' || !Number.isFinite(uid) || uid <= 0) {
@@ -35,6 +35,22 @@ export class UserCreateEventProcessor {
         if (!userHash || userHash.trim() === "") {
             logger.warn(`[UserCreateEventProcessor::processValidateNewUser] Invalid input parameters. UserHash: ${userHash}`);
             throw new UserCreateEventError(UserCreateEventErrorStatus.INVALID_PARAMETER);
+        }
+
+        let existingUserByUid: NullableUser;
+
+        try {
+            existingUserByUid = await this.userCollection.findUserByUid(uid);
+        } catch (error: unknown) {
+            const errorMessage = `An unexpected error occurred during new user validation for UID "${uid}": ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[UserCreateEventProcessor::processValidateNewUser] Unexpected error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+
+        if (existingUserByUid) {
+            logger.warn(`[UserCreateEventProcessor::processValidateNewUser] User already exists with UID: "${uid}"`);
+            
+            throw new UserCreateEventError(UserCreateEventErrorStatus.EXIST_UID);
         }
 
         let existingUserByUserHash: NullableUser;
@@ -51,22 +67,6 @@ export class UserCreateEventProcessor {
             logger.warn(`[UserCreateEventProcessor::processValidateNewUser] User already exists with UserHash: "${userHash}"`);
 
             throw new UserCreateEventError(UserCreateEventErrorStatus.EXIST_USERHASH);
-        }
-        
-        let existingUserByUid: NullableUser;
-
-        try {
-            existingUserByUid = await this.userCollection.findUserByUid(uid);
-        } catch (error: unknown) {
-            const errorMessage = `An unexpected error occurred during new user validation for UID "${uid}": ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[UserCreateEventProcessor::processValidateNewUser] Unexpected error: ${errorMessage}`, error);
-            throw new Error(errorMessage);
-        }
-
-        if (existingUserByUid) {
-            logger.warn(`[UserCreateEventProcessor::processValidateNewUser] User already exists with UID: "${uid}"`);
-            
-            throw new UserCreateEventError(UserCreateEventErrorStatus.EXIST_UID);
         }
     }
 
