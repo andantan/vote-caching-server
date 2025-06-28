@@ -4,6 +4,61 @@ import { IBallot } from "../models/users/schemaBallot.js";
 import logger from "../../config/logger.js";
 
 export default class MongoUserCollectionActor {
+    public async findUserByUserHash(userHash: string): Promise<NullableUser> {
+        logger.debug(`[MongoUserCollectionActor::findIfExistsUser] Checking for existing user. UserHash: "${userHash}"`);
+
+        try {
+            const userPojo: NullableUser = await UserModel.findOne({
+                userHash: userHash
+            }).lean();
+
+            return userPojo;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to check existence for UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[MongoUserCollectionActor::findIfExistsUser] MongoDB operation error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
+    public async findUserByUid(uid: number): Promise<NullableUser> {
+        logger.debug(`[MongoUserCollectionActor::findUserByUid] Checking for existing user. UID: "${uid}"`);
+
+        try {
+            const userPojo: NullableUser = await UserModel.findOne({
+                uid: uid
+            }).lean();
+
+            return userPojo;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to check existence for UID "${uid}": ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[MongoUserCollectionActor::findUserByUid] MongoDB operation error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
+    public async saveUser(userHash: string, uid: number, gender: string, birthDate: Date): Promise<IUser> {
+        try {
+            logger.debug(`[MongoUserCollectionActor::saveUser] Attempting to find or create user. UserHash: "${userHash}"`);
+
+            const userDocument: IUser = new UserModel({
+                uid: uid,
+                userHash: userHash,
+                gender: gender,
+                birthDate: birthDate
+            });
+
+            const newUserDocument: IUser = await userDocument.save();
+
+            logger.info(`[MongoUserCollectionActor::saveUser] New user (UID: ${newUserDocument.uid}, UserHash: "${newUserDocument.userHash}") successfully cached and saved to MongoDB.`);
+
+            return newUserDocument;
+        } catch (error: unknown) {
+            const errorMessage = `Failed to cache and save new user (UserHash: "${userHash}", UID: "${uid}"): ${error instanceof Error ? error.message : String(error)}`;
+            logger.error(`[MongoUserCollectionActor::saveUser] MongoDB operation error: ${errorMessage}`, error);
+            throw new Error(errorMessage);
+        }
+    }
+
     public async saveNewUserIfNotExists(userHash: string): Promise<IUser> {
         try {
             logger.debug(`[MongoUserCollectionActor::saveNewUserIfNotExists] Attempting to find or create user. UserHash: "${userHash}"`);
@@ -27,22 +82,6 @@ export default class MongoUserCollectionActor {
         } catch (error: unknown) {
             const errorMessage = `Failed to find or create user with UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
             logger.error(`[MongoUserCollectionActor::saveNewUserIfNotExists] MongoDB operation error: ${errorMessage}`, error);
-            throw new Error(errorMessage);
-        }
-    }
-
-    public async findIfExistsUser(userHash: string): Promise<NullableUser> {
-        logger.debug(`[MongoUserCollectionActor::findIfExistsUser] Checking for existing user. UserHash: "${userHash}"`);
-
-        try {
-            const userPojo: NullableUser = await UserModel.findOne({
-                userHash: userHash
-            }).lean();
-
-            return userPojo;
-        } catch (error: unknown) {
-            const errorMessage = `Failed to check existence for UserHash "${userHash}": ${error instanceof Error ? error.message : String(error)}`;
-            logger.error(`[MongoUserCollectionActor::findIfExistsUser] MongoDB operation error: ${errorMessage}`, error);
             throw new Error(errorMessage);
         }
     }
