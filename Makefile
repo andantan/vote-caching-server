@@ -24,6 +24,7 @@ run-cache-server: build
 	@echo "Starting the application..."
 	@npm run start
 
+
 clean:
 	@echo "Cleaning interfaces & .js files"
 	@npm run clean
