@@ -2,7 +2,6 @@ import { CommonErrorStatus } from "./common/commonEventError";
 
 export enum UserCreateEventSpecificStatus {
     INVALID_PARAMETER = "INVALID_PARAMETER",
-    USER_NOT_FOUND = "USER_NOT_FOUND",
     EXIST_USERHASH = "EXIST_USERHASH",
     EXIST_UID = "EXIST_UID",
 }
