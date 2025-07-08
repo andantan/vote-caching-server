@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package admin_l3_commands;
+package admin_L3_commands;
 
 service L3Commands {
   rpc CheckHealth (L3HealthCheckRequest)
