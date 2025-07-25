@@ -15,11 +15,12 @@ export async function validateUserEvent(
 
     logger.info(`[grpcUserCreateEventHandler::validateUserEvent] Received UserValidateEventRequest for UID: ${uid}, UserHash: "${userHash}"`);
 
+    const numericUid = Number(uid);
     let validationResult: boolean = true;
     let statusCode: string = "OK";
 
     try {
-        await userCreateEventProcessor.processValidateNewUser(uid, userHash);
+        await userCreateEventProcessor.processValidateNewUser(numericUid, userHash);
 
         logger.info(`[grpcUserCreateEventHandler::validateUserEvent] Proposal validation successful. UID: ${uid}, UserHash: "${userHash}", Status: "${statusCode}"`);
     } catch (error: unknown) {
@@ -50,11 +51,12 @@ export async function cacheUserEvent(
 
     logger.info(`[grpcUserCreateEventHandler::cacheUserEvent] Received UserCacheEventRequest for UID: ${uid}, UserHash: "${userHash}"`);
 
+    const numericUid = Number(uid);
     let cachedResult: boolean = true;
     let statusCode: string = "OK";
 
     try {
-        await userCreateEventProcessor.processCacheNewUser(uid, userHash, gender, birthDate!);
+        await userCreateEventProcessor.processCacheNewUser(numericUid, userHash, gender, birthDate!);
 
         logger.info(`[grpcUserCreateEventHandler::cacheUserEvent] User cached successfully for UID: ${uid}, UserHash: "${userHash}"`);
     } catch (error: unknown) {
@@ -63,7 +65,7 @@ export async function cacheUserEvent(
         if (error instanceof UserCreateEventError) {
             statusCode = error.status;
             logger.warn(`[grpcBallotCreateEventHandler::cacheBallotEvent] Ballot caching failed: UserHash: UID: ${uid}, "${userHash}", Status: "${statusCode}". Internal error message: "${error.message}"`);
-        } else {
+        } else {        
             statusCode = UserCreateEventErrorStatus.UNKNOWN_ERROR;
             logger.error(`[grpcBallotCreateEventHandler::cacheBallotEvent] Unhandled or unexpected error during ballot caching for UID: ${uid}, UserHash: "${userHash}". Error:`, error);
         }

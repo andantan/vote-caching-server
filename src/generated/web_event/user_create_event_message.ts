@@ -17,9 +17,9 @@ import { Timestamp } from "../google/protobuf/timestamp";
  */
 export interface UserValidateEventRequest {
     /**
-     * @generated from protobuf field: int32 uid = 1
+     * @generated from protobuf field: int64 uid = 1
      */
-    uid: number;
+    uid: bigint;
     /**
      * @generated from protobuf field: string user_hash = 2
      */
@@ -43,9 +43,9 @@ export interface UserValidateEventResponse {
  */
 export interface UserCacheEventRequest {
     /**
-     * @generated from protobuf field: int32 uid = 1
+     * @generated from protobuf field: int64 uid = 1
      */
-    uid: number;
+    uid: bigint;
     /**
      * @generated from protobuf field: string user_hash = 2
      */
@@ -72,9 +72,9 @@ export interface UserCacheEventResponse {
      */
     status: string;
     /**
-     * @generated from protobuf field: int32 uid = 3
+     * @generated from protobuf field: int64 uid = 3
      */
-    uid: number;
+    uid: bigint;
     /**
      * @generated from protobuf field: string user_hash = 4
      */
@@ -84,13 +84,13 @@ export interface UserCacheEventResponse {
 class UserValidateEventRequest$Type extends MessageType<UserValidateEventRequest> {
     constructor() {
         super("user_create_event_message.UserValidateEventRequest", [
-            { no: 1, name: "uid", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 1, name: "uid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 2, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<UserValidateEventRequest>): UserValidateEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.uid = 0;
+        message.uid = 0n;
         message.userHash = "";
         if (value !== undefined)
             reflectionMergePartial<UserValidateEventRequest>(this, message, value);
@@ -101,8 +101,8 @@ class UserValidateEventRequest$Type extends MessageType<UserValidateEventRequest
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int32 uid */ 1:
-                    message.uid = reader.int32();
+                case /* int64 uid */ 1:
+                    message.uid = reader.int64().toBigInt();
                     break;
                 case /* string user_hash */ 2:
                     message.userHash = reader.string();
@@ -119,9 +119,9 @@ class UserValidateEventRequest$Type extends MessageType<UserValidateEventRequest
         return message;
     }
     internalBinaryWrite(message: UserValidateEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int32 uid = 1; */
-        if (message.uid !== 0)
-            writer.tag(1, WireType.Varint).int32(message.uid);
+        /* int64 uid = 1; */
+        if (message.uid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.uid);
         /* string user_hash = 2; */
         if (message.userHash !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.userHash);
@@ -194,7 +194,7 @@ export const UserValidateEventResponse = new UserValidateEventResponse$Type();
 class UserCacheEventRequest$Type extends MessageType<UserCacheEventRequest> {
     constructor() {
         super("user_create_event_message.UserCacheEventRequest", [
-            { no: 1, name: "uid", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 1, name: "uid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 2, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "gender", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "birth_date", kind: "message", T: () => Timestamp }
@@ -202,7 +202,7 @@ class UserCacheEventRequest$Type extends MessageType<UserCacheEventRequest> {
     }
     create(value?: PartialMessage<UserCacheEventRequest>): UserCacheEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.uid = 0;
+        message.uid = 0n;
         message.userHash = "";
         message.gender = "";
         if (value !== undefined)
@@ -214,8 +214,8 @@ class UserCacheEventRequest$Type extends MessageType<UserCacheEventRequest> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int32 uid */ 1:
-                    message.uid = reader.int32();
+                case /* int64 uid */ 1:
+                    message.uid = reader.int64().toBigInt();
                     break;
                 case /* string user_hash */ 2:
                     message.userHash = reader.string();
@@ -238,9 +238,9 @@ class UserCacheEventRequest$Type extends MessageType<UserCacheEventRequest> {
         return message;
     }
     internalBinaryWrite(message: UserCacheEventRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int32 uid = 1; */
-        if (message.uid !== 0)
-            writer.tag(1, WireType.Varint).int32(message.uid);
+        /* int64 uid = 1; */
+        if (message.uid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.uid);
         /* string user_hash = 2; */
         if (message.userHash !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.userHash);
@@ -266,7 +266,7 @@ class UserCacheEventResponse$Type extends MessageType<UserCacheEventResponse> {
         super("user_create_event_message.UserCacheEventResponse", [
             { no: 1, name: "cached", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "uid", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 3, name: "uid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 4, name: "user_hash", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
@@ -274,7 +274,7 @@ class UserCacheEventResponse$Type extends MessageType<UserCacheEventResponse> {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.cached = false;
         message.status = "";
-        message.uid = 0;
+        message.uid = 0n;
         message.userHash = "";
         if (value !== undefined)
             reflectionMergePartial<UserCacheEventResponse>(this, message, value);
@@ -291,8 +291,8 @@ class UserCacheEventResponse$Type extends MessageType<UserCacheEventResponse> {
                 case /* string status */ 2:
                     message.status = reader.string();
                     break;
-                case /* int32 uid */ 3:
-                    message.uid = reader.int32();
+                case /* int64 uid */ 3:
+                    message.uid = reader.int64().toBigInt();
                     break;
                 case /* string user_hash */ 4:
                     message.userHash = reader.string();
@@ -315,9 +315,9 @@ class UserCacheEventResponse$Type extends MessageType<UserCacheEventResponse> {
         /* string status = 2; */
         if (message.status !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.status);
-        /* int32 uid = 3; */
-        if (message.uid !== 0)
-            writer.tag(3, WireType.Varint).int32(message.uid);
+        /* int64 uid = 3; */
+        if (message.uid !== 0n)
+            writer.tag(3, WireType.Varint).int64(message.uid);
         /* string user_hash = 4; */
         if (message.userHash !== "")
             writer.tag(4, WireType.LengthDelimited).string(message.userHash);

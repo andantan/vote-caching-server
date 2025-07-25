@@ -27,8 +27,8 @@ export class UserCreateEventProcessor {
     public async processValidateNewUser(uid: number, userHash: string): Promise<void> {
         logger.debug(`[UserCreateEventProcessor::processValidateNewUser] Validating new user with UID: "${uid}", UserHash: "${userHash}"`);
 
-        if (typeof uid !== 'number' || !Number.isFinite(uid) || uid <= 0) {
-            logger.warn(`[UserCreateEventProcessor::processValidateNewUser] Invalid input parameters. UID: "${uid}"`);
+        if (typeof uid !== 'number' || uid <= 0) {
+            logger.warn(`[UserCreateEventProcessor::processValidateNewUser] Invalid input parameters. UID: "${uid}"`);  
             throw new UserCreateEventError(UserCreateEventErrorStatus.INVALID_PARAMETER);
         }
 
