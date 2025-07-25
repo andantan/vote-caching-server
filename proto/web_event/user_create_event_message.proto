@@ -13,7 +13,7 @@ service UserCreateEventService {
 }
 
 message UserValidateEventRequest {
-  int32 uid = 1;
+  int64 uid = 1;
   string user_hash = 2;
 }
 
@@ -23,7 +23,7 @@ message UserValidateEventResponse {
 }
 
 message UserCacheEventRequest{
-  int32 uid = 1;
+  int64 uid = 1;
   string user_hash = 2;
   string gender = 3;
   google.protobuf.Timestamp birth_date = 4;
@@ -32,6 +32,6 @@ message UserCacheEventRequest{
 message UserCacheEventResponse {
   bool cached = 1;
   string status = 2;
-  int32 uid = 3;
+  int64 uid = 3;
   string user_hash = 4;
 }
