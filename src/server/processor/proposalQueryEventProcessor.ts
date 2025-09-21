@@ -176,6 +176,7 @@ export class ProposalQueryEventProcessor {
 
         const grpcProposal: Proposal = Proposal.create({
             topic: proposal.topic,
+            proposer: proposal.proposer,
             duration: proposal.duration,
             expired: proposal.expired,
             result: resultMessage,

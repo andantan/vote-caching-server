@@ -21,31 +21,35 @@ export interface Proposal {
      */
     topic: string;
     /**
-     * @generated from protobuf field: int32 duration = 2
+     * @generated from protobuf field: string proposer = 2
+     */
+    proposer: string;
+    /**
+     * @generated from protobuf field: int32 duration = 3
      */
     duration: number;
     /**
-     * @generated from protobuf field: bool expired = 3
+     * @generated from protobuf field: bool expired = 4
      */
     expired: boolean;
     /**
-     * @generated from protobuf field: proposal_query_event_message.Result result = 4
+     * @generated from protobuf field: proposal_query_event_message.Result result = 5
      */
     result?: Result;
     /**
-     * @generated from protobuf field: repeated proposal_query_event_message.BlockHeight block_heights = 5
+     * @generated from protobuf field: repeated proposal_query_event_message.BlockHeight block_heights = 6
      */
     blockHeights: BlockHeight[];
     /**
-     * @generated from protobuf field: google.protobuf.Timestamp created_at = 6
+     * @generated from protobuf field: google.protobuf.Timestamp created_at = 7
      */
     createdAt?: Timestamp;
     /**
-     * @generated from protobuf field: google.protobuf.Timestamp expired_at = 7
+     * @generated from protobuf field: google.protobuf.Timestamp expired_at = 8
      */
     expiredAt?: Timestamp;
     /**
-     * @generated from protobuf field: repeated string options = 8
+     * @generated from protobuf field: repeated string options = 9
      */
     options: string[];
 }
@@ -177,18 +181,20 @@ class Proposal$Type extends MessageType<Proposal> {
     constructor() {
         super("proposal_query_event_message.Proposal", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "duration", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
-            { no: 3, name: "expired", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 4, name: "result", kind: "message", T: () => Result },
-            { no: 5, name: "block_heights", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => BlockHeight },
-            { no: 6, name: "created_at", kind: "message", T: () => Timestamp },
-            { no: 7, name: "expired_at", kind: "message", T: () => Timestamp },
-            { no: 8, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "proposer", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "duration", kind: "scalar", T: 5 /*ScalarType.INT32*/ },
+            { no: 4, name: "expired", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 5, name: "result", kind: "message", T: () => Result },
+            { no: 6, name: "block_heights", kind: "message", repeat: 2 /*RepeatType.UNPACKED*/, T: () => BlockHeight },
+            { no: 7, name: "created_at", kind: "message", T: () => Timestamp },
+            { no: 8, name: "expired_at", kind: "message", T: () => Timestamp },
+            { no: 9, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Proposal>): Proposal {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
+        message.proposer = "";
         message.duration = 0;
         message.expired = false;
         message.blockHeights = [];
@@ -205,25 +211,28 @@ class Proposal$Type extends MessageType<Proposal> {
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* int32 duration */ 2:
+                case /* string proposer */ 2:
+                    message.proposer = reader.string();
+                    break;
+                case /* int32 duration */ 3:
                     message.duration = reader.int32();
                     break;
-                case /* bool expired */ 3:
+                case /* bool expired */ 4:
                     message.expired = reader.bool();
                     break;
-                case /* proposal_query_event_message.Result result */ 4:
+                case /* proposal_query_event_message.Result result */ 5:
                     message.result = Result.internalBinaryRead(reader, reader.uint32(), options, message.result);
                     break;
-                case /* repeated proposal_query_event_message.BlockHeight block_heights */ 5:
+                case /* repeated proposal_query_event_message.BlockHeight block_heights */ 6:
                     message.blockHeights.push(BlockHeight.internalBinaryRead(reader, reader.uint32(), options));
                     break;
-                case /* google.protobuf.Timestamp created_at */ 6:
+                case /* google.protobuf.Timestamp created_at */ 7:
                     message.createdAt = Timestamp.internalBinaryRead(reader, reader.uint32(), options, message.createdAt);
                     break;
-                case /* google.protobuf.Timestamp expired_at */ 7:
+                case /* google.protobuf.Timestamp expired_at */ 8:
                     message.expiredAt = Timestamp.internalBinaryRead(reader, reader.uint32(), options, message.expiredAt);
                     break;
-                case /* repeated string options */ 8:
+                case /* repeated string options */ 9:
                     message.options.push(reader.string());
                     break;
                 default:
@@ -241,27 +250,30 @@ class Proposal$Type extends MessageType<Proposal> {
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* int32 duration = 2; */
+        /* string proposer = 2; */
+        if (message.proposer !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.proposer);
+        /* int32 duration = 3; */
         if (message.duration !== 0)
-            writer.tag(2, WireType.Varint).int32(message.duration);
-        /* bool expired = 3; */
+            writer.tag(3, WireType.Varint).int32(message.duration);
+        /* bool expired = 4; */
         if (message.expired !== false)
-            writer.tag(3, WireType.Varint).bool(message.expired);
-        /* proposal_query_event_message.Result result = 4; */
+            writer.tag(4, WireType.Varint).bool(message.expired);
+        /* proposal_query_event_message.Result result = 5; */
         if (message.result)
-            Result.internalBinaryWrite(message.result, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
-        /* repeated proposal_query_event_message.BlockHeight block_heights = 5; */
+            Result.internalBinaryWrite(message.result, writer.tag(5, WireType.LengthDelimited).fork(), options).join();
+        /* repeated proposal_query_event_message.BlockHeight block_heights = 6; */
         for (let i = 0; i < message.blockHeights.length; i++)
-            BlockHeight.internalBinaryWrite(message.blockHeights[i], writer.tag(5, WireType.LengthDelimited).fork(), options).join();
-        /* google.protobuf.Timestamp created_at = 6; */
+            BlockHeight.internalBinaryWrite(message.blockHeights[i], writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+        /* google.protobuf.Timestamp created_at = 7; */
         if (message.createdAt)
-            Timestamp.internalBinaryWrite(message.createdAt, writer.tag(6, WireType.LengthDelimited).fork(), options).join();
-        /* google.protobuf.Timestamp expired_at = 7; */
+            Timestamp.internalBinaryWrite(message.createdAt, writer.tag(7, WireType.LengthDelimited).fork(), options).join();
+        /* google.protobuf.Timestamp expired_at = 8; */
         if (message.expiredAt)
-            Timestamp.internalBinaryWrite(message.expiredAt, writer.tag(7, WireType.LengthDelimited).fork(), options).join();
-        /* repeated string options = 8; */
+            Timestamp.internalBinaryWrite(message.expiredAt, writer.tag(8, WireType.LengthDelimited).fork(), options).join();
+        /* repeated string options = 9; */
         for (let i = 0; i < message.options.length; i++)
-            writer.tag(8, WireType.LengthDelimited).string(message.options[i]);
+            writer.tag(9, WireType.LengthDelimited).string(message.options[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

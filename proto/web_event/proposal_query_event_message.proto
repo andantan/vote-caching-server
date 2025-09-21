@@ -7,16 +7,17 @@ package proposal_query_event_message;
 
 message Proposal {
   string topic = 1;
-  int32 duration = 2;
-  bool expired = 3;
+  string proposer = 2;
+  int32 duration = 3;
+  bool expired = 4;
 
-  Result result = 4;
-  repeated BlockHeight block_heights = 5;
+  Result result = 5;
+  repeated BlockHeight block_heights = 6;
 
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp expired_at = 7;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp expired_at = 8;
 
-  repeated string options = 8;
+  repeated string options = 9;
 }
 
 message BlockHeight {

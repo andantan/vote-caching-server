@@ -42,11 +42,15 @@ export interface ProposalCacheEventRequest {
      */
     topic: string;
     /**
-     * @generated from protobuf field: uint32 duration = 2
+     * @generated from protobuf field: string proposer = 2
+     */
+    proposer: string;
+    /**
+     * @generated from protobuf field: uint32 duration = 3
      */
     duration: number;
     /**
-     * @generated from protobuf field: repeated string options = 3
+     * @generated from protobuf field: repeated string options = 4
      */
     options: string[];
 }
@@ -170,13 +174,15 @@ class ProposalCacheEventRequest$Type extends MessageType<ProposalCacheEventReque
     constructor() {
         super("proposal_create_event_message.ProposalCacheEventRequest", [
             { no: 1, name: "topic", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "duration", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 3, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "proposer", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "duration", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 4, name: "options", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<ProposalCacheEventRequest>): ProposalCacheEventRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.topic = "";
+        message.proposer = "";
         message.duration = 0;
         message.options = [];
         if (value !== undefined)
@@ -191,10 +197,13 @@ class ProposalCacheEventRequest$Type extends MessageType<ProposalCacheEventReque
                 case /* string topic */ 1:
                     message.topic = reader.string();
                     break;
-                case /* uint32 duration */ 2:
+                case /* string proposer */ 2:
+                    message.proposer = reader.string();
+                    break;
+                case /* uint32 duration */ 3:
                     message.duration = reader.uint32();
                     break;
-                case /* repeated string options */ 3:
+                case /* repeated string options */ 4:
                     message.options.push(reader.string());
                     break;
                 default:
@@ -212,12 +221,15 @@ class ProposalCacheEventRequest$Type extends MessageType<ProposalCacheEventReque
         /* string topic = 1; */
         if (message.topic !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.topic);
-        /* uint32 duration = 2; */
+        /* string proposer = 2; */
+        if (message.proposer !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.proposer);
+        /* uint32 duration = 3; */
         if (message.duration !== 0)
-            writer.tag(2, WireType.Varint).uint32(message.duration);
-        /* repeated string options = 3; */
+            writer.tag(3, WireType.Varint).uint32(message.duration);
+        /* repeated string options = 4; */
         for (let i = 0; i < message.options.length; i++)
-            writer.tag(3, WireType.LengthDelimited).string(message.options[i]);
+            writer.tag(4, WireType.LengthDelimited).string(message.options[i]);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

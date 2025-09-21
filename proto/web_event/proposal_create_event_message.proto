@@ -21,8 +21,9 @@ message ProposalValidateEventResponse {
 
 message ProposalCacheEventRequest {
   string topic = 1;
-  uint32 duration = 2;
-  repeated string options = 3;
+  string proposer = 2;
+  uint32 duration = 3;
+  repeated string options = 4;
 }
 
 message ProposalCacheEventResponse {
