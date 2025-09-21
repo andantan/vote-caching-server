@@ -20,12 +20,13 @@ export interface QueryPaging {
 }
 
 export default class MongoVoteCollectionActor {
-    public async saveNewVote(topic: string, duration: number, options: string[]): Promise<IVote> {
+    public async saveNewVote(topic: string, proposer: string, duration: number, options: string[]): Promise<IVote> {
         logger.debug(`[MongoVoteCollectionActor::saveNewProposal] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}`);
 
         try {
             const newVote: IVote = new VoteModel({
                 topic: topic,
+                proposer: proposer,
                 duration: duration,
                 options: options
             });

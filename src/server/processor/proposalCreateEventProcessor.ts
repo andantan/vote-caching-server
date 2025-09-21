@@ -61,10 +61,10 @@ export class ProposalCreateEventProcessor {
         logger.info(`[ProposalCreateEventProcessor::validateExistence] Proposal validation successful: Topic: "${topic}"`);
     }
 
-    public async processCacheProposal(topic: string, duration: number, options: string[]): Promise<void> {
+    public async processCacheProposal(topic: string, proposer: string, duration: number, options: string[]): Promise<void> {
         logger.debug(`[ProposalCreateEventProcessor::processCacheProposal] Attempting to save new proposal. Topic: "${topic}", Duration: ${duration}.`);
         try {
-            await this.voteCollection.saveNewVote(topic, duration, options);
+            await this.voteCollection.saveNewVote(topic, proposer, duration, options);
             
             logger.info(`[ProposalCreateEventProcessor::processCacheProposal] New proposal successfully saved. Topic: "${topic}".`);
         } catch (error: unknown) {

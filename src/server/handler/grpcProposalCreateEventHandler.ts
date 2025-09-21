@@ -47,15 +47,15 @@ export async function cacheProposalEvent(
     call: ServerUnaryCall<Event.ProposalCacheEventRequest, Event.ProposalCacheEventResponse>,
     callback: sendUnaryData<Event.ProposalCacheEventResponse>
 ): Promise<void> {
-    const { topic, duration, options } = call.request;
+    const { topic, proposer, duration, options } = call.request;
 
-    logger.debug(`[grpcProposalCreateEventHandler::cacheProposalEvent] Received request to cache new proposal. Topic: "${topic}", Duration: ${duration}`);
+    logger.debug(`[grpcProposalCreateEventHandler::cacheProposalEvent] Received request to cache new proposal. Topic: "${topic}", Proposer: "${proposer}", Duration: ${duration}`);
 
     let cachedResult: boolean = true;
     let statusCode: string = "OK";
 
     try {
-        await proposalCreateEventProcessor.processCacheProposal(topic, duration, options);
+        await proposalCreateEventProcessor.processCacheProposal(topic, proposer, duration, options);
 
         logger.info(`[grpcProposalCreateEventHandler::cacheProposalEvent] New proposal successfully cached. Topic: "${topic}".`);
     } catch (error: unknown) {
