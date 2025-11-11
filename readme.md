@@ -55,13 +55,13 @@ git clone https://github.com/andantan/vote-blockchain-server
 
 ## Build & Run Instructions
 
-### 1️⃣ Build the Blockchain Node
+### 1️⃣ Build the Blockchain Caching server
 
 ```bash
-make build
+make deploy
 ```
 
-or directly run:
+run:
 
 ```bash
 make run-cache-server
